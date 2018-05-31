@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Corpus">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/libs/Corpus.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
