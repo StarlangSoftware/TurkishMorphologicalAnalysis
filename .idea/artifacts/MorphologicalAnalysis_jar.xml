@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="MorphologicalAnalysis:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/MorphologicalAnalysis_jar</output-path>
-    <root id="archive" name="MorphologicalAnalysis.jar">
-      <element id="module-output" name="MorphologicalAnalysis" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/libs/Corpus.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>

@@ -53,3 +53,7 @@ nb-configuration.xml
 release.properties
 pom.xml.releaseBackup
 pom.xml.tag
+out/artifacts/MorphologicalAnalysis_jar/MorphologicalAnalysis.jar
+out/production/MorphologicalAnalysis/turkish_finite_state_machine.xml
+out/production/MorphologicalAnalysis/Data/Dictionary/turkish_dictionary.txt
+out/production/MorphologicalAnalysis/libs/Corpus.jar
