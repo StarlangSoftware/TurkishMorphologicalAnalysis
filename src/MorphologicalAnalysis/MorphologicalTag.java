@@ -1,139 +1,512 @@
 package MorphologicalAnalysis;
 
-/*
-        A1PL                    Agreement 1st person plural
-        A1SG                    Agreement 1st person singular
-        A2PL                    Agreement 2nd person plural
-        A2SG                    Agreement 2nd person singular
-        A3PL                    Agreement 3rd person plural
-        A3SG                    Agreement 3rd person singular
-        ABL                     Ablative Case
-        ABLE                    Ability, possibility (-(y)Abil)
-        ACC                     Accusative Case
-        ACQUIRE                 Acquire (-lAn)
-        ADJ                     Cat: Adjective
-        ADV                     Cat: Adverb
-        AFTERDOINGSO            After doing so (-(y)Ip)
-        AGT	                    Agent (-CI, -(y)IcI)
-        ALMOST	                -sI
-        AOR	                    Aorist Tense
-        ASIF	                -CA, CAsInA
-        ASLONGAS	            -dIkçA
-        BECOME	                Become (-lAş)
-        BYDOINGSO	            By doing so (-(y)ArAk)
-        CARD	                Cardinal number
-        CAUS	                Causative
-        COND	                Conditional (-(y)sA)
-        CONJ	                Cat: Conjunction or disjunction
-        COP	                    Copula (-DIr)
-        DAT	                    Dative Case
-        DATE	                Date (xx.yy.zzzz)
-        DEMONSP	                Demonstrative Pronoun
-        DESR	                Desire/Past Auxiliary (-sA)
-        DET	                    Cat: Determiner
-        DIM	                    Diminutive (-CIk)
-        DISTRIB	                Cardinal-to-distribution (-şAr)
-        DUP	                    Duplication
-        EMAIL	                e-mail (x@y)
-        EQU	                    -(I)ncA (by phrase)
-        EVERSINCE	            Ever since (-(y)Agel)
-        FEELLIKE	            Projection (-(y)AsI) e.g. öpülesi
-        FITFOR	                -(A)lIk ??
-        FUT	                    Future Tense (-(y)AcAk)
-        FUTPART	                Future Participle (-(y)AcAk)
-        GEN	                    Genitive CASE
-        HASTILY	                Hastility (-(y)Iver)
-        IMP	                    Imperative (0, -sın, -(y)In, -sInlAr)
-        INF	                    Infinitive (-mAK)
-        INF2	                Infinitive 2 (-mA)
-        INF3	                Infinitive 3 (-y)Iş
-        INS	                    Instrumental
-        INTERJ	                Cat: Interjection
-        JUSTLIKE	            -sI
-        LOC	                    Locative Case
-        LY	                    -ly (-CA)
-        NARR	                Narrative Past Tens (-mIş)
-        NECES	                Necessitative/Obligative (-mAlI)
-        NEG	                    Negative
-        NESS	                State of (-(I)lIk)
-        NOM	                    Nominative Case
-        NOUN	                Cat: Noun
-        NUM	                    Cat: Numeral/Number
-        OPT	                    Optative (-(y)A)
-        ORD	                    Ordinal Number
-        P1PL	                Possessive 1st person plural
-        P1SG	                Possessive 1st person singular
-        P2PL	                Possessive 2nd person plural
-        P2SG	                Possessive 2nd person singular
-        P3PL	                Possessive 3rd person plural
-        P3SG	                Possessive 3rd person singular
-        PASS	                Passive (-Il, -(I)n)
-        PAST	                Past Tense (-DI)
-        PASTPART	            Past participle (-DIK)
-        PCABL	                Postp. w/ Ablative complement
-        PCACC	                Postp. w/ Accusative complement
-        PCDAT	                Postp. w/ Dative Complement
-        PCINS	                Postp. w/ Instrumental Complement
-        PCNOM	                Postp. w/ Nominative Complement
-        PERS	                Personal pronoun
-        PNON	                None possessive
-        POS	                    Positive (verbs)
-        POSTP	                Postposition
-        PRES	                Present Tense (0)
-        PRESPART	            Present Participle (-(y)An)
-        PROG1	                Progressive Tense 1 (-(I)yor)
-        PROG2	                Progressive Tense 2 (-mAktA)
-        PRON	                Cat: Pronoun
-        PROP	                Proper Noun
-        PUNC	                Punctuation
-        QUANTP	                Quantifier (Quantificational Pronoun)?
-        QUES	                mI
-        QUESP	                Question Particle (ne, kim, nasıl ...)
-        RANGE	                Range (e.g. 6-7)
-        RECIP	                Reciprocal (-(I)ş)
-        REFLEX	                Reflexive (-(I)n)
-        REL	                    Relativizer (-ki)
-        RELATED	                Related to (-sAl)
-        REPEAT	                Continuous (-(y)Adur)
-        SINCE	                Since (-dIr)
-        SINCEDOINGSO	        Since doing so (-(y)AlI)
-        START	                Start (-(y)Akoy)
-        STAY	                Stay (-(y)Akal)
-        TIME	                Time (xx:yy)
-        VERB	                Cat: Verb
-        WHEN	                When (-(y)IncA)
-        WHILE	                While (-(y)ken)
-        WITH	                With (-lI)
-        WITHOUT	                Without (-sIz)
-        WITHOUTHAVINGDONESO     Without having done so (-mAdAn)
-        ZERO	                Zero Derivation
-*/
-
 public enum MorphologicalTag {
-    NOUN, ADVERB, ADJECTIVE, VERB, A1SG,
-    A2SG, A3SG, A1PL, A2PL, A3PL,
-    P1SG, P2SG, P3SG, P1PL, P2PL,
-    P3PL, PROPERNOUN, PNON, NOMINATIVE, WITH,
-    WITHOUT, ACCUSATIVE, DATIVE, GENITIVE, ABLATIVE,
-    PERSONALPRONOUN, ZERO, ABLE, NEGATIVE, PASTTENSE,
-    CONJUNCTION, DETERMINER, DUPLICATION, INTERJECTION, NUMBER,
-    POSTPOSITION, PUNCTUATION, QUESTION, AGENT, BYDOINGSO,
-    CARDINAL, CAUSATIVE, DEMONSTRATIVEPRONOUN, DISTRIBUTIVE, FITFOR,
-    FUTUREPARTICIPLE, INFINITIVE, NESS, ORDINAL, PASSIVE,
-    PASTPARTICIPLE, PRESENTPARTICIPLE, QUESTIONPRONOUN, QUANTITATIVEPRONOUN, RANGE,
-    RATIO, REAL, RECIPROCAL, REFLEXIVE, REFLEXIVEPRONOUN,
-    TIME, WHEN, WHILE, WITHOUTHAVINGDONESO, PCABLATIVE,
-    PCACCUSATIVE, PCDATIVE, PCGENITIVE, PCINSTRUMENTAL, PCNOMINATIVE,
-    ACQUIRE, ACTOF, AFTERDOINGSO, ALMOST, AS,
-    ASIF, BECOME, EVERSINCE, FEELLIKE, HASTILY,
-    INBETWEEN, JUSTLIKE, LY, RELATED, REPEAT,
-    SINCE, SINCEDOINGSO, START, STAY,
-    EQUATIVE, INSTRUMENTAL, AORIST, DESIRE, FUTURE,
-    IMPERATIVE, NARRATIVE, NECESSITY, OPTATIVE, PAST,
-    PRESENT, PROGRESSIVE1, PROGRESSIVE2, CONDITIONAL, COPULA,
-    POSITIVE, PRONOUN, LOCATIVE, RELATIVE, DEMONSTRATIVE,
-    INFINITIVE2, INFINITIVE3, BEGINNINGOFSENTENCE, ENDOFSENTENCE, BEGINNINGOFTITLE,
-    ENDOFTITLE, BEGINNINGOFDOCUMENT, ENDOFDOCUMENT, ASLONGAS, ADAMANTLY,
-    PERCENT, WITHOUTBEINGABLETOHAVEDONESO, DIMENSION, NOTABLESTATE, FRACTION,
-    HASHTAG, EMAIL, DATE
+    /**
+     * Noun : Alengir
+     */
+    NOUN,
+    /**
+     * Adverb : Alelacele
+     */
+    ADVERB,
+    /**
+     * Adjective : Alengirli
+     */
+    ADJECTIVE,
+    /**
+     * Verb : Alıkoy
+     */
+    VERB,
+    /**
+     * 1st person singular agreement : Ben gelirim
+     */
+    A1SG,
+    /**
+     * 2nd person singular agreement : Sen gelirsin
+     */
+    A2SG,
+    /**
+     * 3rd person singular agreement : O gelir
+     */
+    A3SG,
+    /**
+     * 1st person plural agreement : Biz geliriz
+     */
+    A1PL,
+    /**
+     * 2nd person plural agreement : Siz gelirsiniz
+     */
+    A2PL,
+    /**
+     * 3rd person plural agreement : Onlar gelirler
+     */
+    A3PL,
+    /**
+     * 1st person singular possessive : Benim
+     */
+    P1SG,
+    /**
+     * 2nd person singular possessive :Senin
+     */
+    P2SG,
+    /**
+     * 3rd person singular possessive : Onun
+     */
+    P3SG,
+    /**
+     * 1st person plural possessive :  Bizim
+     */
+    P1PL,
+    /**
+     * 2nd person plural possessive : Sizin
+     */
+    P2PL,
+    /**
+     * 3rd person plural possessive : Onların
+     */
+    P3PL,
+    /**
+     * Proper noun : John
+     */
+    PROPERNOUN,
+    /**
+     * None possessive : Ev
+     */
+    PNON,
+    /**
+     * Nominative Case : Kedi uyuyor.
+     */
+    NOMINATIVE,
+    /**
+     * With : Kalemle
+     */
+    WITH,
+    /**
+     * Without : Dikişsiz
+     */
+    WITHOUT,
+    /**
+     * Accusatıve : Beni
+     */
+    ACCUSATIVE,
+    /**
+     * Dative case : Bana
+     */
+    DATIVE,
+    /**
+     * Genitive : Benim
+     */
+    GENITIVE,
+    /**
+     * Ablative : Okuldan
+     */
+    ABLATIVE,
+    /**
+     * Perosnal pronoun : O
+     */
+    PERSONALPRONOUN,
+    /**
+     * Zero Derivation : Kırmızıydı
+     */
+    ZERO,
+    /**
+     * Ability, possibility : Olabilir
+     */
+    ABLE,
+    /**
+     * Negative : Yapama
+     */
+    NEGATIVE,
+    /**
+     * Past tense : Gitti
+     */
+    PASTTENSE,
+    /**
+     * Conjunction or disjunction : Ama, ise
+     */
+    CONJUNCTION,
+    /**
+     * Determiner : Birtakım
+     */
+    DETERMINER,
+    /**
+     * Duplication : Çıtır çıtır
+     */
+    DUPLICATION,
+    /**
+     * Interjection : Agucuk
+     */
+    INTERJECTION,
+    /**
+     * Number : bir
+     */
+    NUMBER,
+    /**
+     * Post posıtıon : Atfen
+     */
+    POSTPOSITION,
+    /**
+     * Punctuation : +
+     */
+    PUNCTUATION,
+    /**
+     * Question : Mı
+     */
+    QUESTION,
+    /**
+     * Agent : Toplayıcı
+     */
+    AGENT,
+    /**
+     * By doing so : Zıplayarak
+     */
+    BYDOINGSO,
+    /**
+     * Cardinal : yüz, bin
+     */
+    CARDINAL,
+    /**
+     * Causative Form : Pişirmek
+     */
+    CAUSATIVE,
+    /**
+     * Demonstrative pronoun : Bu, şu
+     */
+    DEMONSTRATIVEPRONOUN,
+    /**
+     * Distributive : altışar
+     */
+    DISTRIBUTIVE,
+    /**
+     * Fit for : Ahmetlik
+     */
+    FITFOR,
+    /**
+     * Future participle : Gülecek
+     */
+    FUTUREPARTICIPLE,
+    /**
+     * Infinitive : Biri
+     */
+    INFINITIVE,
+    /**
+     * Ness : Ağırbaşlılık
+     */
+    NESS,
+    /**
+     * Ordinal Number : Altıncı
+     */
+    ORDINAL,
+    /**
+     * Passive : Açıldı
+     */
+    PASSIVE,
+    /**
+     * Past participle : Kırılmış
+     */
+    PASTPARTICIPLE,
+    /**
+     * Present partıcıple : Sarılan
+     */
+    PRESENTPARTICIPLE,
+    /**
+     * Question pronoun : Kim
+     */
+    QUESTIONPRONOUN,
+    /**
+     * Quantitative pronoun : Each
+     */
+    QUANTITATIVEPRONOUN,
+    /**
+     * Range : 1 - 3
+     */
+    RANGE,
+    /**
+     * Ratio : 1/2
+     */
+    RATIO,
+    /**
+     * Real : 1.0
+     */
+    REAL,
+    /**
+     * Reciprocal verb : Görüşmek
+     */
+    RECIPROCAL,
+    /**
+     * Reflexive : Kendi
+     */
+    REFLEXIVE,
+    /**
+     * Reflexive pronoun : Kendim
+     */
+    REFLEXIVEPRONOUN,
+    /**
+     * Time : 14:28
+     */
+    TIME,
+    /**
+     * When : Okuyunca
+     */
+    WHEN,
+    /**
+     * While : Gelirken
+     */
+    WHILE,
+    /**
+     * Without having done so : Çaktırmadan
+     */
+    WITHOUTHAVINGDONESO,
+    /**
+     * PC ablative
+     */
+    PCABLATIVE,
+    /***
+     * PC accusative
+     */
+    PCACCUSATIVE,
+    /**
+     * PC dative
+     */
+    PCDATIVE,
+    /**
+     * PC genitive
+     */
+    PCGENITIVE,
+    /**
+     * PC instrumental
+     */
+    PCINSTRUMENTAL,
+    /**
+     * PC nominative
+     */
+    PCNOMINATIVE,
+    /**
+     * Acquire : Kazanılan
+     */
+    ACQUIRE,
+    /**
+     * Act of : Aldatmaca
+     */
+    ACTOF,
+    /**
+     * After doing so : Yapıp
+     */
+    AFTERDOINGSO,
+    /**
+     * Almost : Dikensi
+     */
+    ALMOST,
+    /**
+     * As : gibi
+     */
+    AS,
+    /**
+     * As if : Yaşarmışcasına
+     */
+    ASIF,
+    /**
+     * Become : Abideleş
+     */
+    BECOME,
+    /**
+     * Ever since : Çıkagel
+     */
+    EVERSINCE,
+    /**
+     * Projection : Öpülesi
+     */
+    FEELLIKE,
+    /**
+     * Hastility : Yapıver
+     */
+    HASTILY,
+    /**
+     * In between : Arasında
+     */
+    INBETWEEN,
+    /**
+     * Just like : Destansı
+     */
+    JUSTLIKE,
+    /**
+     * -LY : Akıllıca
+     */
+    LY,
+    /**
+     * Related to : Davranışsal
+     */
+    RELATED,
+    /**
+     * Continuous : Yapadur
+     */
+    REPEAT,
+    /**
+     * Since doing so : Amasyalı
+     */
+    SINCE,
+    /**
+     * Since doing so : Amasyalı
+     */
+    SINCEDOINGSO,
+    /**
+     * Start : Alıkoy
+     */
+    START,
+    /**
+     * Stay : Bakakal
+     */
+    STAY,
+    /**
+     * Equative : Öylece
+     */
+    EQUATIVE,
+    /**
+     * Instrumental : Kışın, arabayla
+     */
+    INSTRUMENTAL,
+    /**
+     * Aorist Tense : Her hafta sonunda futbol oynarlar.
+     */
+    AORIST,
+    /**
+     * Desire/Past Auxiliary : Çıkarsa
+     */
+    DESIRE,
+    /**
+     * Future : Yağacak
+     */
+    FUTURE,
+    /**
+     * Imperative : Otur!
+     */
+    IMPERATIVE,
+    /**
+     * Narrative Past Tense : Oluşmuş
+     */
+    NARRATIVE,
+    /**
+     * Necessity : Yapmalı
+     */
+    NECESSITY,
+    /**
+     * Optative : Doğanaya
+     */
+    OPTATIVE,
+    /**
+     * Past tense : Gitti
+     */
+    PAST,
+    /**
+     * Present partıcıple : Sarılan
+     */
+    PRESENT,
+    /**
+     * Progressive : Görüyorum
+     */
+    PROGRESSIVE1,
+    /**
+     * Progressive : Görmekteyim
+     */
+    PROGRESSIVE2,
+    /**
+     * Conditional : Gelirse
+     */
+    CONDITIONAL,
+    /**
+     * Copula : Mavidir
+     */
+    COPULA,
+    /**
+     * Positive : Gittim
+     */
+    POSITIVE,
+    /**
+     * Pronoun : Ben
+     */
+    PRONOUN,
+    /**
+     * Locative : Aşağıda
+     */
+    LOCATIVE,
+    /**
+     * Relative : Gelenin
+     */
+    RELATIVE,
+    /**
+     * Demonstrative : Bu
+     */
+    DEMONSTRATIVE,
+    /**
+     * Infinitive2 : Gitme
+     */
+    INFINITIVE2,
+    /**
+     * Infinitive3 : Gidiş
+     */
+    INFINITIVE3,
+    /**
+     * Sentence beginning header
+     */
+    BEGINNINGOFSENTENCE,
+    /**
+     * Sentence ending header
+     */
+    ENDOFSENTENCE,
+    /**
+     * Title beginning header
+     */
+    BEGINNINGOFTITLE,
+    /**
+     * Title ending header
+     */
+    ENDOFTITLE,
+    /**
+     * Document beginning header
+     */
+    BEGINNINGOFDOCUMENT,
+    /**
+     * Document ending header
+     */
+    ENDOFDOCUMENT,
+    /**
+     * As long as : Yaşadıkça
+     */
+    ASLONGAS,
+    /**
+     * Adamantly
+     */
+    ADAMANTLY,
+    /**
+     * Percent : 15%
+     */
+    PERCENT,
+    /**
+     * Without being able to have done so: kararlamadan
+     */
+    WITHOUTBEINGABLETOHAVEDONESO,
+    /**
+     * Dimension : Küçücük
+     */
+    DIMENSION,
+    /**
+     * Notable state : Anlaşılmazlık
+     */
+    NOTABLESTATE,
+    /**
+     * Fraction : Ondalık
+     */
+    FRACTION,
+    /**
+     * Hash tag : #
+     */
+    HASHTAG,
+    /**
+     * E-mail : @
+     */
+    EMAIL,
+    /**
+     * Date : 11/06/2018
+     */
+    DATE
 }
