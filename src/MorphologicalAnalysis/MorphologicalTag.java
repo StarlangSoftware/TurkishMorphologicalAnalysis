@@ -258,23 +258,23 @@ public enum MorphologicalTag {
      */
     WITHOUTHAVINGDONESO,
     /**
-     * PC ablative
+     * PC ablative : Başka
      */
     PCABLATIVE,
     /***
-     * PC accusative
+     * PC accusative : Takiben
      */
     PCACCUSATIVE,
     /**
-     * PC dative
+     * PC dative : İlişkin
      */
     PCDATIVE,
     /**
-     * PC genitive
+     * PC genitive : Yanısıra
      */
     PCGENITIVE,
     /**
-     * PC instrumental
+     * PC instrumental : Birlikte
      */
     PCINSTRUMENTAL,
     /**
@@ -494,7 +494,7 @@ public enum MorphologicalTag {
      */
     NOTABLESTATE,
     /**
-     * Fraction : Ondalık
+     * Fraction : 1/2
      */
     FRACTION,
     /**
