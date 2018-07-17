@@ -5,88 +5,172 @@ import Dictionary.Word;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MorphologicalParse implements Serializable{
+public class MorphologicalParse implements Serializable {
     protected ArrayList<InflectionalGroup> inflectionalGroups;
     protected Word root;
 
-    public MorphologicalParse(){
+    /**
+     * An empty constructor of {@link MorphologicalParse} class.
+     */
+    public MorphologicalParse() {
     }
 
-    public Word getWord(){
+    /**
+     * The no-arg getWord method returns root {@link Word}.
+     *
+     * @return root {@link Word}.
+     */
+    public Word getWord() {
         return root;
     }
 
-    public MorphologicalParse(String parse){
+    /**
+     * Another constructor of {@link MorphologicalParse} class which takes a {@link String} parse as an input. First it creates
+     * an {@link ArrayList} as iGs for inflectional groups, and while given String contains derivational boundary (^DB+), it
+     * adds the substring to the iGs {@link ArrayList} and continue to use given String from 4th index. If it does not contain ^DB+,
+     * it directly adds the given String to the iGs {@link ArrayList}. Then, it creates a new {@link ArrayList} as
+     * inflectionalGroups and checks for some cases.
+     * <p>
+     * If the first item of iGs {@link ArrayList} is ++Punc, it creates a new root as +, and by calling
+     * {@link InflectionalGroup} method with Punc it initializes the IG {@link ArrayList} by parsing given input
+     * String IG by + and calling the getMorphologicalTag method with these substrings. If getMorphologicalTag method returns
+     * a tag, it adds this tag to the IG {@link ArrayList} and also to the inflectionalGroups {@link ArrayList}.
+     * <p>
+     * If the first item of iGs {@link ArrayList} has +, it creates a new word of first item's substring from index 0 to +,
+     * and assigns it to root. Then, by calling {@link InflectionalGroup} method with substring from index 0 to +,
+     * it initializes the IG {@link ArrayList} by parsing given input String IG by + and calling the getMorphologicalTag
+     * method with these substrings. If getMorphologicalTag method returns a tag, it adds this tag to the IG {@link ArrayList}
+     * and also to the inflectionalGroups {@link ArrayList}.
+     * <p>
+     * If the first item of iGs {@link ArrayList} does not contain +, it creates a new word with first item and assigns it as root.
+     * <p>
+     * At the end, it loops through the items of iGs and by calling {@link InflectionalGroup} method with these items
+     * it initializes the IG {@link ArrayList} by parsing given input String IG by + and calling the getMorphologicalTag
+     * method with these substrings. If getMorphologicalTag method returns a tag, it adds this tag to the IG {@link ArrayList}
+     * and also to the inflectionalGroups {@link ArrayList}.
+     *
+     * @param parse String input.
+     */
+    public MorphologicalParse(String parse) {
         int i;
         ArrayList<String> iGs;
         iGs = new ArrayList<String>();
         String st = parse;
-        while (st.contains("^DB+")){
+        while (st.contains("^DB+")) {
             iGs.add(st.substring(0, st.indexOf("^DB+")));
             st = st.substring(st.indexOf("^DB+") + 4);
         }
         iGs.add(st);
         inflectionalGroups = new ArrayList<InflectionalGroup>();
-        if (iGs.get(0).equals("++Punc")){
+        if (iGs.get(0).equals("++Punc")) {
             root = new Word("+");
             inflectionalGroups.add(new InflectionalGroup("Punc"));
         } else {
-            if (iGs.get(0).indexOf('+') != -1){
+            if (iGs.get(0).indexOf('+') != -1) {
                 root = new Word(iGs.get(0).substring(0, iGs.get(0).indexOf('+')));
                 inflectionalGroups.add(new InflectionalGroup(iGs.get(0).substring(iGs.get(0).indexOf('+') + 1)));
             } else {
                 root = new Word(iGs.get(0));
             }
-            for (i = 1; i < iGs.size(); i++){
+            for (i = 1; i < iGs.size(); i++) {
                 inflectionalGroups.add(new InflectionalGroup(iGs.get(i)));
             }
         }
     }
 
-    public MorphologicalParse(ArrayList<String> inflectionalGroups){
+    /**
+     * Another constructor of {@link MorphologicalParse} class which takes an {@link ArrayList} inflectionalGroups as an input.
+     * First, it initializes inflectionalGroups {@link ArrayList} and if the first item of the {@link ArrayList} has +, it gets
+     * the substring from index 0 to + and assigns it as root, and by calling {@link InflectionalGroup} method with substring from index 0 to +,
+     * it initializes the IG {@link ArrayList} by parsing given input String IG by + and calling the getMorphologicalTag
+     * method with these substrings. If getMorphologicalTag method returns a tag, it adds this tag to the IG {@link ArrayList}
+     * and also to the inflectionalGroups {@link ArrayList}. However, if the first item does not contain +, it directly prints out
+     * indicating that there is no root for that item of this Inflectional Group.
+     * <p>
+     * At the end, it loops through the items of inflectionalGroups and by calling {@link InflectionalGroup} method with these items
+     * it initializes the IG {@link ArrayList} by parsing given input String IG by + and calling the getMorphologicalTag
+     * method with these substrings. If getMorphologicalTag method returns a tag, it adds this tag to the IG {@link ArrayList}
+     * and also to the inflectionalGroups {@link ArrayList}.
+     *
+     * @param inflectionalGroups {@link ArrayList} input.
+     */
+    public MorphologicalParse(ArrayList<String> inflectionalGroups) {
         int i;
         this.inflectionalGroups = new ArrayList<InflectionalGroup>();
-        if (inflectionalGroups.get(0).indexOf('+') != -1){
+        if (inflectionalGroups.get(0).indexOf('+') != -1) {
             root = new Word(inflectionalGroups.get(0).substring(0, inflectionalGroups.get(0).indexOf('+')));
             this.inflectionalGroups.add(new InflectionalGroup(inflectionalGroups.get(0).substring(inflectionalGroups.get(0).indexOf('+') + 1)));
         } else {
             System.out.println("Root word for " + inflectionalGroups.get(0) + " does not exist\n");
         }
-        for (i = 1; i < inflectionalGroups.size(); i++){
+        for (i = 1; i < inflectionalGroups.size(); i++) {
             this.inflectionalGroups.add(new InflectionalGroup(inflectionalGroups.get(i)));
         }
     }
 
-    public String getTransitionList(){
+    /**
+     * The getTransitionList method gets the first item of inflectionalGroups {@link ArrayList} as a {@link String}, then loops
+     * through the items of inflectionalGroups and concatenates them by using +.
+     *
+     * @return String that contains transition list.
+     */
+    public String getTransitionList() {
         String result = inflectionalGroups.get(0).toString();
-        for (int i = 1; i < inflectionalGroups.size(); i++){
+        for (int i = 1; i < inflectionalGroups.size(); i++) {
             result = result + "+" + inflectionalGroups.get(i).toString();
         }
         return result;
     }
 
-    public String getInflectionalGroupString(int index){
-        if (index == 0){
+    /**
+     * The getInflectionalGroupString method takes an {@link Integer} index as an input and if index is 0, it directly returns the
+     * root and the first item of inflectionalGroups {@link ArrayList}. If the index is not 0, it then returns the corresponding
+     * item of inflectionalGroups {@link ArrayList} as a {@link String}.
+     *
+     * @param index Integer input.
+     * @return corresponding item of inflectionalGroups at given index as a {@link String}.
+     */
+    public String getInflectionalGroupString(int index) {
+        if (index == 0) {
             return root.getName() + "+" + inflectionalGroups.get(0).toString();
         } else {
             return inflectionalGroups.get(index).toString();
         }
     }
 
-    public InflectionalGroup getInflectionalGroup(int index){
+    /**
+     * The getInflectionalGroup method takes an {@link Integer} index as an input and it directly returns the {@link InflectionalGroup}
+     * at given index.
+     *
+     * @param index Integer input.
+     * @return InflectionalGroup at given index.
+     */
+    public InflectionalGroup getInflectionalGroup(int index) {
         return inflectionalGroups.get(index);
     }
 
-    public InflectionalGroup getLastInflectionalGroup(){
+    /**
+     * The getLastInflectionalGroup method directly returns the last {@link InflectionalGroup} of inflectionalGroups {@link ArrayList}.
+     *
+     * @return the last {@link InflectionalGroup} of inflectionalGroups {@link ArrayList}.
+     */
+    public InflectionalGroup getLastInflectionalGroup() {
         return getInflectionalGroup(inflectionalGroups.size() - 1);
     }
 
-    public String getTag(int index){
+    /**
+     * The getTag method takes an {@link Integer} index as an input and and if the given index is 0, it directly return the root.
+     * then, it loops through the inflectionalGroups {@link ArrayList} it returns the MorphologicalTag of the corresponding inflectional group.
+     *
+     * @param index Integer input.
+     * @return the MorphologicalTag of the corresponding inflectional group, or null of invalid index inputs.
+     */
+    public String getTag(int index) {
         int size = 1;
         if (index == 0)
             return root.getName();
-        for (InflectionalGroup group:inflectionalGroups){
-            if (index < size + group.size()){
+        for (InflectionalGroup group : inflectionalGroups) {
+            if (index < size + group.size()) {
                 return InflectionalGroup.getTag(group.getTag(index - size));
             }
             size += group.size();
@@ -94,39 +178,82 @@ public class MorphologicalParse implements Serializable{
         return null;
     }
 
-    public int tagSize(){
+    /**
+     * The tagSize method loops through the inflectionalGroups {@link ArrayList} and accumulates the sizes of each inflectional group
+     * in the inflectionalGroups.
+     *
+     * @return total size of the inflectionalGroups {@link ArrayList}.
+     */
+    public int tagSize() {
         int size = 1;
-        for (InflectionalGroup group:inflectionalGroups){
+        for (InflectionalGroup group : inflectionalGroups) {
             size += group.size();
         }
         return size;
     }
 
-    public int size(){
+    /**
+     * The size method returns the size of the inflectionalGroups {@link ArrayList}.
+     *
+     * @return the size of the inflectionalGroups {@link ArrayList}.
+     */
+    public int size() {
         return inflectionalGroups.size();
     }
 
-    public InflectionalGroup firstInflectionalGroup(){
+    /**
+     * The firstInflectionalGroup method returns the first inflectional group of inflectionalGroups {@link ArrayList}.
+     *
+     * @return the first inflectional group of inflectionalGroups {@link ArrayList}.
+     */
+    public InflectionalGroup firstInflectionalGroup() {
         return inflectionalGroups.get(0);
     }
 
-    public InflectionalGroup lastInflectionalGroup(){
+    /**
+     * The lastInflectionalGroup method returns the last inflectional group of inflectionalGroups {@link ArrayList}.
+     *
+     * @return the last inflectional group of inflectionalGroups {@link ArrayList}.
+     */
+    public InflectionalGroup lastInflectionalGroup() {
         return inflectionalGroups.get(inflectionalGroups.size() - 1);
     }
 
-    public Word getWordWithPos(){
+    /**
+     * The getWordWithPos method returns root with the MorphologicalTag of the first inflectional as a new word.
+     *
+     * @return root with the MorphologicalTag of the first inflectional as a new word.
+     */
+    public Word getWordWithPos() {
         return new Word(root.getName() + "+" + InflectionalGroup.getTag(firstInflectionalGroup().getTag(0)));
     }
 
-    public String getPos(){
+    /**
+     * The getPos method returns the MorphologicalTag of the last inflectional group.
+     *
+     * @return the MorphologicalTag of the last inflectional group.
+     */
+    public String getPos() {
         return InflectionalGroup.getTag(lastInflectionalGroup().getTag(0));
     }
 
-    public String getRootPos(){
+    /**
+     * The getRootPos method returns the MorphologicalTag of the first inflectional group.
+     *
+     * @return the MorphologicalTag of the first inflectional group.
+     */
+    public String getRootPos() {
         return InflectionalGroup.getTag(firstInflectionalGroup().getTag(0));
     }
 
-    public String lastIGContainsCase(){
+    /**
+     * The lastIGContainsCase method returns the MorphologicalTag of last inflectional group if it is one of the NOMINATIVE,
+     * ACCUSATIVE, DATIVE, LOCATIVE or ABLATIVE cases, null otherwise.
+     *
+     * @return the MorphologicalTag of last inflectional group if it is one of the NOMINATIVE,
+     * ACCUSATIVE, DATIVE, LOCATIVE or ABLATIVE cases, null otherwise.
+     */
+    public String lastIGContainsCase() {
         MorphologicalTag caseTag = lastInflectionalGroup().containsCase();
         if (caseTag != null)
             return InflectionalGroup.getTag(caseTag);
@@ -134,87 +261,196 @@ public class MorphologicalParse implements Serializable{
             return "NULL";
     }
 
-    public boolean lastIGContainsTag(MorphologicalTag tag){
+    /**
+     * The lastIGContainsTag method takes a MorphologicalTag as an input and returns true if the last inflectional group's
+     * MorphologicalTag matches with one of the tags in the IG {@link ArrayList}, falze otherwise.
+     *
+     * @param tag {@link MorphologicalTag} type input.
+     * @return true if the last inflectional group's MorphologicalTag matches with one of the tags in the IG {@link ArrayList}, false otherwise.
+     */
+    public boolean lastIGContainsTag(MorphologicalTag tag) {
         return lastInflectionalGroup().containsTag(tag);
     }
 
-    public boolean lastIGContainsPossessive(){
+    /**
+     * lastIGContainsPossessive method returns true if the last inflectional group contains one of the
+     * possessives: P1PL, P1SG, P2PL, P2SG, P3PL AND P3SG, false otherwise.
+     *
+     * @return true if the last inflectional group contains one of the possessives: P1PL, P1SG, P2PL, P2SG, P3PL AND P3SG, false otherwise.
+     */
+    public boolean lastIGContainsPossessive() {
         return lastInflectionalGroup().containsPossessive();
     }
 
-    public boolean isCapitalWord(){
+    /**
+     * The isCapitalWord method returns true if the character at first index o f root is an uppercase letter, false otherwise.
+     *
+     * @return true if the character at first index o f root is an uppercase letter, false otherwise.
+     */
+    public boolean isCapitalWord() {
         return Character.isUpperCase(root.getName().charAt(0));
     }
 
-    public boolean isNoun(){
+    /**
+     * The isNoun method returns true if the past of speech is NOUN, false otherwise.
+     *
+     * @return true if the past of speech is NOUN, false otherwise.
+     */
+    public boolean isNoun() {
         return (getPos().equals("NOUN"));
     }
 
-    public boolean isVerb(){
+    /**
+     * The isVerb method returns true if the past of speech is VERB, false otherwise.
+     *
+     * @return true if the past of speech is VERB, false otherwise.
+     */
+    public boolean isVerb() {
         return (getPos().equals("VERB"));
     }
 
-    public boolean isRootVerb(){
+    /**
+     * The isRootVerb method returns true if the past of speech of root is BERV, false otherwise.
+     *
+     * @return true if the past of speech of root is VERB, false otherwise.
+     */
+    public boolean isRootVerb() {
         return (getRootPos().equals("VERB"));
     }
 
-    public boolean isAdjective(){
+    /**
+     * The isAdjective method returns true if the past of speech is ADJ, false otherwise.
+     *
+     * @return true if the past of speech is ADJ, false otherwise.
+     */
+    public boolean isAdjective() {
         return (getPos().equals("ADJ"));
     }
 
-    public boolean isProperNoun(){
+    /**
+     * The isProperNoun method returns true if the first inflectional group's MorphologicalTag is a PROPERNOUN, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a PROPERNOUN, false otherwise.
+     */
+    public boolean isProperNoun() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.PROPERNOUN);
     }
 
-    public boolean isPunctuation(){
+    /**
+     * The isPunctuation method returns true if the first inflectional group's MorphologicalTag is a PUNCTUATION, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a PUNCTUATION, false otherwise.
+     */
+    public boolean isPunctuation() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.PUNCTUATION);
     }
 
-    public boolean isCardinal(){
+    /**
+     * The isCardinal method returns true if the first inflectional group's MorphologicalTag is a CARDINAL, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a CARDINAL, false otherwise.
+     */
+    public boolean isCardinal() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.CARDINAL);
     }
 
-    public boolean isOrdinal(){
+    /**
+     * The isOrdinal method returns true if the first inflectional group's MorphologicalTag is a ORDINAL, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a ORDINAL, false otherwise.
+     */
+    public boolean isOrdinal() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.ORDINAL);
     }
 
-    public boolean isReal(){
+    /**
+     * The isReal method returns true if the first inflectional group's MorphologicalTag is a REAL, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a REAL, false otherwise.
+     */
+    public boolean isReal() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.REAL);
     }
 
-    public boolean isNumber(){
+    /**
+     * The isNumber method returns true if the first inflectional group's MorphologicalTag is REAL or CARDINAL, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a REAL or CARDINAL, false otherwise.
+     */
+    public boolean isNumber() {
         return isReal() || isCardinal();
     }
 
-    public boolean isTime(){
+    /**
+     * The isTime method returns true if the first inflectional group's MorphologicalTag is a TIME, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a TIME, false otherwise.
+     */
+    public boolean isTime() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.TIME);
     }
 
-    public boolean isDate(){
+    /**
+     * The isDate method returns true if the first inflectional group's MorphologicalTag is a DATE, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a DATE, false otherwise.
+     */
+    public boolean isDate() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.DATE);
     }
 
-    public boolean isHashTag(){
+    /**
+     * The isHashTag method returns true if the first inflectional group's MorphologicalTag is a HASHTAG, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a HASHTAG, false otherwise.
+     */
+    public boolean isHashTag() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.HASHTAG);
     }
 
-    public boolean isEmail(){
+    /**
+     * The isEmail method returns true if the first inflectional group's MorphologicalTag is a EMAIL, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a EMAIL, false otherwise.
+     */
+    public boolean isEmail() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.EMAIL);
     }
 
-    public boolean isPercent(){
+    /**
+     * The isPercent method returns true if the first inflectional group's MorphologicalTag is a PERCENT, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a PERCENT, false otherwise.
+     */
+    public boolean isPercent() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.PERCENT);
     }
 
-    public boolean isFraction(){
+    /**
+     * The isFraction method returns true if the first inflectional group's MorphologicalTag is a FRACTION, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a FRACTION, false otherwise.
+     */
+    public boolean isFraction() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.FRACTION);
     }
 
-    public boolean isRange(){
+    /**
+     * The isRange method returns true if the first inflectional group's MorphologicalTag is a RANGE, false otherwise.
+     *
+     * @return true if the first inflectional group's MorphologicalTag is a RANGE, false otherwise.
+     */
+    public boolean isRange() {
         return getInflectionalGroup(0).containsTag(MorphologicalTag.RANGE);
     }
 
-    public boolean isPlural(){
+    /**
+     * The isPlural method returns true if {@link InflectionalGroup}'s MorphologicalTags are from the agreement plural
+     * or possessive plural, i.e A1PL, A2PL, A3PL, P1PL, P2PL or P3PL, and false otherwise.
+     *
+     * @return true if {@link InflectionalGroup}'s MorphologicalTags are from the agreement plural or possessive plural.
+     */
+    public boolean isPlural() {
         for (InflectionalGroup inflectionalGroup : inflectionalGroups)
             if (inflectionalGroup.containsPlural()) {
                 return true;
@@ -222,20 +458,37 @@ public class MorphologicalParse implements Serializable{
         return false;
     }
 
-    public boolean isAuxiliary(){
+    /**
+     * The isAuxiliary method returns true if the root equals to the et, ol, or yap, and false otherwise.
+     *
+     * @return true if the root equals to the et, ol, or yap, and false otherwise.
+     */
+    public boolean isAuxiliary() {
         return root.getName().equals("et") || root.getName().equals("ol") || root.getName().equals("yap");
     }
 
-    public boolean containsTag(MorphologicalTag tag){
-        for (InflectionalGroup inflectionalGroup:inflectionalGroups){
-            if (inflectionalGroup.containsTag(tag)){
+    /**
+     * The containsTag method takes a MorphologicalTag as an input and loops through the inflectionalGroups {@link ArrayList},
+     * returns true if the input matches with on of the tags in the IG, false otherwise.
+     *
+     * @return true if the input matches with on of the tags in the IG, false otherwise.
+     */
+    public boolean containsTag(MorphologicalTag tag) {
+        for (InflectionalGroup inflectionalGroup : inflectionalGroups) {
+            if (inflectionalGroup.containsTag(tag)) {
                 return true;
             }
         }
         return false;
     }
 
-    public String toString(){
+    /**
+     * The overridden toString method gets the root and the first inflectional group as a result {@link String} then concatenates
+     * with ^DB+ and the following inflectional groups.
+     *
+     * @return result {@link String}.
+     */
+    public String toString() {
         String result = root.getName() + "+" + inflectionalGroups.get(0).toString();
         for (int i = 1; i < inflectionalGroups.size(); i++)
             result = result + "^DB+" + inflectionalGroups.get(i).toString();
