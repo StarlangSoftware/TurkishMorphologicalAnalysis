@@ -453,7 +453,7 @@ public class FsmMorphologicalAnalyzer {
      * Ex : Açıktohumlular
      * <p>
      * !isPlural and isPortmanteauEndingWithSI, if root holds the conditions then it gets the state with the
-     * name of NNominalRootNoPossesive.
+     * name of NominalRootNoPossesive.
      * Ex : Balarısı
      * <p>
      * !isPlural and isPortmanteau, if root holds the conditions then it gets the state with the name of
@@ -466,11 +466,11 @@ public class FsmMorphologicalAnalyzer {
      * <p>
      * !isPlural, !isPortmanteau and isInterjection, if root holds the conditions then it gets the state
      * with the name of InterjectionRoot.
-     * Ex : Hey!, Aa!
+     * Ex : Hey, Aa
      * <p>
      * !isPlural, !isPortmanteau and isDuplicate, if root holds the conditions then it gets the state
      * with the name of DuplicateRoot.
-     * Ex : Allak Bullak
+     * Ex : Allak,
      * <p>
      * !isPlural, !isPortmanteau and isNumeral, if root holds the conditions then it gets the state
      * with the name of CardinalRoot.
@@ -478,11 +478,11 @@ public class FsmMorphologicalAnalyzer {
      * <p>
      * !isPlural, !isPortmanteau and isReal, if root holds the conditions then it gets the state
      * with the name of RealRoot.
-     * Ex : 1, 2
+     * Ex : 1.2
      * <p>
      * !isPlural, !isPortmanteau and isFraction, if root holds the conditions then it gets the state
      * with the name of FractionRoot.
-     * Ex : Ondalık
+     * Ex : 1/2
      * <p>
      * !isPlural, !isPortmanteau and isDate, if root holds the conditions then it gets the state
      * with the name of DateRoot.

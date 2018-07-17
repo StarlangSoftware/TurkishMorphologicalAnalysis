@@ -218,7 +218,7 @@ public class MetamorphicParse implements Serializable {
             */
             MorphologicalTag.A1PL,
             /**
-             * 1st person singuular agreement : Ben giderim
+             * 1st person singular agreement : Ben giderim
             */
             MorphologicalTag.A1SG,
             /**
