@@ -179,7 +179,7 @@ public class Transition {
 
     /**
      * The beforeLastVowel method takes a {@link String} stem as an input. It loops through the given stem and returns
-     * the last vowel which come before the last character.
+     * the second last vowel.
      *
      * @param stem String input.
      * @return the last vowel.
@@ -202,7 +202,7 @@ public class Transition {
 
     /**
      * The lastVowel method takes a {@link String} stem as an input. It loops through the given stem and returns
-     * the last vowel .
+     * the last vowel.
      *
      * @param stem String input.
      * @return the last vowel.
@@ -333,83 +333,104 @@ public class Transition {
             }
         }
         formationToCheck = stem;
+        //---vowelEChangesToIDuringYSuffixation---
+        //de->d(i)yor, ye->y(i)yor
         if (rootWord && withFirstChar() == 'y' && root.vowelEChangesToIDuringYSuffixation() && with.charAt(1) != 'H') {
             formation = stem.substring(0, stem.length() - 1) + 'i';
             formationToCheck = formation;
         } else {
+            //---lastIdropsDuringPassiveSuffixation---
+            // yoğur->yoğrul, ayır->ayrıl, buyur->buyrul, çağır->çağrıl, çevir->çevril, devir->devril,
+            // kavur->kavrul, kayır->kayrıl, kıvır->kıvrıl, savur->savrul, sıyır->sıyrıl, yoğur->yoğrul
             if (rootWord && (with.equalsIgnoreCase("Hl") || with.equalsIgnoreCase("Hn")) && root.lastIdropsDuringPassiveSuffixation()) {
                 formation = stem.substring(0, stem.length() - 2) + stem.charAt(stem.length() - 1);
                 formationToCheck = stem;
             } else {
+                //---showsSuRegularities---
+                //karasu->karasuyu, özsu->özsuyu, ağırsu->ağırsuyu, akarsu->akarsuyu, bengisu->bengisuyu
                 if (rootWord && root.showsSuRegularities() && startWithVowelorConsonantDrops() && !with.startsWith("y")) {
                     formation = stem + 'y';
                     formationToCheck = formation;
                 } else {
                     if (rootWord && root.duplicatesDuringSuffixation() && TurkishLanguage.isConsonantDrop(with.charAt(0))) {
+                        //---duplicatesDuringSuffixation---
                         if (softenDuringSuffixation(root)) {
+                            //--extra softenDuringSuffixation
                             switch (lastPhoneme(stem)) {
                                 case 'p':
+                                    //tıp->tıbbı
                                     formation = stem.substring(0, stem.length() - 1) + "bb";
                                     break;
-                                case 'ç':
-                                    formation = stem.substring(0, stem.length() - 1) + "cc";
-                                    break;
                                 case 't':
+                                    //cet->ceddi, met->meddi, ret->reddi, serhat->serhaddi, zıt->zıddı, şet->şeddi
                                     formation = stem.substring(0, stem.length() - 1) + "dd";
                                     break;
                             }
                         } else {
+                            //cer->cerri, emrihak->emrihakkı, fek->fekki, fen->fenni, had->haddi, hat->hattı,
+                            // haz->hazzı, his->hissi
                             formation = stem + stem.charAt(stem.length() - 1);
                         }
                         formationToCheck = formation;
                     } else {
                         if (rootWord && root.lastIdropsDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && !startState.getName().startsWith("ProperRoot") && startWithVowelorConsonantDrops()) {
+                            //---lastIdropsDuringSuffixation---
                             if (softenDuringSuffixation(root)) {
+                                //---softenDuringSuffixation---
                                 switch (lastPhoneme(stem)) {
                                     case 'p':
+                                        //hizip->hizbi, kayıp->kaybı, kayıt->kaydı, kutup->kutbu
                                         formation = stem.substring(0, stem.length() - 2) + 'b';
                                         break;
                                     case 't':
+                                        //akit->akdi, ahit->ahdi, lahit->lahdi, nakit->nakdi, vecit->vecdi
                                         formation = stem.substring(0, stem.length() - 2) + 'd';
                                         break;
                                     case 'ç':
+                                        //eviç->evci, nesiç->nesci
                                         formation = stem.substring(0, stem.length() - 2) + 'c';
-                                        break;
-                                    case 'k':
-                                        formation = stem.substring(0, stem.length() - 2) + 'g';
                                         break;
                                 }
                             } else {
+                                //sarıağız->sarıağzı, zehir->zehri, zikir->zikri, nutuk->nutku, omuz->omzu, ömür->ömrü
+                                //lütuf->lütfu, metin->metni, kavim->kavmi, kasıt->kastı
                                 formation = stem.substring(0, stem.length() - 2) + stem.charAt(stem.length() - 1);
                             }
                             formationToCheck = stem;
                         } else {
                             switch (lastPhoneme(stem)) {
+                                //---nounSoftenDuringSuffixation or verbSoftenDuringSuffixation
                                 case 'p':
+                                    //adap->adabı, amip->amibi, azap->azabı, gazap->gazabı
                                     if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'b';
                                     }
                                     break;
                                 case 't':
+                                    //abat->abadı, adet->adedi, akort->akordu, armut->armudu
+                                    //affet->affedi, yoket->yokedi, sabret->sabredi, rakset->raksedi
                                     if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'd';
                                     }
                                     break;
                                 case 'ç':
+                                    //ağaç->ağacı, almaç->almacı, akaç->akacı, avuç->avucu
                                     if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'c';
                                     }
                                     break;
                                 case 'g':
+                                    //arkeolog->arkeoloğu, filolog->filoloğu, minerolog->mineroloğu
                                     if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'ğ';
                                     }
                                     break;
                                 case 'k':
+                                    //ahenk->ahengi, künk->küngü, renk->rengi, pelesenk->pelesengi
                                     if (startWithVowelorConsonantDrops() && rootWord && root.endingKChangesIntoG() && !root.isProperNoun()) {
                                         formation = stem.substring(0, stem.length() - 1) + 'g';
                                     } else {
-                                        //Özel isimler yumuşamaz istisnası
+                                        //ablak->ablağı, küllük->küllüğü, kitaplık->kitaplığı, evcilik->evciliği
                                         if (startWithVowelorConsonantDrops() && (!rootWord || (softenDuringSuffixation(root) && (!root.isProperNoun() || !startState.toString().equals("ProperRoot"))))) {
                                             formation = stem.substring(0, stem.length() - 1) + 'ğ';
                                         }
@@ -488,19 +509,24 @@ public class Transition {
                 case '3':
                 case '4':
                 case '5':
+                    //3->3'tü, 5->5'ti, 4->4'tü
                     return formation + 't';
                 case '0':
                     if (root.getName().endsWith("40") || root.getName().endsWith("60") || root.getName().endsWith("70"))
+                        //40->40'tı, 60->60'tı, 70->70'ti
                         return formation + 't';
                     else
+                        //30->30'du, 50->50'ydi, 80->80'di
                         return formation + 'd';
                 default:
                     return formation + 'd';
             }
         } else {
             if (TurkishLanguage.isSertSessiz(lastPhoneme(formationToCheck))) {
+                //yap+DH->yaptı
                 return formation + 't';
             } else {
+                //sar+DH->sardı
                 return formation + 'd';
             }
         }
@@ -515,27 +541,35 @@ public class Transition {
             switch (lastVowel(formationToCheck)) {
                 case '6':
                 case '9':
+                    //6'ya, 9'a
                     return formation + 'a';
                 case '0':
                     if (root.getName().endsWith("10") || root.getName().endsWith("30") || root.getName().endsWith("40") || root.getName().endsWith("60") || root.getName().endsWith("90"))
+                        //10'a, 30'a, 40'a, 60'a, 90'a
                         return formation + 'a';
                     else
+                        //20'ye, 50'ye, 80'e, 70'e
                         return formation + 'e';
                 default:
+                    //3'e, 8'e, 4'e, 2'ye
                     return formation + 'e';
             }
         }
         if (TurkishLanguage.isBackVowel(lastVowel(formationToCheck))) {
             if (root.notObeysVowelHarmonyDuringAgglutination() && rootWord) {
+                //alkole, anormale, ampule, tümamirali, spirali, sosyali
                 return formation + 'e';
             } else {
+                //sakala, kabala, eve, kediye
                 return formation + 'a';
             }
         }
         if (TurkishLanguage.isFrontVowel(lastVowel(formationToCheck))) {
             if (root.notObeysVowelHarmonyDuringAgglutination() && rootWord) {
+                //sakala, kabala, eve, kediye
                 return formation + 'a';
             } else {
+                //alkole, anormale, ampule, tümamirali, spirali, sosyali
                 return formation + 'e';
             }
         }
@@ -557,18 +591,23 @@ public class Transition {
             return formation;
         }
         if (specialCaseTenseSuffix) {
+            //eğer ek Hyor eki ise,
             if (rootWord) {
                 if (root.vowelAChangesToIDuringYSuffixation()) {
                     if (TurkishLanguage.isFrontRoundedVowel(beforeLastVowel(formationToCheck))) {
+                        //büyülüyor, bölümlüyor, çözümlüyor, döşüyor
                         return formation.substring(0, formation.length() - 1) + 'ü';
                     }
                     if (TurkishLanguage.isFrontUnroundedVowel(beforeLastVowel(formationToCheck))) {
+                        //adresliyor, alevliyor, ateşliyor, bekliyor
                         return formation.substring(0, formation.length() - 1) + 'i';
                     }
                     if (TurkishLanguage.isBackRoundedVowel(beforeLastVowel(formationToCheck))) {
+                        //buğuluyor, bulguluyor, çamurluyor, aforozluyor
                         return formation.substring(0, formation.length() - 1) + 'u';
                     }
                     if (TurkishLanguage.isBackUnroundedVowel(beforeLastVowel(formationToCheck))) {
+                        //açıklıyor, çalkalıyor, gazlıyor, gıcırdıyor
                         return formation.substring(0, formation.length() - 1) + 'ı';
                     }
                 }
@@ -602,14 +641,18 @@ public class Transition {
         }
         if (root.isNumeral() || root.isFraction() || root.isReal()) {
             if (root.getName().endsWith("6") || root.getName().endsWith("40") || root.getName().endsWith("60") || root.getName().endsWith("90")) {
+                //6'yı, 40'ı, 60'ı
                 return formation + 'ı';
             } else {
                 if (root.getName().endsWith("3") || root.getName().endsWith("4") || root.getName().endsWith("00")) {
+                    //3'ü, 4'ü, 100'ü
                     return formation + 'ü';
                 } else {
                     if (root.getName().endsWith("9") || root.getName().endsWith("10") || root.getName().endsWith("30")) {
+                        //9'u, 10'u, 30'u
                         return formation + 'u';
                     } else {
+                        //2'yi, 5'i, 8'i
                         return formation + 'i';
                     }
                 }
