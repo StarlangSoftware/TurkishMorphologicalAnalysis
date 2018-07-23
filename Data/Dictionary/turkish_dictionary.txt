@@ -7261,7 +7261,7 @@ boksit CL_ISIM
 boksör CL_ISIM
 boktan IS_ADJ
 böl CL_FIIL F5PL
-bol IS_UUU IS_ADJ
+bol IS_UUU IS_UU IS_ADJ
 bolal CL_FIIL F4PL
 bolar CL_FIIL F4PR
 bolat IS_OA
@@ -19329,7 +19329,7 @@ hamhalat CL_ISIM
 hami IS_ADJ CL_ISIM IS_OA
 hamid IS_OA
 hamide IS_OA
-hamil IS_OA IS_UDD IS_UD IS_ADJ
+hamil IS_OA IS_UDD IS_UD CL_ISIM IS_ADJ
 hamile IS_ADJ CL_ISIM
 hamilen IS_ADVERB
 hamilikart CL_ISIM
@@ -42358,7 +42358,7 @@ sokur CL_ISIM
 sokuş CL_FIIL
 söküş CL_ISIM
 sokuştur CL_FIIL F4PR
-sol IS_UUU CL_FIIL CL_ISIM IS_ADJ F5PL-NO-REF
+sol IS_UUU IS_UU CL_FIIL CL_ISIM IS_ADJ F5PL-NO-REF
 solaçık IS_SD CL_ISIM
 solak IS_SD CL_ISIM IS_ADJ
 solaklık CL_ISIM IS_SD
@@ -49293,8 +49293,8 @@ yapsatçılık CL_ISIM IS_SD
 yaptırım CL_ISIM
 yapyakın IS_ADVERB
 yapyalnız CL_ISIM
-yâr IS_UUU CL_ISIM
-yar IS_UUU CL_FIIL CL_ISIM F5PR
+yâr IS_UUU IS_UU CL_ISIM
+yar IS_UUU IS_UU CL_FIIL CL_ISIM F5PR
 yara F_GUD CL_FIIL CL_ISIM F4PW IS_OA
 yaradan IS_OA
 yaradancılık IS_OA IS_SD CL_ISIM

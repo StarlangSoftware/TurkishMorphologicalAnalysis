@@ -716,6 +716,24 @@ public class FsmMorphologicalAnalyzer {
         for (Word word : words) {
             root = (TxtWord) word;
             initializeParseList(initialFsmParse, root, isProper);
+            if (root.obeysAndNotObeysVowelHarmonyDuringAgglutination()){
+                TxtWord newRoot = root.clone();
+                newRoot.removeFlag("IS_UU");
+                newRoot.removeFlag("IS_UUU");
+                initializeParseList(initialFsmParse, newRoot, isProper);
+            }
+            if (root.rootSoftenAndNotSoftenDuringSuffixation()){
+                TxtWord newRoot = root.clone();
+                newRoot.removeFlag("IS_SD");
+                newRoot.removeFlag("IS_SDD");
+                initializeParseList(initialFsmParse, newRoot, isProper);
+            }
+            if (root.lastIDropsAndNotDropDuringSuffixation()){
+                TxtWord newRoot = root.clone();
+                newRoot.removeFlag("IS_UD");
+                newRoot.removeFlag("IS_UDD");
+                initializeParseList(initialFsmParse, newRoot, isProper);
+            }
         }
         return initialFsmParse;
     }
