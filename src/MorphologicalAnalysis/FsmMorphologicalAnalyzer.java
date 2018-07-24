@@ -902,7 +902,6 @@ public class FsmMorphologicalAnalyzer {
     private ArrayList<FsmParse> analysis(String surfaceForm, boolean isProper) {
         ArrayList<FsmParse> initialFsmParse;
         FsmParse fsmParse;
-        System.out.println();
         if (Word.isPunctuation(surfaceForm) && !surfaceForm.equals("%")) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("Punctuation"), true, true));

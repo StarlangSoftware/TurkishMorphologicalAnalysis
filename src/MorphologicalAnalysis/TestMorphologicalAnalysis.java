@@ -193,6 +193,7 @@ public class TestMorphologicalAnalysis {
 
     public static void main(String[] args){
         analyze();
+        //checkSpeed();
     }
 
 }
