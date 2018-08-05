@@ -20,6 +20,31 @@
                 </configuration>
             </plugin>
 
+            <!-- https://stackoverflow.com/questions/10935135/maven-and-adding-jars-to-system-scope/31023523 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <id>install-external</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <file>${basedir}/src/libs/Corpus.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>dilbaz</groupId>
+                            <artifactId>Corpus</artifactId>
+                            <version>1.0.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--https://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -47,8 +72,8 @@
             <groupId>dilbaz</groupId>
             <artifactId>Corpus</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/libs/Corpus.jar</systemPath>
+            <!--<scope>system</scope>
+             <systemPath>${project.basedir}/src/libs/Corpus.jar</systemPath> -->
         </dependency>
 
     </dependencies>
