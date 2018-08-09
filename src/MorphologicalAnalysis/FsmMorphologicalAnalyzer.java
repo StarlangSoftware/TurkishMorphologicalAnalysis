@@ -734,6 +734,11 @@ public class FsmMorphologicalAnalyzer {
                 newRoot.removeFlag("IS_UDD");
                 initializeParseList(initialFsmParse, newRoot, isProper);
             }
+            if (root.endingKChangesIntoG()){
+                TxtWord newRoot = root.clone();
+                newRoot.removeFlag("IS_OA");
+                initializeParseList(initialFsmParse, newRoot, isProper);
+            }
         }
         return initialFsmParse;
     }

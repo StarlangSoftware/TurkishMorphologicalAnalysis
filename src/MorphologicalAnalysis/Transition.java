@@ -123,8 +123,6 @@ public class Transition {
         return true;
     }
 
-    //// TODO: 7/20/2018
-
     /**
      * The transitionPossible method takes a {@link FsmParse} currentFsmParse as an input. It then checks some special cases;
      *
@@ -132,7 +130,6 @@ public class Transition {
      * @return
      */
     public boolean transitionPossible(FsmParse currentFsmParse) {
-        //// TODO: 7/20/2018 for what? and ask example.
         if (with.equalsIgnoreCase("Ar") && currentFsmParse.getSurfaceForm().endsWith("l") && !currentFsmParse.getWord().getName().equalsIgnoreCase(currentFsmParse.getSurfaceForm())) {
             return false;
         }
@@ -147,7 +144,6 @@ public class Transition {
         return true;
     }
 
-    //// TODO: 7/23/2018
     public boolean transitionPossible(TxtWord root, State fromState) {
         if (root.isAdjective() && ((root.isNominal() && !root.isExceptional()) || root.isPronoun()) && toState.getName().equalsIgnoreCase("NominalRoot(ADJ)") && with.equalsIgnoreCase("0")) {
             return false;
@@ -499,7 +495,6 @@ public class Transition {
         return formation;
     }
 
-    //// TODO: 7/23/2018
     private String resolveD(TxtWord root, String formation) {
         if (root.isAbbreviation()) {
             return formation + 'd';
@@ -583,7 +578,6 @@ public class Transition {
         return formation;
     }
 
-    //// TODO: 7/23/2018
     private String resolveH(TxtWord root, String formation, boolean beginningOfSuffix, boolean specialCaseTenseSuffix, boolean rootWord) {
         if (root.isAbbreviation())
             return formation + 'i';

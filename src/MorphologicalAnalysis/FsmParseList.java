@@ -122,9 +122,6 @@ public class FsmParseList {
                     defaultCase = "P3SG+NOM";
                 }
                 break;
-            case "A3SG+P2SG$A3SG+PNON":
-                defaultCase = "A3SG+PNON";
-                break;
             case "A2SG+P2SG$A3SG+P3SG":
                 defaultCase = "A3SG+P3SG";
                 break;
