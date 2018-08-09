@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>MorphologicalAnalysis</groupId>
+    <artifactId>MorphologicalAnalysis</artifactId>
+    <version>1.1.0</version>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <!-- https://stackoverflow.com/questions/10935135/maven-and-adding-jars-to-system-scope/31023523 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <id>install-external</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <file>${basedir}/src/libs/Corpus.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>dilbaz</groupId>
+                            <artifactId>Corpus</artifactId>
+                            <version>1.0.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--https://stackoverflow.com/questions/1729054/including-dependencies-in-a-jar-with-maven-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <!--https://stackoverflow.com/questions/4955635/how-to-add-local-jar-files-to-a-maven-project-->
+            <groupId>dilbaz</groupId>
+            <artifactId>Corpus</artifactId>
+            <version>1.0.0</version>
+            <!--<scope>system</scope>
+             <systemPath>${project.basedir}/src/libs/Corpus.jar</systemPath> -->
+        </dependency>
+
+    </dependencies>
+
+</project>
