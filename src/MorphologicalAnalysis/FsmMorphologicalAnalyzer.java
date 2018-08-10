@@ -233,7 +233,7 @@ public class FsmMorphologicalAnalyzer {
     private Trie prepareTrie(TxtDictionary currentDictionary) {
         Trie result = new Trie();
         String root, rootWithoutLast, rootWithoutLastTwo;
-        char last;
+        char last, lastBefore = ' ';
         for (int i = 0; i < currentDictionary.size(); i++) {
             TxtWord word = (TxtWord) currentDictionary.getWord(i);
             root = word.getName();
@@ -245,6 +245,9 @@ public class FsmMorphologicalAnalyzer {
                 rootWithoutLastTwo = root.substring(0, root.length() - 2);
             } else {
                 rootWithoutLastTwo = "";
+            }
+            if (root.length() > 1){
+                lastBefore = root.charAt(root.length() - 2);
             }
             last = root.charAt(root.length() - 1);
             result.addWord(root, word);
@@ -258,6 +261,9 @@ public class FsmMorphologicalAnalyzer {
             // NominalRootNoPossesive
             if (word.isPortmanteauEndingWithSI()) {
                 result.addWord(rootWithoutLastTwo, word);
+            }
+            if (word.isPortmanteauFacedVowelEllipsis()){
+                result.addWord(rootWithoutLastTwo + last + lastBefore, word);
             }
             if (word.rootSoftenDuringSuffixation()) {
                 addWordWhenRootSoften(result, last, rootWithoutLast, word);
