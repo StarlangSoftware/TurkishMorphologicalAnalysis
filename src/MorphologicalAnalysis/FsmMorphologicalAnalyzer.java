@@ -4,20 +4,12 @@ import Corpus.Sentence;
 import DataStructure.Cache.LRUCache;
 import Dictionary.Trie.Trie;
 import Dictionary.*;
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import java.io.*;
 import java.util.*;
 
 public class FsmMorphologicalAnalyzer {
 
     private Trie dictionaryTrie;
-    private ArrayList<State> states;
+    private FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
     private TxtDictionary dictionary;
     private LRUCache<String, FsmParseList> cache;
@@ -50,7 +42,7 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary, int cacheSize) {
         this.dictionary = dictionary;
-        readFsm(fileName);
+        finiteStateMachine = new FiniteStateMachine(fileName);
         dictionaryTrie = prepareTrie(dictionary);
         cache = new LRUCache<>(cacheSize);
     }
@@ -65,116 +57,7 @@ public class FsmMorphologicalAnalyzer {
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary) {
         this(fileName, dictionary, 100000);
     }
-
-    /**
-     * The readFsm method reads the finite state machine in the given input file. It has a NodeList which holds the states
-     * of the nodes and there are 4 different type of nodes; stateNode, root Node, transitionNode and withNode.
-     * Also there are two states; state that a node currently in and state that a node will be in.
-     * <p>
-     * DOMParser is used to parse the given file. Firstly it gets the document to parse, then gets its elements by the
-     * tag names. For instance, it gets states by the tag name 'state' and puts them into an ArrayList called stateList.
-     * Secondly, it traverses this stateList and gets each Node's attributes. There are three attributes; name, start,
-     * and end which will be named as states. If a node is in a startState it is tagged as 'yes', otherwise 'no'.
-     * Also, if a node is in a startState, additional attribute will be fetched; originalPos that represents its original
-     * part of speech.
-     * <p>
-     * At the last step, by starting rootNode's first child, it gets all the transitionNodes and next states called toState,
-     * then continue with the nextSiblings. Also, if there is no possible toState, it prints this case and the causative states.
-     *
-     * @param fileName the file to read the finite state machine.
-     */
-    private void readFsm(String fileName) {
-        int i;
-        boolean startState, endState;
-        NodeList stateList;
-        Node stateNode, rootNode, transitionNode, withNode;
-        State state, toState;
-        String stateName, withName, originalPos, rootToPos, toPos;
-        NamedNodeMap attributes;
-        DOMParser parser = new DOMParser();
-        Document doc;
-        try {
-            parser.parse(fileName);
-        } catch (SAXException | IOException e) {
-            e.printStackTrace();
-        }
-        doc = parser.getDocument();
-        stateList = doc.getElementsByTagName("state");
-        states = new ArrayList<>();
-        for (i = 0; i < stateList.getLength(); i++) {
-            stateNode = stateList.item(i);
-            attributes = stateNode.getAttributes();
-            stateName = attributes.getNamedItem("name").getNodeValue();
-            startState = attributes.getNamedItem("start").getNodeValue().equalsIgnoreCase("yes");
-            endState = attributes.getNamedItem("end").getNodeValue().equalsIgnoreCase("yes");
-            if (startState) {
-                originalPos = attributes.getNamedItem("originalpos").getNodeValue();
-                states.add(new State(stateName, true, endState, originalPos));
-            } else {
-                states.add(new State(stateName, false, endState));
-            }
-        }
-        rootNode = doc.getFirstChild();
-        stateNode = rootNode.getFirstChild();
-        while (stateNode != null) {
-            if (stateNode.hasAttributes()) {
-                attributes = stateNode.getAttributes();
-                stateName = attributes.getNamedItem("name").getNodeValue();
-                state = getState(stateName);
-                transitionNode = stateNode.getFirstChild();
-                while (transitionNode != null) {
-                    if (transitionNode.hasAttributes()) {
-                        attributes = transitionNode.getAttributes();
-                        stateName = attributes.getNamedItem("name").getNodeValue();
-                        if (attributes.getNamedItem("transitionname") != null) {
-                            withName = attributes.getNamedItem("transitionname").getNodeValue();
-                        } else {
-                            withName = null;
-                        }
-                        if (attributes.getNamedItem("topos") != null) {
-                            rootToPos = attributes.getNamedItem("topos").getNodeValue();
-                        } else {
-                            rootToPos = null;
-                        }
-                        toState = getState(stateName);
-                        if (toState != null) {
-                            withNode = transitionNode.getFirstChild();
-                            while (withNode != null) {
-                                if (withNode.getFirstChild() != null) {
-                                    if (withNode.hasAttributes()) {
-                                        attributes = withNode.getAttributes();
-                                        withName = attributes.getNamedItem("name").getNodeValue();
-                                        if (attributes.getNamedItem("toPos") != null) {
-                                            toPos = attributes.getNamedItem("topos").getNodeValue();
-                                        } else {
-                                            toPos = null;
-                                        }
-                                    } else {
-                                        toPos = null;
-                                    }
-                                    if (toPos == null) {
-                                        if (rootToPos == null) {
-                                            state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName);
-                                        } else {
-                                            state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName, rootToPos);
-                                        }
-                                    } else {
-                                        state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName, toPos);
-                                    }
-                                }
-                                withNode = withNode.getNextSibling();
-                            }
-                        } else {
-                            System.out.println("From state " + state.getName() + " to state " + stateName + " does not exist");
-                        }
-                    }
-                    transitionNode = transitionNode.getNextSibling();
-                }
-            }
-            stateNode = stateNode.getNextSibling();
-        }
-    }
-
+    
     /**
      * The addWordWhenRootSoften is used to add word to Trie whose last consonant will be soften.
      * For instance, in the case of Dative Case Suffix, the word is 'müzik' when '-e' is added to the word, the last
@@ -361,25 +244,7 @@ public class FsmMorphologicalAnalyzer {
         }
         return result;
     }
-
-    /**
-     * The isValidTransition loops through states ArrayList and checks transitions between states. If the actual transition
-     * equals to the given transition input, method returns true otherwise returns false.
-     *
-     * @param transition is used to compare with the actual transition of a state.
-     * @return true when the actual transition equals to the transition input, false otherwise.
-     */
-    public boolean isValidTransition(String transition) {
-        for (State state : states) {
-            for (int i = 0; i < state.transitionCount(); i++) {
-                if (state.getTransition(i).toString() != null && state.getTransition(i).toString().equals(transition)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
+    
     /**
      * The getDictionary method is used to get TxtDictionary.
      *
@@ -388,23 +253,7 @@ public class FsmMorphologicalAnalyzer {
     public TxtDictionary getDictionary() {
         return dictionary;
     }
-
-    /**
-     * The getState method is used to loop through the states {@link ArrayList} and return the state whose name equal
-     * to the given input name.
-     *
-     * @param name is used to compare with the state's actual name.
-     * @return state if found any, null otherwise.
-     */
-    private State getState(String name) {
-        for (State state : states) {
-            if (state.getName().equalsIgnoreCase(name)) {
-                return state;
-            }
-        }
-        return null;
-    }
-
+    
     /**
      * The isPossibleSubstring method first checks whether given short and long strings are equal to root word.
      * Then, compares both short and long strings' chars till the last two chars of short string. In the presence of mismatch,
@@ -567,135 +416,135 @@ public class FsmMorphologicalAnalyzer {
     private void initializeParseList(ArrayList<FsmParse> fsmParse, TxtWord root, boolean isProper) {
         FsmParse currentFsmParse;
         if (root.isPlural()) {
-            currentFsmParse = new FsmParse(root, getState("NominalRootPlural"));
+            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRootPlural"));
             fsmParse.add(currentFsmParse);
         } else {
             if (root.isPortmanteauEndingWithSI()) {
-                currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2), getState("CompoundNounRoot"));
+                currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2), finiteStateMachine.getState("CompoundNounRoot"));
                 fsmParse.add(currentFsmParse);
-                currentFsmParse = new FsmParse(root, getState("NominalRootNoPossesive"));
+                currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRootNoPossesive"));
                 fsmParse.add(currentFsmParse);
             } else {
                 if (root.isPortmanteau()) {
-                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 1), getState("CompoundNounRoot"));
+                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 1), finiteStateMachine.getState("CompoundNounRoot"));
                     fsmParse.add(currentFsmParse);
                 } else {
                     if (root.isHeader()) {
-                        currentFsmParse = new FsmParse(root, getState("HeaderRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("HeaderRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isInterjection()) {
-                        currentFsmParse = new FsmParse(root, getState("InterjectionRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("InterjectionRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isDuplicate()) {
-                        currentFsmParse = new FsmParse(root, getState("DuplicateRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("DuplicateRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isNumeral()) {
-                        currentFsmParse = new FsmParse(root, getState("CardinalRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("CardinalRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isReal()) {
-                        currentFsmParse = new FsmParse(root, getState("RealRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("RealRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isFraction()) {
-                        currentFsmParse = new FsmParse(root, getState("FractionRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("FractionRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isDate()) {
-                        currentFsmParse = new FsmParse(root, getState("DateRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("DateRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isPercent()) {
-                        currentFsmParse = new FsmParse(root, getState("PercentRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PercentRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isRange()) {
-                        currentFsmParse = new FsmParse(root, getState("RangeRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("RangeRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isTime()) {
-                        currentFsmParse = new FsmParse(root, getState("TimeRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("TimeRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isOrdinal()) {
-                        currentFsmParse = new FsmParse(root, getState("OrdinalRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("OrdinalRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isVerb() || root.isPassive()) {
                         if (!root.verbType().equalsIgnoreCase("")) {
-                            currentFsmParse = new FsmParse(root, getState("VerbalRoot(" + root.verbType() + ")"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("VerbalRoot(" + root.verbType() + ")"));
                         } else {
                             if (!root.isPassive()) {
-                                currentFsmParse = new FsmParse(root, getState("VerbalRoot"));
+                                currentFsmParse = new FsmParse(root, finiteStateMachine.getState("VerbalRoot"));
                             } else {
-                                currentFsmParse = new FsmParse(root, getState("PassiveHn"));
+                                currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PassiveHn"));
                             }
                         }
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isPronoun()) {
                         if (root.getName().equalsIgnoreCase("kendi")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(REFLEX)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(REFLEX)"));
                             fsmParse.add(currentFsmParse);
                         }
                         if (root.getName().equalsIgnoreCase("öbür") || root.getName().equalsIgnoreCase("hep") || root.getName().equalsIgnoreCase("kimse") || root.getName().equalsIgnoreCase("hiçbiri") || root.getName().equalsIgnoreCase("birbiri") || root.getName().equalsIgnoreCase("birbirleri") || root.getName().equalsIgnoreCase("biri") || root.getName().equalsIgnoreCase("bazı") || root.getName().equalsIgnoreCase("kimi")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(QUANT)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUANT)"));
                             fsmParse.add(currentFsmParse);
                         }
                         if (root.getName().equalsIgnoreCase("tümü") || root.getName().equalsIgnoreCase("çoğu") || root.getName().equalsIgnoreCase("hepsi")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(QUANTPLURAL)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUANTPLURAL)"));
                             fsmParse.add(currentFsmParse);
                         }
                         if (root.getName().equalsIgnoreCase("o") || root.getName().equalsIgnoreCase("bu") || root.getName().equalsIgnoreCase("şu")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(DEMONS)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(DEMONS)"));
                             fsmParse.add(currentFsmParse);
                         }
                         if (root.getName().equalsIgnoreCase("ben") || root.getName().equalsIgnoreCase("sen") || root.getName().equalsIgnoreCase("o") || root.getName().equalsIgnoreCase("biz") || root.getName().equalsIgnoreCase("siz") || root.getName().equalsIgnoreCase("onlar")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(PERS)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(PERS)"));
                             fsmParse.add(currentFsmParse);
                         }
                         if (root.getName().equalsIgnoreCase("nere") || root.getName().equalsIgnoreCase("ne") || root.getName().equalsIgnoreCase("kim") || root.getName().equalsIgnoreCase("hangi")) {
-                            currentFsmParse = new FsmParse(root, getState("PronounRoot(QUES)"));
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUES)"));
                             fsmParse.add(currentFsmParse);
                         }
                     }
                     if (root.isAdjective()) {
-                        currentFsmParse = new FsmParse(root, getState("AdjectiveRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("AdjectiveRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isPureAdjective()) {
-                        currentFsmParse = new FsmParse(root, getState("Adjective"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("Adjective"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isNominal()) {
-                        currentFsmParse = new FsmParse(root, getState("NominalRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isProperNoun() && isProper) {
-                        currentFsmParse = new FsmParse(root, getState("ProperRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("ProperRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isQuestion()) {
-                        currentFsmParse = new FsmParse(root, getState("QuestionRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("QuestionRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isDeterminer()) {
-                        currentFsmParse = new FsmParse(root, getState("DeterminerRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("DeterminerRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isConjunction()) {
-                        currentFsmParse = new FsmParse(root, getState("ConjunctionRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("ConjunctionRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isPostP()) {
-                        currentFsmParse = new FsmParse(root, getState("PostP"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PostP"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isAdverb()) {
-                        currentFsmParse = new FsmParse(root, getState("AdverbRoot"));
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("AdverbRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                 }
@@ -855,7 +704,7 @@ public class FsmMorphologicalAnalyzer {
     public ArrayList<FsmParse> morphologicalAnalysis(TxtWord root, String surfaceForm, String state) {
         ArrayList<FsmParse> initialFsmParse;
         initialFsmParse = new ArrayList<>();
-        initialFsmParse.add(new FsmParse(root, getState(state)));
+        initialFsmParse.add(new FsmParse(root, finiteStateMachine.getState(state)));
         return parseWord(initialFsmParse, surfaceForm);
     }
 
@@ -991,7 +840,7 @@ public class FsmMorphologicalAnalyzer {
         if (surfaceForm.endsWith(".") && isInteger(surfaceForm.substring(0, surfaceForm.length() - 1))) {
             Integer.parseInt(surfaceForm.substring(0, surfaceForm.length() - 1));
             initialFsmParse = new ArrayList<>(1);
-            fsmParse = new FsmParse(Integer.parseInt(surfaceForm.substring(0, surfaceForm.length() - 1)), getState("OrdinalRoot"));
+            fsmParse = new FsmParse(Integer.parseInt(surfaceForm.substring(0, surfaceForm.length() - 1)), finiteStateMachine.getState("OrdinalRoot"));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
@@ -999,7 +848,7 @@ public class FsmMorphologicalAnalyzer {
         if (isInteger(surfaceForm)) {
             Integer.parseInt(surfaceForm);
             initialFsmParse = new ArrayList<>(1);
-            fsmParse = new FsmParse(Integer.parseInt(surfaceForm), getState("CardinalRoot"));
+            fsmParse = new FsmParse(Integer.parseInt(surfaceForm), finiteStateMachine.getState("CardinalRoot"));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
@@ -1007,7 +856,7 @@ public class FsmMorphologicalAnalyzer {
         if (isDouble(surfaceForm)) {
             Double.parseDouble(surfaceForm);
             initialFsmParse = new ArrayList<>(1);
-            fsmParse = new FsmParse(Double.parseDouble(surfaceForm), getState("RealRoot"));
+            fsmParse = new FsmParse(Double.parseDouble(surfaceForm), finiteStateMachine.getState("RealRoot"));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
@@ -1049,10 +898,10 @@ public class FsmMorphologicalAnalyzer {
         if (currentParse.size() == 0) {
             fsmParse = new ArrayList<>(1);
             if (isProperNoun(surfaceForm)) {
-                fsmParse.add(new FsmParse(surfaceForm, getState("ProperRoot")));
+                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("ProperRoot")));
                 return new FsmParseList(parseWord(fsmParse, surfaceForm));
             } else {
-                fsmParse.add(new FsmParse(surfaceForm, getState("NominalRoot")));
+                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
                 return new FsmParseList(parseWord(fsmParse, surfaceForm));
             }
         } else {
