@@ -253,7 +253,16 @@ public class FsmMorphologicalAnalyzer {
     public TxtDictionary getDictionary() {
         return dictionary;
     }
-    
+
+    /**
+     * The getFiniteStateMachine method is used to get FiniteStateMachine.
+     *
+     * @return FiniteStateMachine type finiteStateMachine.
+     */
+    public FiniteStateMachine getFiniteStateMachine() {
+        return finiteStateMachine;
+    }
+
     /**
      * The isPossibleSubstring method first checks whether given short and long strings are equal to root word.
      * Then, compares both short and long strings' chars till the last two chars of short string. In the presence of mismatch,

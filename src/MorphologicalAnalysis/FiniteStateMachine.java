@@ -94,7 +94,7 @@ public class FiniteStateMachine {
                                     if (withNode.hasAttributes()) {
                                         attributes = withNode.getAttributes();
                                         withName = attributes.getNamedItem("name").getNodeValue();
-                                        if (attributes.getNamedItem("toPos") != null) {
+                                        if (attributes.getNamedItem("topos") != null) {
                                             toPos = attributes.getNamedItem("topos").getNodeValue();
                                         } else {
                                             toPos = null;
