@@ -571,6 +571,8 @@ public class FsmMorphologicalAnalyzer {
             fsmParse.add(currentFsmParse);
         } else {
             if (root.isPortmanteauEndingWithSI()) {
+                currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2), getState("CompoundNounRoot"));
+                fsmParse.add(currentFsmParse);
                 currentFsmParse = new FsmParse(root, getState("NominalRootNoPossesive"));
                 fsmParse.add(currentFsmParse);
             } else {

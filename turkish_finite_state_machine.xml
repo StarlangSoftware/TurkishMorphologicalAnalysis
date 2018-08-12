@@ -1082,16 +1082,13 @@
 </state>
 <state name="NominalRootNoPossesive" start="yes" end="no" originalpos="NOUN">
 <to name="Case1">
-<with>0</with>
-<with name="DAT">yA</with>
-<with name="LOC">DA</with>
-<with name="ABL">DAn</with>
-<with name="GEN">nHn</with>
-<with name="INS">ylA</with>
-</to>
-<to name="Case2">
-<with name="LOC">DA</with>
-<with name="GEN">nHn</with>
+<with name="A3SG+PNON+NOM">0</with>
+<with name="A3SG+PNON+DAT">nA</with>
+<with name="A3SG+PNON+ACC">nH</with>
+<with name="A3SG+PNON+LOC">nDA</with>
+<with name="A3SG+PNON+ABL">nDAn</with>
+<with name="A3SG+PNON+GEN">nHn</with>
+<with name="A3SG+PNON+INS">ylA</with>
 </to>
 </state>
 <state name="CompoundNounRoot" start="yes" end="no" originalpos="NOUN">
