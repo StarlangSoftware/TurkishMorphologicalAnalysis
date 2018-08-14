@@ -145,14 +145,32 @@ public class FsmMorphologicalAnalyzer {
             if (word.isPortmanteauEndingWithSI()) {
                 result.addWord(rootWithoutLastTwo, word);
             }
-            if (word.isPortmanteauFacedVowelEllipsis()){
-                result.addWord(rootWithoutLastTwo + last + lastBefore, word);
-            }
             if (word.rootSoftenDuringSuffixation()) {
                 addWordWhenRootSoften(result, last, rootWithoutLast, word);
             }
             if (word.isPortmanteau()) {
-                result.addWord(rootWithoutLast, word);
+                if (word.isPortmanteauFacedVowelEllipsis()){
+                    result.addWord(rootWithoutLastTwo + last + lastBefore, word);
+                } else {
+                    if (word.isPortmanteauFacedSoftening()){
+                        switch (lastBefore){
+                            case 'b':
+                                result.addWord(rootWithoutLastTwo + 'p', word);
+                                break;
+                            case 'c':
+                                result.addWord(rootWithoutLastTwo + 'ç', word);
+                                break;
+                            case 'd':
+                                result.addWord(rootWithoutLastTwo + 't', word);
+                                break;
+                            case 'ğ':
+                                result.addWord(rootWithoutLastTwo + 'k', word);
+                                break;
+                        }
+                    } else {
+                        result.addWord(rootWithoutLast, word);
+                    }
+                }
             }
             if (word.vowelEChangesToIDuringYSuffixation() || word.vowelAChangesToIDuringYSuffixation()) {
                 switch (last) {
@@ -435,7 +453,32 @@ public class FsmMorphologicalAnalyzer {
                 fsmParse.add(currentFsmParse);
             } else {
                 if (root.isPortmanteau()) {
-                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 1), finiteStateMachine.getState("CompoundNounRoot"));
+                    if (root.isPortmanteauFacedVowelEllipsis()){
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRootNoPossesive"));
+                        fsmParse.add(currentFsmParse);
+                        currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + root.getName().charAt(root.getName().length() - 1) + root.getName().charAt(root.getName().length() - 2), finiteStateMachine.getState("CompoundNounRoot"));
+                    } else {
+                        if (root.isPortmanteauFacedSoftening()){
+                            switch (root.getName().charAt(root.getName().length() - 2)){
+                                case 'b':
+                                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + 'p', finiteStateMachine.getState("CompoundNounRoot"));
+                                    break;
+                                case 'c':
+                                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + 'ç', finiteStateMachine.getState("CompoundNounRoot"));
+                                    break;
+                                case 'd':
+                                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + 't', finiteStateMachine.getState("CompoundNounRoot"));
+                                    break;
+                                case 'ğ':
+                                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + 'k', finiteStateMachine.getState("CompoundNounRoot"));
+                                    break;
+                                default:
+                                    currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 1), finiteStateMachine.getState("CompoundNounRoot"));
+                            }
+                        } else {
+                            currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 1), finiteStateMachine.getState("CompoundNounRoot"));
+                        }
+                    }
                     fsmParse.add(currentFsmParse);
                 } else {
                     if (root.isHeader()) {
