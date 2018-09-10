@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -44,7 +45,8 @@ public class FiniteStateMachine {
         DOMParser parser = new DOMParser();
         Document doc;
         try {
-            parser.parse(fileName);
+            ClassLoader classLoader = getClass().getClassLoader();
+            parser.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
         } catch (SAXException | IOException e) {
             e.printStackTrace();
         }

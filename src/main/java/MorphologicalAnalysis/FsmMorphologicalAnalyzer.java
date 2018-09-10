@@ -19,7 +19,7 @@ public class FsmMorphologicalAnalyzer {
      * turkish_dictionary.txt with fixed cache size 100000 and by using turkish_finite_state_machine.xml file.
      */
     public FsmMorphologicalAnalyzer() {
-        this("turkish_finite_state_machine.xml", new TxtDictionary("Data/Dictionary/turkish_dictionary.txt", new TurkishWordComparator()), 100000);
+        this("turkish_finite_state_machine.xml", new TxtDictionary(), 100000);
     }
 
     /**
@@ -29,7 +29,7 @@ public class FsmMorphologicalAnalyzer {
      * @param cacheSize the size of the LRUCache.
      */
     public FsmMorphologicalAnalyzer(int cacheSize) {
-        this("turkish_finite_state_machine.xml", new TxtDictionary("Data/Dictionary/turkish_dictionary.txt", new TurkishWordComparator()), cacheSize);
+        this("turkish_finite_state_machine.xml", new TxtDictionary(), cacheSize);
     }
 
     /**
