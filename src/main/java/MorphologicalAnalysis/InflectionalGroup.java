@@ -202,7 +202,7 @@ public class InflectionalGroup implements Serializable {
      * The containsPossessive method loops through the tags in IG {@link ArrayList} and returns true if the tag in IG is
      * one of the possessives: P1PL, P1SG, P2PL, P2SG, P3PL AND P3SG.
      *
-     * @return
+     * @return true if it contains possessive tag, false otherwise.
      */
     public boolean containsPossessive() {
         for (MorphologicalTag tag : IG) {

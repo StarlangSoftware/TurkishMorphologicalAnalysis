@@ -927,7 +927,7 @@ public class FsmMorphologicalAnalyzer {
      * The isProperNoun method takes surfaceForm String as input and checks its each char whether they are in the range
      * of letters between A to Z or one of the Turkish letters such as İ, Ü, Ğ, Ş, Ç, and Ö.
      *
-     * @param surfaceForm
+     * @param surfaceForm String to check for proper noun.
      * @return false if surfaceForm is null or length of 0, return true if it is a letter.
      */
     public boolean isProperNoun(String surfaceForm) {

@@ -343,12 +343,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
     /**
      * The headerTransition method gets the first item of formList and checks for cases;
      * <p>
-     * If it is <DOC>, it returns <DOC>+BDTAG which indicates the beginning of a document.
-     * If it is </DOC>, it returns </DOC>+EDTAG which indicates the ending of a document.
-     * If it is <TITLE>, it returns <TITLE>+BTTAG which indicates the beginning of a title.
-     * If it is </TITLE>, it returns </TITLE>+ETTAG which indicates the ending of a title.
-     * If it is <S>, it returns <S>+BSTAG which indicates the beginning of a sentence.
-     * If it is </S>, it returns </S>+ESTAG which indicates the ending of a sentence.
+     * If it is &lt;DOC&gt;, it returns &lt;DOC&gt;+BDTAG which indicates the beginning of a document.
+     * If it is &lt;/DOC&gt;, it returns &lt;/DOC&gt;+EDTAG which indicates the ending of a document.
+     * If it is &lt;TITLE&gt;, it returns &lt;TITLE&gt;+BTTAG which indicates the beginning of a title.
+     * If it is &lt;/TITLE&gt;, it returns &lt;/TITLE&gt;+ETTAG which indicates the ending of a title.
+     * If it is &lt;S&gt;, it returns &lt;S&gt;+BSTAG which indicates the beginning of a sentence.
+     * If it is &lt;/S&gt;, it returns &lt;/S&gt;+ESTAG which indicates the ending of a sentence.
      *
      * @return corresponding tags of the headers and an empty {@link String} if any case does not match.
      */
@@ -481,7 +481,7 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * Ex : Ahmet
      * <p>
      * If it is "HeaderRoot", it assigns the result of the headerTransition method to the result String.
-     * Ex : <DOC>
+     * Ex : &lt;DOC&gt;
      * <p>
      * If it is "InterjectionRoot", it assigns concatenation of first item of formList and +INTERJ to the result String.
      * Ex : Hey

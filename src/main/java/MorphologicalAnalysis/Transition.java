@@ -126,8 +126,8 @@ public class Transition {
     /**
      * The transitionPossible method takes a {@link FsmParse} currentFsmParse as an input. It then checks some special cases;
      *
-     * @param currentFsmParse
-     * @return
+     * @param currentFsmParse Parse to be checked
+     * @return true if transition is possible false otherwise
      */
     public boolean transitionPossible(FsmParse currentFsmParse) {
         if (with.equalsIgnoreCase("Ar") && currentFsmParse.getSurfaceForm().endsWith("l") && !currentFsmParse.getWord().getName().equalsIgnoreCase(currentFsmParse.getSurfaceForm())) {

@@ -471,6 +471,7 @@ public class MorphologicalParse implements Serializable {
      * The containsTag method takes a MorphologicalTag as an input and loops through the inflectionalGroups {@link ArrayList},
      * returns true if the input matches with on of the tags in the IG, false otherwise.
      *
+     * @param tag checked tag
      * @return true if the input matches with on of the tags in the IG, false otherwise.
      */
     public boolean containsTag(MorphologicalTag tag) {
