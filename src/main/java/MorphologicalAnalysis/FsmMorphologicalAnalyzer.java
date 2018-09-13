@@ -459,6 +459,8 @@ public class FsmMorphologicalAnalyzer {
                         currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + root.getName().charAt(root.getName().length() - 1) + root.getName().charAt(root.getName().length() - 2), finiteStateMachine.getState("CompoundNounRoot"));
                     } else {
                         if (root.isPortmanteauFacedSoftening()){
+                            currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRootNoPossesive"));
+                            fsmParse.add(currentFsmParse);
                             switch (root.getName().charAt(root.getName().length() - 2)){
                                 case 'b':
                                     currentFsmParse = new FsmParse(root.getName().substring(0, root.getName().length() - 2) + 'p', finiteStateMachine.getState("CompoundNounRoot"));
