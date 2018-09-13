@@ -112,14 +112,9 @@ public class FsmParseList {
     private String defaultCaseForParseString(String rootForm, String parseString, String partOfSpeech) {
         String defaultCase = null;
         switch (parseString) {
-            case "A3PL+P3PL+NOM$A3PL+P3SG+NOM$A3PL+PNON+ACC$A3SG+P3PL+NOM":
-                defaultCase = "A3PL+P3SG+NOM";
-                break;
             case "P3SG+NOM$PNON+ACC":
                 if (partOfSpeech.equals("PROP")) {
                     defaultCase = "PNON+ACC";
-                } else {
-                    defaultCase = "P3SG+NOM";
                 }
                 break;
             case "A2SG+P2SG$A3SG+P3SG":
