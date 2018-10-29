@@ -34,6 +34,27 @@ public class FsmMorphologicalAnalyzer {
 
     /**
      * Another constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
+     * given input dictionary file name and by using turkish_finite_state_machine.xml file.
+     *
+     * @param dictionaryFileName the size of the LRUCache.
+     */
+    public FsmMorphologicalAnalyzer(String dictionaryFileName) {
+        this("turkish_finite_state_machine.xml", new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 100000);
+    }
+
+    /**
+     * Another constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
+     * given input dictionary file name and by using turkish_finite_state_machine.xml file.
+     *
+     * @param fileName           the file to read the finite state machine.
+     * @param dictionaryFileName the file to read the dictionary.
+     */
+    public FsmMorphologicalAnalyzer(String fileName, String dictionaryFileName) {
+        this(fileName, new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 100000);
+    }
+
+    /**
+     * Another constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
      * given input dictionary, with given inputs fileName and cacheSize.
      *
      * @param fileName   the file to read the finite state machine.
