@@ -418,7 +418,7 @@ public class FsmMorphologicalAnalyzer {
      * QUANT = Quantitative Pronouns Ex : öbür, hep, kimse, hiçbiri, bazı, kimi, biri
      * QUANTPLURAL = Quantitative Plural Pronouns Ex : tümü, çoğu, hepsi
      * DEMONS = Demonstrative Pronouns Ex : o, bu, şu
-     * PERS = Personal Pronouns Ex : kben, sen, o, biz, siz, onlar
+     * PERS = Personal Pronouns Ex : ben, sen, o, biz, siz, onlar
      * QUES = Interrogatıve Pronouns Ex : nere, ne, kim, hangi
      * <p>
      * !isPlural, !isPortmanteau and isAdjective, if root holds the conditions then it gets the state
@@ -565,11 +565,11 @@ public class FsmMorphologicalAnalyzer {
                             currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(REFLEX)"));
                             fsmParse.add(currentFsmParse);
                         }
-                        if (root.getName().equalsIgnoreCase("öbür") || root.getName().equalsIgnoreCase("hep") || root.getName().equalsIgnoreCase("kimse") || root.getName().equalsIgnoreCase("hiçbiri") || root.getName().equalsIgnoreCase("birbiri") || root.getName().equalsIgnoreCase("birbirleri") || root.getName().equalsIgnoreCase("biri") || root.getName().equalsIgnoreCase("bazı") || root.getName().equalsIgnoreCase("kimi")) {
+                        if (root.getName().equalsIgnoreCase("öbür") || root.getName().equalsIgnoreCase("öteki") || root.getName().equalsIgnoreCase("hep") || root.getName().equalsIgnoreCase("kimse") || root.getName().equalsIgnoreCase("diğeri") || root.getName().equalsIgnoreCase("hiçbiri") || root.getName().equalsIgnoreCase("böylesi") || root.getName().equalsIgnoreCase("birbiri") || root.getName().equalsIgnoreCase("birbirleri") || root.getName().equalsIgnoreCase("biri") || root.getName().equalsIgnoreCase("başkası") || root.getName().equalsIgnoreCase("bazı") || root.getName().equalsIgnoreCase("kimi")) {
                             currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUANT)"));
                             fsmParse.add(currentFsmParse);
                         }
-                        if (root.getName().equalsIgnoreCase("tümü") || root.getName().equalsIgnoreCase("çoğu") || root.getName().equalsIgnoreCase("hepsi")) {
+                        if (root.getName().equalsIgnoreCase("tümü") || root.getName().equalsIgnoreCase("topu") || root.getName().equalsIgnoreCase("herkes") || root.getName().equalsIgnoreCase("cümlesi") || root.getName().equalsIgnoreCase("çoğu") || root.getName().equalsIgnoreCase("birçoğu") || root.getName().equalsIgnoreCase("birkaçı") || root.getName().equalsIgnoreCase("birçokları") || root.getName().equalsIgnoreCase("hepsi")) {
                             currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUANTPLURAL)"));
                             fsmParse.add(currentFsmParse);
                         }
@@ -581,7 +581,7 @@ public class FsmMorphologicalAnalyzer {
                             currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(PERS)"));
                             fsmParse.add(currentFsmParse);
                         }
-                        if (root.getName().equalsIgnoreCase("nere") || root.getName().equalsIgnoreCase("ne") || root.getName().equalsIgnoreCase("kim") || root.getName().equalsIgnoreCase("hangi")) {
+                        if (root.getName().equalsIgnoreCase("nere") || root.getName().equalsIgnoreCase("ne") || root.getName().equalsIgnoreCase("kaçı") || root.getName().equalsIgnoreCase("kim") || root.getName().equalsIgnoreCase("hangi")) {
                             currentFsmParse = new FsmParse(root, finiteStateMachine.getState("PronounRoot(QUES)"));
                             fsmParse.add(currentFsmParse);
                         }

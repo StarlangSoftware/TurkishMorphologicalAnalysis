@@ -398,7 +398,7 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         if (formList.get(0).equalsIgnoreCase("kendi")) {
             return "kendi+PRON+REFLEXP";
         }
-        if (formList.get(0).equalsIgnoreCase("hep") || formList.get(0).equalsIgnoreCase("öbür") || formList.get(0).equalsIgnoreCase("kimse") || formList.get(0).equalsIgnoreCase("hiçbiri") || formList.get(0).equalsIgnoreCase("tümü") || formList.get(0).equalsIgnoreCase("çoğu") || formList.get(0).equalsIgnoreCase("hepsi") || formList.get(0).equalsIgnoreCase("birbiri") || formList.get(0).equalsIgnoreCase("birbirleri") || formList.get(0).equalsIgnoreCase("biri") || formList.get(0).equalsIgnoreCase("bazı") || formList.get(0).equalsIgnoreCase("kimi")) {
+        if (formList.get(0).equalsIgnoreCase("hep") || formList.get(0).equalsIgnoreCase("öbür") || formList.get(0).equalsIgnoreCase("topu") || formList.get(0).equalsIgnoreCase("öteki") || formList.get(0).equalsIgnoreCase("kimse") || formList.get(0).equalsIgnoreCase("hiçbiri") || formList.get(0).equalsIgnoreCase("tümü") || formList.get(0).equalsIgnoreCase("çoğu") || formList.get(0).equalsIgnoreCase("hepsi") || formList.get(0).equalsIgnoreCase("herkes") || formList.get(0).equalsIgnoreCase("başkası") || formList.get(0).equalsIgnoreCase("birçoğu") || formList.get(0).equalsIgnoreCase("birçokları") || formList.get(0).equalsIgnoreCase("birbiri") || formList.get(0).equalsIgnoreCase("birbirleri") || formList.get(0).equalsIgnoreCase("biri") || formList.get(0).equalsIgnoreCase("birkaçı") || formList.get(0).equalsIgnoreCase("böylesi") || formList.get(0).equalsIgnoreCase("diğeri") || formList.get(0).equalsIgnoreCase("cümlesi") || formList.get(0).equalsIgnoreCase("bazı") || formList.get(0).equalsIgnoreCase("kimi")) {
             return formList.get(0) + "+PRON+QUANTP";
         }
         if ((formList.get(0).equalsIgnoreCase("o") && suffixList.get(0).getName().equalsIgnoreCase("PronounRoot(DEMONS)")) || formList.get(0).equalsIgnoreCase("bu") || formList.get(0).equalsIgnoreCase("şu")) {
@@ -422,7 +422,7 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         if (formList.get(0).equalsIgnoreCase("onlar")) {
             return "o+PRON+PERS+A3PL+PNON";
         }
-        if (formList.get(0).equalsIgnoreCase("nere") || formList.get(0).equalsIgnoreCase("ne") || formList.get(0).equalsIgnoreCase("kim") || formList.get(0).equalsIgnoreCase("hangi")) {
+        if (formList.get(0).equalsIgnoreCase("nere") || formList.get(0).equalsIgnoreCase("ne") || formList.get(0).equalsIgnoreCase("kaçı") || formList.get(0).equalsIgnoreCase("kim") || formList.get(0).equalsIgnoreCase("hangi")) {
             return formList.get(0) + "+PRON+QUESP";
         }
         return "";
