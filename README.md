@@ -138,22 +138,22 @@ This generates a new `TxtDictionary` type dictionary from [`turkish_dictionary.t
 Creating a morphological analyzer with different cache size, dictionary or finite state machine is also possible. 
 * With different cache size, 
 
-        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer(50000)   
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(50000)   
 
 * Using a different dictionary,
 
-        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer('my_turkish_dictionary.txt')    
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("my_turkish_dictionary.txt")    
 
 * Specifying both finite state machine and dictionary, 
 
-        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer('fsm.xml', 'my_turkish_dictionary.txt')       
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", "my_turkish_dictionary.txt")       
     
 * Giving finite state machine and cache size with creating `TxtDictionary` object, 
         
-        TxtDictionary dictionary = new TxtDictionary('my_turkish_dictionary.txt', new TurkishWordComparator())
-        FsmMorphologicalAnalyzer('fsm.xml', dictionary, 50000) 
+        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator())
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary, 50000) 
     
 * With different finite state machine and creating `TxtDictionary` object,
        
-        TxtDictionary dictionary = new TxtDictionary('my_turkish_dictionary.txt', new TurkishWordComparator())
-        FsmMorphologicalAnalyzer('fsm.xml', dictionary)
+        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator())
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary)
