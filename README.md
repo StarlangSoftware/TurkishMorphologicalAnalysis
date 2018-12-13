@@ -90,7 +90,9 @@ Morphological Analysis
 * [Morphology](#morphology)
     + [Maven Usage](#maven-usage)
 	+ [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
-
+	+ [Word level morphological analysis](#word-level-morphological-analysis)
+	+ [Sentence level morphological analysis](#sentence-level-morphological-analysis)
+	
 ## Morphology
 Turkish is one of the morphologically rich languages due to its agglutinative nature. Morphological Analysis repository provides a two-level morphological analyzer for Turkish which consists of finite state transducer, rule engine for suffixation, and lexicon.
 
@@ -129,7 +131,7 @@ Turkish is one of the morphologically rich languages due to its agglutinative na
 
 ## Creating FsmMorphologicalAnalyzer 
 
-FsmMorphologicalAnalyzer provides Turkish morphological analysis. Analysis can be done in word and sentence level. This class can be created as follows:
+FsmMorphologicalAnalyzer provides Turkish morphological analysis. This class can be created as follows:
 
     FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
     
@@ -157,3 +159,64 @@ Creating a morphological analyzer with different cache size, dictionary or finit
        
         TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator())
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary)
+
+## Word level morphological analysis
+
+For morphological analysis,  `morphologicalAnalysis(String word)` method of `FsmMorphologicalAnalyzer` is used. This returns `FsmParseList` object. 
+
+
+    FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+    String word = "yarına";
+    FsmParseList fsmParseList = fsm.morphologicalAnalysis(word);
+    for (int i = 0; i < fsmParseList.size(); i++){
+      System.out.println(fsmParseList.getFsmParse(i).transitionList();
+    } 
+      
+Output
+
+    yar+NOUN+A3SG+P2SG+DAT
+    yar+NOUN+A3SG+P3SG+DAT
+    yarı+NOUN+A3SG+P2SG+DAT
+    yarın+NOUN+A3SG+PNON+DAT
+    
+From `FsmParseList`, a single `FsmParse` can be obtained as follows:
+
+    FsmParse parse = fsmParseList.getFsmParse(0);
+    System.out.println(parse.transitionList();   
+    
+Output    
+    
+    yar+NOUN+A3SG+P2SG+DAT
+    
+## Sentence level morphological analysis
+`morphologicalAnalysis(Sentence sentence, Boolean debug)` method of `FsmMorphologicalAnalyzer` is used. This returns `FsmParseList[]` object. 
+
+    FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+    Sentence sentence = new Sentence("Yarın doktora gidecekler");
+    FsmParseList[] parseLists = fsm.morphologicalAnalysis(sentence, false);
+    for(int i = 0; i < parseLists.length; i++){
+        for(int j = 0; j < parseLists[i].size(); j++){
+            FsmParse parse = parseLists[i].getFsmParse(j);
+            System.out.println(parse.transitionList());
+        }
+        System.out.println("-----------------");
+    }
+    
+Output
+    
+    -----------------
+    yar+NOUN+A3SG+P2SG+NOM
+    yar+NOUN+A3SG+PNON+GEN
+    yar+VERB+POS+IMP+A2PL
+    yarı+NOUN+A3SG+P2SG+NOM
+    yarın+NOUN+A3SG+PNON+NOM
+    -----------------
+    doktor+NOUN+A3SG+PNON+DAT
+    doktora+NOUN+A3SG+PNON+NOM
+    -----------------
+    git+VERB+POS+FUT+A3PL
+    git+VERB+POS^DB+NOUN+FUTPART+A3PL+PNON+NOM
+
+
+
+    
