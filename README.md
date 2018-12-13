@@ -89,7 +89,7 @@ Morphological Analysis
 ============
 * [Morphology](#morphology)
     + [Maven Usage](#maven-usage)
-	
+	+ [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
 
 ## Morphology
 Turkish is one of the morphologically rich languages due to its agglutinative nature. Morphological Analysis repository provides a two-level morphological analyzer for Turkish which consists of finite state transducer, rule engine for suffixation, and lexicon.
@@ -126,3 +126,34 @@ Turkish is one of the morphologically rich languages due to its agglutinative na
             <version>1.0.1</version>
         </dependency>
     </dependencies>
+
+## Creating FsmMorphologicalAnalyzer 
+
+FsmMorphologicalAnalyzer provides Turkish morphological analysis. Analysis can be done in word and sentence level. This class can be created as follows:
+
+    FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+    
+This generates a new `TxtDictionary` type dictionary from [`turkish_dictionary.txt`](https://github.com/olcaytaner/Dictionary/tree/master/src/main/resources) with fixed cache size 100000 and by using [`turkish_finite_state_machine.xml`](https://github.com/olcaytaner/MorphologicalAnalysis/tree/master/src/main/resources). 
+
+Creating a morphological analyzer with different cache size, dictionary or finite state machine is also possible. 
+* With different cache size, 
+
+        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer(50000)   
+
+* Using a different dictionary,
+
+        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer('my_turkish_dictionary.txt')    
+
+* Specifying both finite state machine and dictionary, 
+
+        FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer('fsm.xml', 'my_turkish_dictionary.txt')       
+    
+* Giving finite state machine and cache size with creating `TxtDictionary` object, 
+        
+        TxtDictionary dictionary = new TxtDictionary('my_turkish_dictionary.txt', new TurkishWordComparator())
+        FsmMorphologicalAnalyzer('fsm.xml', dictionary, 50000) 
+    
+* With different finite state machine and creating `TxtDictionary` object,
+       
+        TxtDictionary dictionary = new TxtDictionary('my_turkish_dictionary.txt', new TurkishWordComparator())
+        FsmMorphologicalAnalyzer('fsm.xml', dictionary)
