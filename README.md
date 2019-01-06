@@ -52,8 +52,6 @@ See the snapshot of the project at the beginning:
 
 // put the link of ss
 
-![Main IDE page](https://github.com/master/dev/site/images/zemberek-ide-main.png)
-
 ## Compile
 
 **From IDE**
