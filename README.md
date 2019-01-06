@@ -72,9 +72,6 @@ Go to `MorphologicalAnalysis` directory and compile with
 
 Use `package` of 'Lifecycle' from maven window on the right and from `MorphologicalAnalysis` root module.
 
-// add ss
-![IDE Maven Package](https://github.com/master/dev/site/images/zemberek-maven-package.png)
-
 **From Console**
 
 Use below line to generate jar file:
