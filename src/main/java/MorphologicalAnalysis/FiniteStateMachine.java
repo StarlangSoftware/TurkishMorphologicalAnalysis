@@ -32,7 +32,7 @@ public class FiniteStateMachine {
      * At the last step, by starting rootNode's first child, it gets all the transitionNodes and next states called toState,
      * then continue with the nextSiblings. Also, if there is no possible toState, it prints this case and the causative states.
      *
-     * @param fileName the file to read the finite state machine.
+     * @param fileName the resource file to read the finite state machine. Only files in resources folder are supported.
      */
     public FiniteStateMachine(String fileName) {
         int i;
@@ -48,8 +48,9 @@ public class FiniteStateMachine {
             ClassLoader classLoader = getClass().getClassLoader();
             parser.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
         } catch (SAXException | IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Fst file '" + fileName + "' could not be loaded from resources. Verify that file exists in project's resource folder.",e);
         }
+
         doc = parser.getDocument();
         stateList = doc.getElementsByTagName("state");
         states = new ArrayList<>();
