@@ -927,7 +927,6 @@ public class FsmMorphologicalAnalyzer {
             return initialFsmParse;
         }
         if (isInteger(surfaceForm)) {
-            Integer.parseInt(surfaceForm);
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(Integer.parseInt(surfaceForm), finiteStateMachine.getState("CardinalRoot"));
             fsmParse.constructInflectionalGroups();
