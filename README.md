@@ -48,9 +48,6 @@ Steps for opening the cloned project:
 * Select open as project option
 * Couple of seconds, dependencies with Maven will be downloaded. 
 
-See the snapshot of the project at the beginning:
-
-// put the link of ss
 
 ## Compile
 
@@ -211,7 +208,3 @@ Output
     -----------------
     git+VERB+POS+FUT+A3PL
     git+VERB+POS^DB+NOUN+FUTPART+A3PL+PNON+NOM
-
-
-
-    
