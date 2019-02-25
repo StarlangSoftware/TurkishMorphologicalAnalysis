@@ -1036,15 +1036,19 @@ public class FsmMorphologicalAnalyzer {
     private boolean isInteger(String surfaceForm) {
         if (!surfaceForm.matches("\\+?\\d+")) return false;
         int len = surfaceForm.length();
-        if (len<10) return true;        //Most common scenario. Return after a single check.
-        else if(len>10) return false;
-        else {
-            try {
-                Integer.parseInt(surfaceForm);
-                return true;
-            }
-            catch (Exception e){
+        if (len < 10) {
+            return true;        //Most common scenario. Return after a single check.
+        } else {
+            if (len > 10) {
                 return false;
+            } else {
+                try {
+                    Integer.parseInt(surfaceForm);
+                    return true;
+                }
+                catch (Exception e){
+                    return false;
+                }
             }
         }
     }
