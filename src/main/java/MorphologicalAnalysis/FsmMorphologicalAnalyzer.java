@@ -694,8 +694,7 @@ public class FsmMorphologicalAnalyzer {
     private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, String surfaceForm, TxtWord root) {
         State currentState = currentFsmParse.getFinalSuffix();
         String currentSurfaceForm = currentFsmParse.getSurfaceForm();
-        for (int i = 0; i < currentState.transitionCount(); i++) {
-            Transition currentTransition = currentState.getTransition(i);
+        for (Transition currentTransition : finiteStateMachine.getTransitions(currentState)) {
             if (currentTransition.transitionPossible(currentFsmParse.getSurfaceForm(), surfaceForm) && currentTransition.transitionPossible(currentFsmParse) && (currentSurfaceForm.compareTo(root.getName()) != 0 || (currentSurfaceForm.compareTo(root.getName()) == 0 && currentTransition.transitionPossible(root, currentState)))) {
                 String tmp = currentTransition.makeTransition(root, currentSurfaceForm, currentFsmParse.getStartState());
                 if ((tmp.length() < surfaceForm.length() && isPossibleSubstring(tmp, surfaceForm, root)) || (tmp.length() == surfaceForm.length() && (root.lastIdropsDuringSuffixation() || (tmp.equalsIgnoreCase(surfaceForm))))) {

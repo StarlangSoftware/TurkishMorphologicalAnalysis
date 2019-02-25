@@ -10,12 +10,14 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by olcay on 12/08/2018.
  */
 public class FiniteStateMachine {
     private ArrayList<State> states;
+    private HashMap<State, ArrayList<Transition>> transitions;
 
     /**
      * Constructor reads the finite state machine in the given input file. It has a NodeList which holds the states
@@ -50,7 +52,7 @@ public class FiniteStateMachine {
         } catch (SAXException | IOException e) {
             throw new RuntimeException("Fst file '" + fileName + "' could not be loaded from resources. Verify that file exists in project's resource folder.",e);
         }
-
+        transitions = new HashMap<>();
         doc = parser.getDocument();
         stateList = doc.getElementsByTagName("state");
         states = new ArrayList<>();
@@ -107,12 +109,12 @@ public class FiniteStateMachine {
                                     }
                                     if (toPos == null) {
                                         if (rootToPos == null) {
-                                            state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName);
+                                            addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName);
                                         } else {
-                                            state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName, rootToPos);
+                                            addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName, rootToPos);
                                         }
                                     } else {
-                                        state.addTransition(toState, withNode.getFirstChild().getNodeValue(), withName, toPos);
+                                        addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName, toPos);
                                     }
                                 }
                                 withNode = withNode.getNextSibling();
@@ -136,9 +138,9 @@ public class FiniteStateMachine {
      * @return true when the actual transition equals to the transition input, false otherwise.
      */
     public boolean isValidTransition(String transition) {
-        for (State state : states) {
-            for (int i = 0; i < state.transitionCount(); i++) {
-                if (state.getTransition(i).toString() != null && state.getTransition(i).toString().equals(transition)) {
+        for (State state : transitions.keySet()) {
+            for (Transition transition1 : transitions.get(state)) {
+                if (transition1.toString() != null && transition1.toString().equals(transition)) {
                     return true;
                 }
             }
@@ -160,6 +162,61 @@ public class FiniteStateMachine {
             }
         }
         return null;
+    }
+
+    /**
+     * The addTransition method creates a new {@link Transition} with given input parameters and adds the transition to
+     * transitions {@link ArrayList}.
+     *
+     * @param toState  State type input indicating the next state.
+     * @param with     String input indicating with what the transition will be made.
+     * @param withName String input.
+     */
+    public void addTransition(State fromState, State toState, String with, String withName) {
+        ArrayList<Transition> transitionList;
+        Transition newTransition = new Transition(toState, with, withName);
+        if (transitions.containsKey(fromState)){
+            transitionList = transitions.get(fromState);
+        } else {
+            transitionList = new ArrayList<>();
+        }
+        transitionList.add(newTransition);
+        transitions.put(fromState, transitionList);
+    }
+
+    /**
+     * Another addTransition method which takes additional argument; toPos and. It creates a new {@link Transition}
+     * with given input parameters and adds the transition to transitions {@link ArrayList}.
+     *
+     * @param toState  State type input indicating the next state.
+     * @param with     String input indicating with what the transition will be made.
+     * @param withName String input.
+     * @param toPos    String input.
+     */
+    public void addTransition(State fromState, State toState, String with, String withName, String toPos) {
+        ArrayList<Transition> transitionList;
+        Transition newTransition = new Transition(toState, with, withName, toPos);
+        if (transitions.containsKey(fromState)){
+            transitionList = transitions.get(fromState);
+        } else {
+            transitionList = new ArrayList<>();
+        }
+        transitionList.add(newTransition);
+        transitions.put(fromState, transitionList);
+    }
+
+    /**
+     * The getTransitions method returns the transitions at the given state.
+     *
+     * @param state State input.
+     * @return transitions at given state.
+     */
+    public ArrayList<Transition> getTransitions(State state) {
+        if (transitions.containsKey(state)){
+            return transitions.get(state);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 }

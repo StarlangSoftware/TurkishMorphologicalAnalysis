@@ -1,14 +1,11 @@
 package MorphologicalAnalysis;
 
-import java.util.ArrayList;
-
 public class State {
 
     private boolean startState;
     private boolean endState;
     private String name;
     private String pos;
-    private ArrayList<Transition> transitions;
 
 
     /**
@@ -24,7 +21,6 @@ public class State {
         this.startState = startState;
         this.endState = endState;
         this.pos = null;
-        transitions = new ArrayList<Transition>();
     }
 
     /**
@@ -41,34 +37,6 @@ public class State {
         this.startState = startState;
         this.endState = endState;
         this.pos = pos;
-        transitions = new ArrayList<Transition>();
-    }
-
-    /**
-     * The addTransition method creates a new {@link Transition} with given input parameters and adds the transition to
-     * transitions {@link ArrayList}.
-     *
-     * @param toState  State type input indicating the next state.
-     * @param with     String input indicating with what the transition will be made.
-     * @param withName String input.
-     */
-    public void addTransition(State toState, String with, String withName) {
-        Transition newTransition = new Transition(toState, with, withName);
-        transitions.add(newTransition);
-    }
-
-    /**
-     * Another addTransition method which takes additional argument; toPos and. It creates a new {@link Transition}
-     * with given input parameters and adds the transition to transitions {@link ArrayList}.
-     *
-     * @param toState  State type input indicating the next state.
-     * @param with     String input indicating with what the transition will be made.
-     * @param withName String input.
-     * @param toPos    String input.
-     */
-    public void addTransition(State toState, String with, String withName, String toPos) {
-        Transition newTransition = new Transition(toState, with, withName, toPos);
-        transitions.add(newTransition);
     }
 
     /**
@@ -96,25 +64,6 @@ public class State {
      */
     public boolean isEndState() {
         return endState;
-    }
-
-    /**
-     * The transitionCount method returns the size of the transitions {@link ArrayList}.
-     *
-     * @return the size of the transitions {@link ArrayList}.
-     */
-    public int transitionCount() {
-        return transitions.size();
-    }
-
-    /**
-     * The getTransition method returns the transition at the given index.
-     *
-     * @param index int input.
-     * @return transition at given index.
-     */
-    public Transition getTransition(int index) {
-        return transitions.get(index);
     }
 
     /**
