@@ -926,7 +926,6 @@ public class FsmMorphologicalAnalyzer {
             return initialFsmParse;
         }
         if (isInteger(surfaceForm)) {
-            Integer.parseInt(surfaceForm);
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(Integer.parseInt(surfaceForm), finiteStateMachine.getState("CardinalRoot"));
             fsmParse.constructInflectionalGroups();
@@ -1029,12 +1028,25 @@ public class FsmMorphologicalAnalyzer {
 
     /**
      * The isInteger method compares input surfaceForm with regex \+?\d+ and returns the result.
+     * Supports positive integer checks only.
      *
      * @param surfaceForm String to check.
      * @return true if surfaceForm matches with the regex.
      */
     private boolean isInteger(String surfaceForm) {
-        return surfaceForm.matches("\\+?\\d+") && surfaceForm.length() < 11;
+        if (!surfaceForm.matches("\\+?\\d+")) return false;
+        int len = surfaceForm.length();
+        if (len<10) return true;        //Most common scenario. Return after a single check.
+        else if(len>10) return false;
+        else {
+            try {
+                Integer.parseInt(surfaceForm);
+                return true;
+            }
+            catch (Exception e){
+                return false;
+            }
+        }
     }
 
     /**
