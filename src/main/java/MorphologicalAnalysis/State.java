@@ -67,7 +67,7 @@ public class State {
     }
 
     /**
-     * Overridedn toString method which  returns the name.
+     * Overridden toString method which  returns the name.
      *
      * @return String name.
      */
