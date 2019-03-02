@@ -787,7 +787,6 @@ public class FsmMorphologicalAnalyzer {
             return initialFsmParse;
         }
         if (surfaceForm.endsWith(".") && isInteger(surfaceForm.substring(0, surfaceForm.length() - 1))) {
-            Integer.parseInt(surfaceForm.substring(0, surfaceForm.length() - 1));
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(Integer.parseInt(surfaceForm.substring(0, surfaceForm.length() - 1)), finiteStateMachine.getState("OrdinalRoot"));
             fsmParse.constructInflectionalGroups();
@@ -802,7 +801,6 @@ public class FsmMorphologicalAnalyzer {
             return initialFsmParse;
         }
         if (isDouble(surfaceForm)) {
-            Double.parseDouble(surfaceForm);
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(Double.parseDouble(surfaceForm), finiteStateMachine.getState("RealRoot"));
             fsmParse.constructInflectionalGroups();
@@ -959,11 +957,7 @@ public class FsmMorphologicalAnalyzer {
                 break;
             }
         }
-        if (word.isEmpty() && count > 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return word.isEmpty() && count > 1;
     }
 
     /**
@@ -1028,12 +1022,10 @@ public class FsmMorphologicalAnalyzer {
                                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                     } else {
                                         if (isInteger(possibleRoot)) {
-                                            Integer.parseInt(possibleRoot);
                                             dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_SAYI"));
                                             fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                         } else {
                                             if (isDouble(possibleRoot)) {
-                                                Double.parseDouble(possibleRoot);
                                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_REELSAYI"));
                                                 fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                             } else {
