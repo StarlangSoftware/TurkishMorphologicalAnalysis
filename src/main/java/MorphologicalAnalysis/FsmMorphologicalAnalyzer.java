@@ -64,7 +64,7 @@ public class FsmMorphologicalAnalyzer {
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary, int cacheSize) {
         this.dictionary = dictionary;
         finiteStateMachine = new FiniteStateMachine(fileName);
-        dictionaryTrie = prepareTrie(dictionary);
+        dictionaryTrie = dictionary.prepareTrie();
         cache = new LRUCache<>(cacheSize);
     }
 
@@ -77,137 +77,6 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary) {
         this(fileName, dictionary, 100000);
-    }
-    
-    /**
-     * The addWordWhenRootSoften is used to add word to Trie whose last consonant will be soften.
-     * For instance, in the case of Dative Case Suffix, the word is 'müzik' when '-e' is added to the word, the last
-     * char is drooped and root became 'müzi' and by changing 'k' into 'ğ' the word transformed into 'müziğe' as in the
-     * example of 'Herkes müziğe doğru geldi'.
-     * <p>
-     * In the case of accusative, possessive of third person and a derivative suffix, the word is 'kanat' when '-i' is
-     * added to word, last char is dropped, root became 'kana' then 't' transformed into 'd' and added to Trie. The word is
-     * changed into 'kanadı' as in the case of 'Kuşun kırık kanadı'.
-     *
-     * @param trie the name of the Trie to add the word.
-     * @param last the last char of the word to be soften.
-     * @param root the substring of the word whose last one or two chars are omitted from the word to bo softed.
-     * @param word the original word.
-     */
-    private void addWordWhenRootSoften(Trie trie, char last, String root, TxtWord word) {
-        switch (last) {
-            case 'p':
-                trie.addWord(root + 'b', word);
-                break;
-            case '\u00e7': //ç
-                trie.addWord(root + 'c', word);
-                break;
-            case 't':
-                trie.addWord(root + 'd', word);
-                break;
-            case 'k':
-            case 'g':
-                trie.addWord(root + '\u011f', word); //ğ
-                break;
-        }
-    }
-
-    /**
-     * The prepareTrie method is used to create a Trie with the given dictionary. First, it gets the word from dictionary,
-     * then checks some exceptions like 'ben' which does not fit in the consonant softening rule and transforms into 'bana',
-     * and later on it generates a root by removing the last char from the word however if the length of the word is greater
-     * than 1, it also generates the root by removing the last two chars from the word.
-     * <p>
-     * Then, it gets the last char of the root and adds root and word to the result Trie. There are also special cases such as;
-     * lastIdropsDuringSuffixation condition, if it is true then addWordWhenRootSoften method will be used rather than addWord.
-     * Ex : metin + i = metni
-     * isPortmanteauEndingWithSI condition, if it is true then addWord method with rootWithoutLastTwo will be used.
-     * Ex : ademelması + lar = ademelmaları
-     * isPortmanteau condition, if it is true then addWord method with rootWithoutLast will be used.
-     * Ex : mısıryağı + lar = mısıryağları
-     * vowelEChangesToIDuringYSuffixation condition, if it is then addWord method with rootWithoutLast will be used
-     * depending on the last char whether it is 'e' or 'a'.
-     * Ex : ye + iniz - yiyiniz
-     * endingKChangesIntoG condition, if it is true then addWord method with rootWithoutLast will be used with added 'g'.
-     * Ex : ahenk + i = ahengi
-     *
-     * @param currentDictionary the dictionary that Trie will be created.
-     * @return the resulting Trie.
-     */
-    private Trie prepareTrie(TxtDictionary currentDictionary) {
-        Trie result = new Trie();
-        String root, rootWithoutLast, rootWithoutLastTwo;
-        char last, lastBefore = ' ';
-        for (int i = 0; i < currentDictionary.size(); i++) {
-            TxtWord word = (TxtWord) currentDictionary.getWord(i);
-            root = word.getName();
-            if (root.equals("ben")) {
-                result.addWord("bana", word);
-            }
-            rootWithoutLast = root.substring(0, root.length() - 1);
-            if (root.length() > 1) {
-                rootWithoutLastTwo = root.substring(0, root.length() - 2);
-            } else {
-                rootWithoutLastTwo = "";
-            }
-            if (root.length() > 1){
-                lastBefore = root.charAt(root.length() - 2);
-            }
-            last = root.charAt(root.length() - 1);
-            result.addWord(root, word);
-            if (word.lastIdropsDuringSuffixation() || word.lastIdropsDuringPassiveSuffixation()) {
-                if (word.rootSoftenDuringSuffixation()) {
-                    addWordWhenRootSoften(result, last, rootWithoutLastTwo, word);
-                } else {
-                    result.addWord(rootWithoutLastTwo + last, word);
-                }
-            }
-            // NominalRootNoPossesive
-            if (word.isPortmanteauEndingWithSI()) {
-                result.addWord(rootWithoutLastTwo, word);
-            }
-            if (word.rootSoftenDuringSuffixation()) {
-                addWordWhenRootSoften(result, last, rootWithoutLast, word);
-            }
-            if (word.isPortmanteau()) {
-                if (word.isPortmanteauFacedVowelEllipsis()){
-                    result.addWord(rootWithoutLastTwo + last + lastBefore, word);
-                } else {
-                    if (word.isPortmanteauFacedSoftening()){
-                        switch (lastBefore){
-                            case 'b':
-                                result.addWord(rootWithoutLastTwo + 'p', word);
-                                break;
-                            case 'c':
-                                result.addWord(rootWithoutLastTwo + 'ç', word);
-                                break;
-                            case 'd':
-                                result.addWord(rootWithoutLastTwo + 't', word);
-                                break;
-                            case 'ğ':
-                                result.addWord(rootWithoutLastTwo + 'k', word);
-                                break;
-                        }
-                    } else {
-                        result.addWord(rootWithoutLast, word);
-                    }
-                }
-            }
-            if (word.vowelEChangesToIDuringYSuffixation() || word.vowelAChangesToIDuringYSuffixation()) {
-                switch (last) {
-                    case 'e':
-                        result.addWord(rootWithoutLast, word);
-                        break;
-                    case 'a':
-                        result.addWord(rootWithoutLast, word);
-                        break;
-                }
-            }
-            if (word.endingKChangesIntoG()) {
-                result.addWord(rootWithoutLast + 'g', word);
-            }
-        }
-        return result;
     }
 
     /**
