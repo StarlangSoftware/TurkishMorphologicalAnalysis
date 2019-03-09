@@ -14,6 +14,7 @@ public class FsmMorphologicalAnalyzer {
     private static final int MAX_DISTANCE = 2;
     private TxtDictionary dictionary;
     private LRUCache<String, FsmParseList> cache;
+    private HashMap<String,Pattern> mostUsedPatterns = new HashMap<>();
 
     /**
      * First no-arg constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
@@ -812,12 +813,11 @@ public class FsmMorphologicalAnalyzer {
         return parseWord(initialFsmParse, surfaceForm);
     }
 
-    private HashMap<String,Pattern> _Patterns = new HashMap<>();
     protected boolean Matches(String expr, String value){
-        Pattern p = _Patterns.get(expr);
+        Pattern p = mostUsedPatterns.get(expr);
         if (p == null){
             p = Pattern.compile(expr);
-            _Patterns.put(expr, p);
+            mostUsedPatterns.put(expr, p);
         }
         return p.matcher(value).matches();
     }
