@@ -38,7 +38,7 @@ public class TestMorphologicalAnalysis {
         long previous = Calendar.getInstance().getTimeInMillis();
         String line;
         try {
-            FileReader fr = new FileReader("./Data/Corpus/gazete.txt");
+            FileReader fr = new FileReader("gazete.txt");
             BufferedReader br = new BufferedReader(fr);
             line = br.readLine();
             while (line != null){
@@ -46,9 +46,8 @@ public class TestMorphologicalAnalysis {
                 for (int j = 0; j < sentence.wordCount(); j++){
                     fsm.morphologicalAnalysis(sentence.getWord(j).getName());
                     k++;
-                    if (k % 10000 == 0){
-                        long now = Calendar.getInstance().getTimeInMillis();
-                        System.out.println((1000.0 * k) / (now - previous) + " words per sec");
+                    if (k % 1000 == 0){
+                        System.out.println(k);
                     }
                 }
                 line = br.readLine();
