@@ -14,10 +14,31 @@ public class TestMorphologicalAnalysis {
         }
     }
 
+    public static void testSentence(FsmMorphologicalAnalyzer fsm, String s){
+        Sentence sentence = new Sentence(s);
+        FsmParseList[] fsmParses = fsm.morphologicalAnalysis(sentence, false);
+        for (int i = 0; i < fsmParses.length; i++){
+            for (int j = 0; j < fsmParses[i].size(); j++){
+                System.out.println(fsmParses[i].getFsmParse(j).transitionList());
+            }
+        }
+    }
+
     public static void testWordForLemma(FsmMorphologicalAnalyzer fsm, String word, String pos){
         FsmParseList fsmParses = fsm.morphologicalAnalysis(word);
         for (int i = 0; i < fsmParses.size(); i++){
             System.out.println(fsmParses.getFsmParse(i).getLastLemmaWithTag(pos));
+        }
+    }
+
+    public static void analyzeSentence(){
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+        Scanner sc = new Scanner(System.in);
+        String sentence = "ali topu at";
+        while (sentence.length() > 1){
+            System.out.print("->");
+            sentence = sc.nextLine();
+            testSentence(fsm, sentence);
         }
     }
 
@@ -191,7 +212,8 @@ public class TestMorphologicalAnalysis {
     }
 
     public static void main(String[] args){
-        analyze();
+        //analyze();
+        analyzeSentence();
         //checkSpeed();
     }
 
