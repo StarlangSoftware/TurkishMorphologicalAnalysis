@@ -67,7 +67,11 @@ public class FsmMorphologicalAnalyzer {
         this.dictionary = dictionary;
         finiteStateMachine = new FiniteStateMachine(fileName);
         dictionaryTrie = dictionary.prepareTrie();
-        cache = new LRUCache<>(cacheSize);
+        if (cacheSize > 0){
+            cache = new LRUCache<>(cacheSize);
+        } else {
+            cache = null;
+        }
     }
 
     /**

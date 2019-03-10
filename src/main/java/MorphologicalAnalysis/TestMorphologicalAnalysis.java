@@ -55,7 +55,7 @@ public class TestMorphologicalAnalysis {
 
     public static void checkSpeed(){
         int k = 0;
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(1000000);
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(0);
         long previous = Calendar.getInstance().getTimeInMillis();
         String line;
         try {
@@ -213,8 +213,8 @@ public class TestMorphologicalAnalysis {
 
     public static void main(String[] args){
         //analyze();
-        analyzeSentence();
-        //checkSpeed();
+        //analyzeSentence();
+        checkSpeed();
     }
 
 }
