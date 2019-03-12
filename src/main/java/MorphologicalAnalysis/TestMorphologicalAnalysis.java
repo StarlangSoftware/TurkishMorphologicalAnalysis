@@ -3,6 +3,7 @@ package MorphologicalAnalysis;
 import java.io.*;
 import java.util.*;
 import Corpus.*;
+import Dictionary.TxtDictionary;
 import DataStructure.CounterHashMap;
 
 public class TestMorphologicalAnalysis {
@@ -59,7 +60,7 @@ public class TestMorphologicalAnalysis {
         long previous = Calendar.getInstance().getTimeInMillis();
         String line;
         try {
-            FileReader fr = new FileReader("gazete.txt");
+            FileReader fr = new FileReader("deneme.txt");
             BufferedReader br = new BufferedReader(fr);
             line = br.readLine();
             while (line != null){
@@ -176,6 +177,21 @@ public class TestMorphologicalAnalysis {
         }
     }
 
+    public static void checkSpeedSameWord(){
+        Scanner s = new Scanner(System.in);
+        String word;
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(0);
+        System.out.println("->");
+        word = s.next();
+        for (int i = 0; i < 100000; i++){
+            if (i % 1000 == 0){
+                System.out.println(i);
+            }
+            FsmParseList fsmParses = fsm.morphologicalAnalysis(word);
+        }
+    }
+
+
     public static void checkCorrectness(){
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
         Scanner s;
@@ -214,7 +230,8 @@ public class TestMorphologicalAnalysis {
     public static void main(String[] args){
         //analyze();
         //analyzeSentence();
-        checkSpeed();
+        //checkSpeed();
+        checkSpeedSameWord();
     }
 
 }
