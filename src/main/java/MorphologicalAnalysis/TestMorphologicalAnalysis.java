@@ -3,7 +3,7 @@ package MorphologicalAnalysis;
 import java.io.*;
 import java.util.*;
 import Corpus.*;
-import Dictionary.TxtDictionary;
+import Dictionary.*;
 import DataStructure.CounterHashMap;
 
 public class TestMorphologicalAnalysis {
@@ -18,9 +18,9 @@ public class TestMorphologicalAnalysis {
     public static void testSentence(FsmMorphologicalAnalyzer fsm, String s){
         Sentence sentence = new Sentence(s);
         FsmParseList[] fsmParses = fsm.morphologicalAnalysis(sentence, false);
-        for (int i = 0; i < fsmParses.length; i++){
-            for (int j = 0; j < fsmParses[i].size(); j++){
-                System.out.println(fsmParses[i].getFsmParse(j).transitionList());
+        for (FsmParseList fsmParse : fsmParses) {
+            for (int j = 0; j < fsmParse.size(); j++) {
+                System.out.println(fsmParse.getFsmParse(j).transitionList());
             }
         }
     }
@@ -51,6 +51,26 @@ public class TestMorphologicalAnalysis {
             System.out.print("->");
             word = sc.next();
             testWord(fsm, word);
+        }
+    }
+
+    public static void generateAllParses(FsmMorphologicalAnalyzer fsm, TxtWord txtWord){
+        ArrayList<FsmParse> fsmParses = fsm.generateAllParses(txtWord, txtWord.charCount() + 7);
+        for (FsmParse fsmParse : fsmParses){
+            System.out.println(fsmParse.getSurfaceForm());
+        }
+    }
+
+    public static void allParses(){
+        TxtDictionary dictionary = new TxtDictionary();
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+        Scanner sc = new Scanner(System.in);
+        String word = "ali topu at";
+        while (word.length() > 1){
+            System.out.print("->");
+            word = sc.next();
+            TxtWord txtWord = (TxtWord) dictionary.getWord(word);
+            generateAllParses(fsm, txtWord);
         }
     }
 
@@ -191,7 +211,6 @@ public class TestMorphologicalAnalysis {
         }
     }
 
-
     public static void checkCorrectness(){
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
         Scanner s;
@@ -222,16 +241,15 @@ public class TestMorphologicalAnalysis {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (InputMismatchException i){
-            i.printStackTrace();
         }
     }
 
     public static void main(String[] args){
+        allParses();
         //analyze();
         //analyzeSentence();
         //checkSpeed();
-        checkSpeedSameWord();
+        //checkSpeedSameWord();
     }
 
 }

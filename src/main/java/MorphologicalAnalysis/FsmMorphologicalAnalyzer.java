@@ -503,16 +503,58 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
-     * The initializeRootList method is used to create an {@link ArrayList} which consists of initial fsm parsings. First,
-     * it calls getWordsWithPrefix methods by using input String surfaceForm and generates a {@link HashSet}. Then, traverses
+     * The initializeParseListFromRoot method is used to create an {@link ArrayList} which consists of initial fsm parsings. First, traverses
      * this HashSet and uses each word as a root and calls initializeParseList method with this root and ArrayList.
+     * <p>
+     *
+     * @param parseList ArrayList to initialize.
+     * @param root the root form to generate initial parse list.
+     * @param isProper    is used to check a word is proper or not.
+     */
+    private void initializeParseListFromRoot(ArrayList<FsmParse> parseList, TxtWord root, boolean isProper) {
+        initializeParseList(parseList, root, isProper);
+        if (root.obeysAndNotObeysVowelHarmonyDuringAgglutination()){
+            TxtWord newRoot = root.clone();
+            newRoot.removeFlag("IS_UU");
+            newRoot.removeFlag("IS_UUU");
+            initializeParseList(parseList, newRoot, isProper);
+        }
+        if (root.rootSoftenAndNotSoftenDuringSuffixation()){
+            TxtWord newRoot = root.clone();
+            newRoot.removeFlag("IS_SD");
+            newRoot.removeFlag("IS_SDD");
+            initializeParseList(parseList, newRoot, isProper);
+        }
+        if (root.lastIDropsAndNotDropDuringSuffixation()){
+            TxtWord newRoot = root.clone();
+            newRoot.removeFlag("IS_UD");
+            newRoot.removeFlag("IS_UDD");
+            initializeParseList(parseList, newRoot, isProper);
+        }
+        if (root.duplicatesAndNotDuplicatesDuringSuffixation()){
+            TxtWord newRoot = root.clone();
+            newRoot.removeFlag("IS_ST");
+            newRoot.removeFlag("IS_STT");
+            initializeParseList(parseList, newRoot, isProper);
+        }
+        if (root.endingKChangesIntoG()){
+            TxtWord newRoot = root.clone();
+            newRoot.removeFlag("IS_OA");
+            initializeParseList(parseList, newRoot, isProper);
+        }
+    }
+
+    /**
+     * The initializeParseListFromSurfaceForm method is used to create an {@link ArrayList} which consists of initial fsm parsings. First,
+     * it calls getWordsWithPrefix methods by using input String surfaceForm and generates a {@link HashSet}. Then, traverses
+     * this HashSet and uses each word as a root and calls initializeParseListFromRoot method with this root and ArrayList.
      * <p>
      *
      * @param surfaceForm the String used to generate a HashSet of words.
      * @param isProper    is used to check a word is proper or not.
      * @return initialFsmParse ArrayList.
      */
-    private ArrayList<FsmParse> initializeRootList(String surfaceForm, boolean isProper) {
+    private ArrayList<FsmParse> initializeParseListFromSurfaceForm(String surfaceForm, boolean isProper) {
         TxtWord root;
         ArrayList<FsmParse> initialFsmParse;
         initialFsmParse = new ArrayList<>();
@@ -522,38 +564,35 @@ public class FsmMorphologicalAnalyzer {
         HashSet<Word> words = dictionaryTrie.getWordsWithPrefix(surfaceForm);
         for (Word word : words) {
             root = (TxtWord) word;
-            initializeParseList(initialFsmParse, root, isProper);
-            if (root.obeysAndNotObeysVowelHarmonyDuringAgglutination()){
-                TxtWord newRoot = root.clone();
-                newRoot.removeFlag("IS_UU");
-                newRoot.removeFlag("IS_UUU");
-                initializeParseList(initialFsmParse, newRoot, isProper);
-            }
-            if (root.rootSoftenAndNotSoftenDuringSuffixation()){
-                TxtWord newRoot = root.clone();
-                newRoot.removeFlag("IS_SD");
-                newRoot.removeFlag("IS_SDD");
-                initializeParseList(initialFsmParse, newRoot, isProper);
-            }
-            if (root.lastIDropsAndNotDropDuringSuffixation()){
-                TxtWord newRoot = root.clone();
-                newRoot.removeFlag("IS_UD");
-                newRoot.removeFlag("IS_UDD");
-                initializeParseList(initialFsmParse, newRoot, isProper);
-            }
-            if (root.duplicatesAndNotDuplicatesDuringSuffixation()){
-                TxtWord newRoot = root.clone();
-                newRoot.removeFlag("IS_ST");
-                newRoot.removeFlag("IS_STT");
-                initializeParseList(initialFsmParse, newRoot, isProper);
-            }
-            if (root.endingKChangesIntoG()){
-                TxtWord newRoot = root.clone();
-                newRoot.removeFlag("IS_OA");
-                initializeParseList(initialFsmParse, newRoot, isProper);
-            }
+            initializeParseListFromRoot(initialFsmParse, root, isProper);
         }
         return initialFsmParse;
+    }
+
+    /**
+     * The addNewParsesFromCurrentParse method initially gets the final suffixes from input currentFsmParse called as currentState,
+     * and by using the currentState information it gets the new analysis. Then loops through each currentState's transition.
+     * If the currentTransition is possible, it makes the transition.
+     *
+     * @param currentFsmParse FsmParse type input.
+     * @param fsmParse        an ArrayList of FsmParse.
+     * @param maxLength     Maximum length of the parse.
+     * @param root            TxtWord used to make transition.
+     */
+    private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, int maxLength, TxtWord root) {
+        State currentState = currentFsmParse.getFinalSuffix();
+        String currentSurfaceForm = currentFsmParse.getSurfaceForm();
+        for (Transition currentTransition : finiteStateMachine.getTransitions(currentState)) {
+            if (currentTransition.transitionPossible(currentFsmParse) && (currentSurfaceForm.compareTo(root.getName()) != 0 || (currentSurfaceForm.compareTo(root.getName()) == 0 && currentTransition.transitionPossible(root, currentState)))) {
+                String tmp = currentTransition.makeTransition(root, currentSurfaceForm, currentFsmParse.getStartState());
+                if (tmp.length() <= maxLength) {
+                    FsmParse newFsmParse = currentFsmParse.clone();
+                    newFsmParse.addSuffix(currentTransition.toState(), tmp, currentTransition.with(), currentTransition.toString(), currentTransition.toPos());
+                    newFsmParse.setAgreement(currentTransition.with());
+                    fsmParse.add(newFsmParse);
+                }
+            }
+        }
     }
 
     /**
@@ -605,6 +644,46 @@ public class FsmMorphologicalAnalyzer {
             addNewParsesFromCurrentParse(currentFsmParse, fsmParse, surfaceForm, root);
         }
         return false;
+    }
+
+    /**
+     * The parseWord method is used to parse a given fsmParse. It simply adds new parses to the current parse by
+     * using addNewParsesFromCurrentParse method.
+     *
+     * @param fsmParse    an ArrayList of FsmParse
+     * @param maxLength maximum length of the surfaceform.
+     * @return result {@link ArrayList} which has the currentFsmParse.
+     */
+    private ArrayList<FsmParse> parseWord(ArrayList<FsmParse> fsmParse, int maxLength) {
+        ArrayList<FsmParse> result;
+        FsmParse currentFsmParse;
+        TxtWord root;
+        State currentState;
+        String currentSurfaceForm;
+        int i;
+        boolean exists;
+        result = new ArrayList<>();
+        while (fsmParse.size() > 0) {
+            currentFsmParse = fsmParse.remove(0);
+            root = (TxtWord) currentFsmParse.getWord();
+            currentState = currentFsmParse.getFinalSuffix();
+            currentSurfaceForm = currentFsmParse.getSurfaceForm();
+            if (currentState.isEndState() && currentSurfaceForm.length() <= maxLength) {
+                exists = false;
+                for (i = 0; i < result.size(); i++) {
+                    if (currentFsmParse.suffixList().equalsIgnoreCase(result.get(i).suffixList())) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    result.add(currentFsmParse);
+                    currentFsmParse.constructInflectionalGroups();
+                }
+            }
+            addNewParsesFromCurrentParse(currentFsmParse, fsmParse, maxLength, root);
+        }
+        return result;
     }
 
     /**
@@ -664,8 +743,23 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
+     * The generateAllParses with 2 inputs is used to generate all parses with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
+     * and maximum length.
+     *
+     * @param root        TxtWord input.
+     * @param maxLength Maximum length of the surface form.
+     * @return parseWord method with newly populated FsmParse ArrayList and maximum length.
+     */
+    public ArrayList<FsmParse> generateAllParses(TxtWord root, int maxLength) {
+        ArrayList<FsmParse> initialFsmParse;
+        initialFsmParse = new ArrayList<>();
+        initializeParseListFromRoot(initialFsmParse, root, false);
+        return parseWord(initialFsmParse, maxLength);
+    }
+
+    /**
      * The morphologicalAnalysis with 2 inputs is used to initialize an {@link ArrayList} and add a new FsmParse
-     * with given root. Then it calls initializeParseList method to initialize list with newly created ArrayList, input root,
+     * with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
      * and input surfaceForm.
      *
      * @param root        TxtWord input.
@@ -675,7 +769,7 @@ public class FsmMorphologicalAnalyzer {
     public ArrayList<FsmParse> morphologicalAnalysis(TxtWord root, String surfaceForm) {
         ArrayList<FsmParse> initialFsmParse;
         initialFsmParse = new ArrayList<>();
-        initializeParseList(initialFsmParse, root, isProperNoun(surfaceForm));
+        initializeParseListFromRoot(initialFsmParse, root, isProperNoun(surfaceForm));
         return parseWord(initialFsmParse, surfaceForm);
     }
 
@@ -699,9 +793,9 @@ public class FsmMorphologicalAnalyzer {
         }
         if (rootWord != null) {
             initialFsmParse = new ArrayList<>();
-            initializeParseList(initialFsmParse, rootWord, isProper);
+            initializeParseListFromRoot(initialFsmParse, rootWord, isProper);
         } else {
-            initialFsmParse = initializeRootList(surfaceForm, isProper);
+            initialFsmParse = initializeParseListFromSurfaceForm(surfaceForm, isProper);
         }
         return parseExists(initialFsmParse, surfaceForm);
     }
@@ -813,7 +907,7 @@ public class FsmMorphologicalAnalyzer {
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        initialFsmParse = initializeRootList(surfaceForm, isProper);
+        initialFsmParse = initializeParseListFromSurfaceForm(surfaceForm, isProper);
         return parseWord(initialFsmParse, surfaceForm);
     }
 
