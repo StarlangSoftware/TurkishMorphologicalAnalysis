@@ -753,6 +753,9 @@ public class FsmMorphologicalAnalyzer {
     public ArrayList<FsmParse> generateAllParses(TxtWord root, int maxLength) {
         ArrayList<FsmParse> initialFsmParse;
         initialFsmParse = new ArrayList<>();
+        if (root.isProperNoun()){
+            initializeParseListFromRoot(initialFsmParse, root, true);
+        }
         initializeParseListFromRoot(initialFsmParse, root, false);
         return parseWord(initialFsmParse, maxLength);
     }
