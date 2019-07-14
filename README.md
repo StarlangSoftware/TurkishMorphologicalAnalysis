@@ -1,4 +1,8 @@
 # MorphologicalAnalysis
+
+## Morphology
+Turkish is one of the morphologically rich languages due to its agglutinative nature. Morphological Analysis repository provides a two-level morphological analyzer for Turkish which consists of finite state transducer, rule engine for suffixation, and lexicon.
+
 For Developers
 ============
 
@@ -79,14 +83,10 @@ Use below line to generate jar file:
 
 Morphological Analysis
 ============
-* [Morphology](#morphology)
-    + [Maven Usage](#maven-usage)
++ [Maven Usage](#maven-usage)
 	+ [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
 	+ [Word level morphological analysis](#word-level-morphological-analysis)
 	+ [Sentence level morphological analysis](#sentence-level-morphological-analysis)
-	
-## Morphology
-Turkish is one of the morphologically rich languages due to its agglutinative nature. Morphological Analysis repository provides a two-level morphological analyzer for Turkish which consists of finite state transducer, rule engine for suffixation, and lexicon.
 
 ### Maven Usage
 
