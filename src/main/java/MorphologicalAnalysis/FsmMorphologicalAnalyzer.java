@@ -18,10 +18,10 @@ public class FsmMorphologicalAnalyzer {
 
     /**
      * First no-arg constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
-     * turkish_dictionary.txt with fixed cache size 100000 and by using turkish_finite_state_machine.xml file.
+     * turkish_dictionary.txt with fixed cache size 10000000 and by using turkish_finite_state_machine.xml file.
      */
     public FsmMorphologicalAnalyzer() {
-        this("turkish_finite_state_machine.xml", new TxtDictionary(), 100000);
+        this("turkish_finite_state_machine.xml", new TxtDictionary(), 10000000);
     }
 
     /**
@@ -41,7 +41,7 @@ public class FsmMorphologicalAnalyzer {
      * @param dictionaryFileName the size of the LRUCache.
      */
     public FsmMorphologicalAnalyzer(String dictionaryFileName) {
-        this("turkish_finite_state_machine.xml", new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 100000);
+        this("turkish_finite_state_machine.xml", new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 10000000);
     }
 
     /**
@@ -52,7 +52,7 @@ public class FsmMorphologicalAnalyzer {
      * @param dictionaryFileName the file to read the dictionary.
      */
     public FsmMorphologicalAnalyzer(String fileName, String dictionaryFileName) {
-        this(fileName, new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 100000);
+        this(fileName, new TxtDictionary(dictionaryFileName, new TurkishWordComparator()), 10000000);
     }
 
     /**
@@ -76,13 +76,13 @@ public class FsmMorphologicalAnalyzer {
 
     /**
      * Another constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
-     * given input dictionary, with given input fileName and fixed size cacheSize = 100000.
+     * given input dictionary, with given input fileName and fixed size cacheSize = 10000000.
      *
      * @param fileName   the file to read the finite state machine.
      * @param dictionary the dictionary file that will be used to generate dictionaryTrie.
      */
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary) {
-        this(fileName, dictionary, 100000);
+        this(fileName, dictionary, 10000000);
     }
 
     /**
@@ -470,6 +470,10 @@ public class FsmMorphologicalAnalyzer {
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isNominal()) {
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRoot"));
+                        fsmParse.add(currentFsmParse);
+                    }
+                    if (root.isAbbreviation()){
                         currentFsmParse = new FsmParse(root, finiteStateMachine.getState("NominalRoot"));
                         fsmParse.add(currentFsmParse);
                     }
