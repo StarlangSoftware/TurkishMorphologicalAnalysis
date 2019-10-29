@@ -484,6 +484,62 @@ public class MorphologicalParse implements Serializable {
     }
 
     /**
+     * The getTreePos method returns the tree pos tag of a morphological analysis.
+     *
+     * @return Tree pos tag of the morphological analysis in string form.
+     */
+    public String getTreePos(){
+        if (isProperNoun()){
+            return "NNP";
+        } else {
+            if (isVerb()){
+                return "V";
+            } else {
+                if (isAdjective()){
+                    return "JJ";
+                } else {
+                    if (isNoun()){
+                        return "NN";
+                    } else {
+                        if (containsTag(MorphologicalTag.ADVERB)){
+                            return "RB";
+                        } else {
+                            if (isCardinal()){
+                                return "CD";
+                            } else {
+                                if (containsTag(MorphologicalTag.POSTPOSITION)){
+                                    return  "IN";
+                                } else {
+                                    if (containsTag(MorphologicalTag.CONJUNCTION)){
+                                        return "CC";
+                                    } else {
+                                        if (containsTag(MorphologicalTag.DETERMINER)){
+                                            return "DT";
+                                        } else {
+                                            if (containsTag(MorphologicalTag.INTERJECTION)){
+                                                return "UH";
+                                            } else {
+                                                if (containsTag(MorphologicalTag.QUESTIONPRONOUN)){
+                                                    return "WP";
+                                                } else {
+                                                    if (containsTag(MorphologicalTag.PRONOUN)){
+                                                        return "PRP";
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "-XXX-";
+    }
+
+    /**
      * The overridden toString method gets the root and the first inflectional group as a result {@link String} then concatenates
      * with ^DB+ and the following inflectional groups.
      *
