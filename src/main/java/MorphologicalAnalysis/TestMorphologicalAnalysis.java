@@ -263,7 +263,7 @@ public class TestMorphologicalAnalysis {
                 String[] items = line.split(" ");
                 boolean analyzed = true;
                 for (String item : items){
-                    if (!exceptions.contains(item)){
+                    if (item.length() > 1 && !exceptions.contains(item)){
                         FsmParseList parses = fsm.morphologicalAnalysis(item.toUpperCase(new Locale(   "tr")));
                         if (parses.size() == 0){
                             analyzed = false;
@@ -283,12 +283,14 @@ public class TestMorphologicalAnalysis {
                 }
             }
             s.close();
-            PrintWriter pw = new PrintWriter(new File("notanalyzed.txt"));
+            PrintWriter pw = new PrintWriter(new File("notanalyzed.txt"), "UTF-8");
             for (Map.Entry<String, Integer> entry : counter.topN(3000)){
                 pw.println(entry.getKey() + "\t" + entry.getValue());
             }
             pw.close();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }

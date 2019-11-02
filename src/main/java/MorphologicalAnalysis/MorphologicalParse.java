@@ -490,40 +490,40 @@ public class MorphologicalParse implements Serializable {
      */
     public String getTreePos(){
         if (isProperNoun()){
-            return "NNP";
+            return "NP";
         } else {
             if (isVerb()){
-                return "V";
+                return "VP";
             } else {
                 if (isAdjective()){
-                    return "JJ";
+                    return "ADJP";
                 } else {
                     if (isNoun()){
-                        return "NN";
+                        return "NP";
                     } else {
                         if (containsTag(MorphologicalTag.ADVERB)){
-                            return "RB";
+                            return "ADVP";
                         } else {
                             if (isCardinal()){
-                                return "CD";
+                                return "QP";
                             } else {
                                 if (containsTag(MorphologicalTag.POSTPOSITION)){
-                                    return  "IN";
+                                    return  "PP";
                                 } else {
                                     if (containsTag(MorphologicalTag.CONJUNCTION)){
-                                        return "CC";
+                                        return "CONJP";
                                     } else {
                                         if (containsTag(MorphologicalTag.DETERMINER)){
-                                            return "DT";
+                                            return "DP";
                                         } else {
                                             if (containsTag(MorphologicalTag.INTERJECTION)){
-                                                return "UH";
+                                                return "INTJ";
                                             } else {
                                                 if (containsTag(MorphologicalTag.QUESTIONPRONOUN)){
                                                     return "WP";
                                                 } else {
                                                     if (containsTag(MorphologicalTag.PRONOUN)){
-                                                        return "PRP";
+                                                        return "NP";
                                                     }
                                                 }
                                             }
