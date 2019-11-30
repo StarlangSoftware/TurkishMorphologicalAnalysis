@@ -519,7 +519,7 @@ public class MetamorphicParse implements Serializable {
         ArrayList<MorphologicalTag> result = new ArrayList<MorphologicalTag>();
         String s = Character.toString(tag.charAt(0));
         if (Word.isPunctuation(s)) {
-            tag = tag.substring(1, tag.length());
+            tag = tag.substring(1);
         }
         for (int j = 0; j < metaMorphemes.length; j++) {
             if (tag.equalsIgnoreCase(metaMorphemes[j]) && parse.containsTag(morphotacticTags[j])) {

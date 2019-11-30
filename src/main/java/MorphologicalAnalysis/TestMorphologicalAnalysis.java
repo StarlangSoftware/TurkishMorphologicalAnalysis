@@ -296,9 +296,9 @@ public class TestMorphologicalAnalysis {
     }
 
     public static void main(String[] args){
-        analyzeAll();
+        //analyzeAll();
         //allParses();
-        //analyze();
+        analyze();
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();

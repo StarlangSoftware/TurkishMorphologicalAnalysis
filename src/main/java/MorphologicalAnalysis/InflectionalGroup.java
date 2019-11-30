@@ -131,9 +131,9 @@ public class InflectionalGroup implements Serializable {
     }
 
     /**
-     * The size method returns the size of the G {@link ArrayList}.
+     * The size method returns the size of the IG {@link ArrayList}.
      *
-     * @return the size of the G {@link ArrayList}.
+     * @return the size of the IG {@link ArrayList}.
      */
     public int size() {
         return IG.size();

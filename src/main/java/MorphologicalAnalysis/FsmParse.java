@@ -378,7 +378,7 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * The pronounTransition method gets the first item of formList and checks for cases;
      * <p>
      * If it is "kendi", it returns kendi+PRON+REFLEXP which indicates a reflexive pronoun.
-     * If it is one of the "hep, öbür, kimse, hiçbiri, tümü, çoğu, hepsi, biri, birbirleri, birbiri, bazı, kimi", it returns
+     * If it is one of the "hep, öbür, topu, öteki, kimse, hiçbiri, tümü, çoğu, hepsi, herkes, başkası, birçoğu, birçokları, biri, birbirleri, birbiri, birkaçı, böylesi, diğeri, cümlesi, bazı, kimi", it returns
      * +PRON+QUANTP which indicates a quantitative pronoun.
      * If it is one of the "o, bu, şu" and if it is "o" it also checks the first item of suffixList and if it is a PronounRoot(DEMONS),
      * it returns +PRON+DEMONSP which indicates a demonstrative pronoun.
