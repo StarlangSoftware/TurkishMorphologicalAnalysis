@@ -975,17 +975,18 @@ public class FsmMorphologicalAnalyzer {
      * The morphologicalAnalysis is used for debug purposes.
      *
      * @param sentence  to get word from.
-     * @param debugMode states whether in the debug mode.
      * @return FsmParseList type result.
      */
-    public FsmParseList[] morphologicalAnalysis(Sentence sentence, boolean debugMode) {
+    public FsmParseList[] morphologicalAnalysis(Sentence sentence) {
         FsmParseList wordFsmParseList;
         FsmParseList[] result = new FsmParseList[sentence.wordCount()];
         for (int i = 0; i < sentence.wordCount(); i++) {
-            wordFsmParseList = morphologicalAnalysis(sentence.getWord(i).getName());
-            if (wordFsmParseList.size() == 0 && debugMode) {
-                System.out.println("Word " + sentence.getWord(i).getName() + " can not be parsed\n");
+            String originalForm = sentence.getWord(i).getName();
+            String spellCorrectedForm = dictionary.getCorrectForm(originalForm);
+            if (spellCorrectedForm == null){
+                spellCorrectedForm = originalForm;
             }
+            wordFsmParseList = morphologicalAnalysis(spellCorrectedForm);
             result[i] = wordFsmParseList;
         }
         return result;
@@ -1003,7 +1004,12 @@ public class FsmMorphologicalAnalyzer {
         FsmParseList fsmParseList;
         FsmParseList[] result = new FsmParseList[sentence.wordCount()];
         for (int i = 0; i < sentence.wordCount(); i++) {
-            fsmParseList = robustMorphologicalAnalysis(sentence.getWord(i).getName());
+            String originalForm = sentence.getWord(i).getName();
+            String spellCorrectedForm = dictionary.getCorrectForm(originalForm);
+            if (spellCorrectedForm == null){
+                spellCorrectedForm = originalForm;
+            }
+            fsmParseList = robustMorphologicalAnalysis(spellCorrectedForm);
             result[i] = fsmParseList;
         }
         return result;

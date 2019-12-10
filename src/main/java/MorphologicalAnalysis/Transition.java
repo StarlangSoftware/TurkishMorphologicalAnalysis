@@ -178,7 +178,7 @@ public class Transition {
      * the second last vowel.
      *
      * @param stem String input.
-     * @return the last vowel.
+     * @return Vowel before the last vowel.
      */
     private char beforeLastVowel(String stem) {
         int i, before = 1;

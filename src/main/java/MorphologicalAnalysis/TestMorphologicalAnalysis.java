@@ -17,7 +17,7 @@ public class TestMorphologicalAnalysis {
 
     public static void testSentence(FsmMorphologicalAnalyzer fsm, String s){
         Sentence sentence = new Sentence(s);
-        FsmParseList[] fsmParses = fsm.morphologicalAnalysis(sentence, false);
+        FsmParseList[] fsmParses = fsm.morphologicalAnalysis(sentence);
         for (FsmParseList fsmParse : fsmParses) {
             for (int j = 0; j < fsmParse.size(); j++) {
                 System.out.println(fsmParse.getFsmParse(j).transitionList());
