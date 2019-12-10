@@ -86,6 +86,16 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
+     * Another constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
+     * given input dictionary, with given input fileName and fixed size cacheSize = 10000000.
+     *
+     * @param dictionary the dictionary file that will be used to generate dictionaryTrie.
+     */
+    public FsmMorphologicalAnalyzer(TxtDictionary dictionary) {
+        this("turkish_finite_state_machine.xml", dictionary, 10000000);
+    }
+
+    /**
      * The getPossibleWords method takes {@link MorphologicalParse} and {@link MetamorphicParse} as input.
      * First it determines whether the given morphologicalParse is the root verb and whether it contains a verb tag.
      * Then it creates new transition with -mak and creates a new {@link HashSet} result.

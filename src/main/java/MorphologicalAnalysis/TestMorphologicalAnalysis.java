@@ -244,57 +244,6 @@ public class TestMorphologicalAnalysis {
         }
     }
 
-    public static void analyzeAll(){
-        HashSet<String> exceptions = new HashSet<>();
-        CounterHashMap<String> counter = new CounterHashMap<>();
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("gittigidiyor_dictionary.txt");
-        try {
-            int count = 0, analyzedCount = 0;
-            Scanner s = new Scanner(new File("gittigidiyor_misspellings.txt"));
-            while (s.hasNext()){
-                String line = s.nextLine();
-                String[] items = line.split("\\t");
-                exceptions.add(items[0]);
-            }
-            s.close();
-            s = new Scanner(new File("../../../Downloads/1.txt"));
-            while (s.hasNext()){
-                String line = s.nextLine();
-                String[] items = line.split(" ");
-                boolean analyzed = true;
-                for (String item : items){
-                    if (item.length() > 1 && !exceptions.contains(item)){
-                        FsmParseList parses = fsm.morphologicalAnalysis(item.toUpperCase(new Locale(   "tr")));
-                        if (parses.size() == 0){
-                            analyzed = false;
-                            counter.put(item);
-                        }
-                    }
-                }
-                count++;
-                if (analyzed){
-                    analyzedCount++;
-                }
-                if (count % 1000000 == 0){
-                    System.out.println(count + "\t" + analyzedCount);
-                    if (count % 10000000 == 0){
-                        break;
-                    }
-                }
-            }
-            s.close();
-            PrintWriter pw = new PrintWriter(new File("notanalyzed.txt"), "UTF-8");
-            for (Map.Entry<String, Integer> entry : counter.topN(3000)){
-                pw.println(entry.getKey() + "\t" + entry.getValue());
-            }
-            pw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args){
         //analyzeAll();
         //allParses();
