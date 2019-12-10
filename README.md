@@ -181,11 +181,11 @@ Output
     yar+NOUN+A3SG+P2SG+DAT
     
 ## Sentence level morphological analysis
-`morphologicalAnalysis(Sentence sentence, Boolean debug)` method of `FsmMorphologicalAnalyzer` is used. This returns `FsmParseList[]` object. 
+`morphologicalAnalysis(Sentence sentence)` method of `FsmMorphologicalAnalyzer` is used. This returns `FsmParseList[]` object. 
 
     FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
     Sentence sentence = new Sentence("Yarın doktora gidecekler");
-    FsmParseList[] parseLists = fsm.morphologicalAnalysis(sentence, false);
+    FsmParseList[] parseLists = fsm.morphologicalAnalysis(sentence);
     for(int i = 0; i < parseLists.length; i++){
         for(int j = 0; j < parseLists[i].size(); j++){
             FsmParse parse = parseLists[i].getFsmParse(j);
