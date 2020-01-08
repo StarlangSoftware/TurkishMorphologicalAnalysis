@@ -109,19 +109,19 @@ public class FsmMorphologicalAnalyzer {
      * transition with -lar and make this transition then adds to the result.
      *
      * @param morphologicalParse {@link MorphologicalParse} type input.
-     * @param parse              {@link MetamorphicParse} type input.
+     * @param metamorphicParse              {@link MetamorphicParse} type input.
      * @return {@link HashSet} result.
      */
-    public HashSet<String> getPossibleWords(MorphologicalParse morphologicalParse, MetamorphicParse parse) {
+    public HashSet<String> getPossibleWords(MorphologicalParse morphologicalParse, MetamorphicParse metamorphicParse) {
         boolean isRootVerb = morphologicalParse.getRootPos().equals("VERB");
         boolean containsVerb = morphologicalParse.containsTag(MorphologicalTag.VERB);
         Transition transition, verbTransition = new Transition("mAk");
         TxtWord compoundWord, currentRoot;
         HashSet<String> result = new HashSet<>();
-        if (parse == null || parse.getWord() == null) {
+        if (metamorphicParse == null || metamorphicParse.getWord() == null) {
             return result;
         }
-        String verbWord, pluralWord, currentWord = parse.getWord().getName();
+        String verbWord, pluralWord, currentWord = metamorphicParse.getWord().getName();
         int pluralIndex = -1;
         compoundWord = dictionaryTrie.getCompoundWordStartingWith(currentWord);
         if (!isRootVerb) {
@@ -130,7 +130,7 @@ public class FsmMorphologicalAnalyzer {
             }
             result.add(currentWord);
         }
-        currentRoot = (TxtWord) dictionary.getWord(parse.getWord().getName());
+        currentRoot = (TxtWord) dictionary.getWord(metamorphicParse.getWord().getName());
         if (currentRoot == null && compoundWord != null) {
             currentRoot = compoundWord;
         }
@@ -140,9 +140,9 @@ public class FsmMorphologicalAnalyzer {
                 result.add(verbWord);
             }
             pluralWord = null;
-            for (int i = 1; i < parse.size(); i++) {
-                transition = new Transition(null, parse.getMetaMorpheme(i), null);
-                if (parse.getMetaMorpheme(i).equals("lAr")) {
+            for (int i = 1; i < metamorphicParse.size(); i++) {
+                transition = new Transition(null, metamorphicParse.getMetaMorpheme(i), null);
+                if (metamorphicParse.getMetaMorpheme(i).equals("lAr")) {
                     pluralWord = currentWord;
                     pluralIndex = i + 1;
                 }
@@ -155,8 +155,8 @@ public class FsmMorphologicalAnalyzer {
             }
             if (pluralWord != null) {
                 currentWord = pluralWord;
-                for (int i = pluralIndex; i < parse.size(); i++) {
-                    transition = new Transition(null, parse.getMetaMorpheme(i), null);
+                for (int i = pluralIndex; i < metamorphicParse.size(); i++) {
+                    transition = new Transition(null, metamorphicParse.getMetaMorpheme(i), null);
                     currentWord = transition.makeTransition(currentRoot, currentWord);
                     result.add(currentWord);
                     if (containsVerb) {
@@ -844,14 +844,14 @@ public class FsmMorphologicalAnalyzer {
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+",surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+",surfaceForm)) {
+        if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("DateRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("\\d+/\\d+",surfaceForm)) {
+        if (patternMatches("\\d+/\\d+", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("FractionRoot"), true, true));
             fsmParse.constructInflectionalGroups();
@@ -861,28 +861,28 @@ public class FsmMorphologicalAnalyzer {
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("\\d+\\\\/\\d+",surfaceForm)) {
+        if (patternMatches("\\d+\\\\/\\d+", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("FractionRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (surfaceForm.equalsIgnoreCase("%") || patternMatches("%(\\d\\d|\\d)",surfaceForm) || patternMatches("%(\\d\\d|\\d)\\.\\d+",surfaceForm)) {
+        if (surfaceForm.equals("%") || patternMatches("%(\\d\\d|\\d)", surfaceForm) || patternMatches("%(\\d\\d|\\d)\\.\\d+", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("PercentRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)",surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)",surfaceForm)) {
+        if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("TimeRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("\\d+-\\d+",surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)",surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)",surfaceForm)) {
+        if (patternMatches("\\d+-\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("RangeRoot"), true, true));
             fsmParse.constructInflectionalGroups();
@@ -1033,7 +1033,8 @@ public class FsmMorphologicalAnalyzer {
      * @return true if surfaceForm matches with the regex.
      */
     private boolean isInteger(String surfaceForm) {
-        if (!patternMatches("\\+?\\d+",surfaceForm)) return false;
+        if (!patternMatches("\\+?\\d+", surfaceForm))
+            return false;
         int len = surfaceForm.length();
         if (len < 10) {
             return true;        //Most common scenario. Return after a single check.
@@ -1041,13 +1042,7 @@ public class FsmMorphologicalAnalyzer {
             if (len > 10) {
                 return false;
             } else {
-                try {
-                    Integer.parseInt(surfaceForm);
-                    return true;
-                }
-                catch (Exception e){
-                    return false;
-                }
+                return surfaceForm.compareTo("2147483647") <= 0;
             }
         }
     }
@@ -1059,7 +1054,7 @@ public class FsmMorphologicalAnalyzer {
      * @return true if surfaceForm matches with the regex.
      */
     private boolean isDouble(String surfaceForm) {
-        return patternMatches("\\+?(\\d+)?\\.\\d*",surfaceForm);
+        return patternMatches("\\+?(\\d+)?\\.\\d*", surfaceForm);
     }
 
     /**
@@ -1133,23 +1128,23 @@ public class FsmMorphologicalAnalyzer {
                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
                     fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                 } else {
-                    if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+",possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+",possibleRoot)) {
+                    if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+", possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+", possibleRoot)) {
                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_DATE"));
                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                     } else {
-                        if (patternMatches("\\d+/\\d+",possibleRoot)) {
+                        if (patternMatches("\\d+/\\d+", possibleRoot)) {
                             dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
                             fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                         } else {
-                            if (patternMatches("%(\\d\\d|\\d)",possibleRoot) || patternMatches("%(\\d\\d|\\d)\\.\\d+",possibleRoot)) {
+                            if (patternMatches("%(\\d\\d|\\d)", possibleRoot) || patternMatches("%(\\d\\d|\\d)\\.\\d+", possibleRoot)) {
                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_PERCENT"));
                                 fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                             } else {
-                                if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)",possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)",possibleRoot)) {
+                                if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot)) {
                                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_ZAMAN"));
                                     fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                 } else {
-                                    if (patternMatches("\\d+-\\d+",possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)",possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)",possibleRoot)) {
+                                    if (patternMatches("\\d+-\\d+", possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)", possibleRoot)) {
                                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_RANGE"));
                                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                     } else {

@@ -244,10 +244,10 @@ public class TestMorphologicalAnalysis {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws FileNotFoundException {
         //analyzeAll();
         //allParses();
-        analyze();
+        //analyze();
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();
