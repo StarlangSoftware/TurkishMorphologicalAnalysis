@@ -208,3 +208,17 @@ Output
     -----------------
     git+VERB+POS+FUT+A3PL
     git+VERB+POS^DB+NOUN+FUTPART+A3PL+PNON+NOM
+
+## Cite
+If you use this resource on your research, please cite the following paper: 
+
+Yıldız, Olcay Taner, Begüm Avar, and Gökhan Ercan. "An Open, Extendible, and Fast Turkish Morphological Analyzer." Proceedings of the International Conference on Recent Advances in Natural Language Processing (RANLP 2019). 2019. [(Details)](https://www.aclweb.org/anthology/R19-1156/)
+```
+@inproceedings{yildiz2019open,
+  title={An Open, Extendible, and Fast {T}urkish Morphological Analyzer},
+  author={Y{\i}ld{\i}z, Olcay Taner and Avar, Beg{\"u}m and Ercan, G{\"o}khan},
+  booktitle={Proceedings of the International Conference on Recent Advances in Natural Language Processing (RANLP 2019)},
+  pages={1364--1372},
+  year={2019},
+  doi = "10.26615/978-954-452-056-4_156"
+}
