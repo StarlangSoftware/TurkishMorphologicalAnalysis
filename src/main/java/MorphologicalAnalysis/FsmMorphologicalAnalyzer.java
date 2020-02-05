@@ -551,7 +551,7 @@ public class FsmMorphologicalAnalyzer {
             newRoot.removeFlag("IS_STT");
             initializeParseList(parseList, newRoot, isProper);
         }
-        if (root.endingKChangesIntoG()){
+        if (root.endingKChangesIntoG() && root.containsFlag("IS_OA")){
             TxtWord newRoot = root.clone();
             newRoot.removeFlag("IS_OA");
             initializeParseList(parseList, newRoot, isProper);
