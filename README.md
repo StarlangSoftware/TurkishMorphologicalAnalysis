@@ -5,6 +5,8 @@ Turkish is one of the morphologically rich languages due to its agglutinative na
 
 For Developers
 ============
+You can also see either [Python](https://github.com/olcaytaner/TurkishMorphologicalAnalysis-Py) 
+or [C++](https://github.com/olcaytaner/TurkishMorphologicalAnalysis-CPP) repository.
 
 ## Requirements
 
