@@ -1,6 +1,5 @@
 package MorphologicalAnalysis;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -8,6 +7,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,16 +46,21 @@ public class FiniteStateMachine {
         State state, toState;
         String stateName, withName, originalPos, rootToPos, toPos;
         NamedNodeMap attributes;
-        DOMParser parser = new DOMParser();
-        Document doc;
+        DocumentBuilder builder = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            parser.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
+            doc = builder.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
         } catch (SAXException | IOException e) {
             throw new RuntimeException("Fst file '" + fileName + "' could not be loaded from resources. Verify that file exists in project's resource folder.",e);
         }
         transitions = new HashMap<>();
-        doc = parser.getDocument();
         stateList = doc.getElementsByTagName("state");
         states = new ArrayList<>();
         for (i = 0; i < stateList.getLength(); i++) {

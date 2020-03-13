@@ -244,10 +244,30 @@ public class TestMorphologicalAnalysis {
         }
     }
 
+    public static void analyzeUnique() throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter("output.txt");
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(new TxtDictionary("gittigidiyor_dictionary.txt", new TurkishWordComparator(), "gittigidiyor_misspellings.txt"));
+        Scanner input = new Scanner(new File("unique.txt"));
+        while (input.hasNext()){
+            String item = input.next();
+            if (fsm.getDictionary().getCorrectForm(item) == null){
+                if (fsm.morphologicalAnalysis(item).size() == 0){
+                    String item1 = item.toUpperCase(new Locale("tr"));
+                    if (fsm.morphologicalAnalysis(item1).size() == 0){
+                        pw.println(item);
+                    }
+                }
+            }
+        }
+        pw.close();
+        input.close();
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
+        //analyzeUnique();
         //analyzeAll();
         //allParses();
-        //analyze();
+        analyze();
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();
