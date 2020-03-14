@@ -79,24 +79,21 @@ Use below line to generate jar file:
 
      mvn install
 
-
-
-------------------------------------------------
-
-Morphological Analysis
-============
-+ [Maven Usage](#maven-usage)
-	+ [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
-	+ [Word level morphological analysis](#word-level-morphological-analysis)
-	+ [Sentence level morphological analysis](#sentence-level-morphological-analysis)
-
-### Maven Usage
+## Maven Usage
 
 	<dependency>
   	<groupId>NlpToolkit</groupId>
   	<artifactId>MorphologicalAnalysis</artifactId>
   	<version>1.0.12</version>
 	</dependency>
+
+------------------------------------------------
+
+Deatiled Description
+============
++ [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
++ [Word level morphological analysis](#word-level-morphological-analysis)
++ [Sentence level morphological analysis](#sentence-level-morphological-analysis)
 
 ## Creating FsmMorphologicalAnalyzer 
 
@@ -109,25 +106,25 @@ This generates a new `TxtDictionary` type dictionary from [`turkish_dictionary.t
 Creating a morphological analyzer with different cache size, dictionary or finite state machine is also possible. 
 * With different cache size, 
 
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(50000)   
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(50000);   
 
 * Using a different dictionary,
 
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("my_turkish_dictionary.txt")    
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("my_turkish_dictionary.txt");   
 
 * Specifying both finite state machine and dictionary, 
 
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", "my_turkish_dictionary.txt")       
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", "my_turkish_dictionary.txt") ;      
     
 * Giving finite state machine and cache size with creating `TxtDictionary` object, 
         
-        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator())
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary, 50000) 
+        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator());
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary, 50000) ;
     
 * With different finite state machine and creating `TxtDictionary` object,
        
-        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator())
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary)
+        TxtDictionary dictionary = new TxtDictionary("my_turkish_dictionary.txt", new TurkishWordComparator(), "my_turkish_misspelled.txt");
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("fsm.xml", dictionary);
 
 ## Word level morphological analysis
 
