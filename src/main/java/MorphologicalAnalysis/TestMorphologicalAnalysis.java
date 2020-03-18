@@ -266,18 +266,23 @@ public class TestMorphologicalAnalysis {
 
     public static void createNGram() throws FileNotFoundException{
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
-        Scanner input = new Scanner(new File("input.txt"));
+        Scanner input = new Scanner(new File("gazete.txt"));
         NGram<String> root = new NGram<String>(2);
-        NGram<String> normal = new NGram<String>(2);
         int k = 0;
         while (input.hasNextLine()){
             String line = input.nextLine();
             String[] items = line.split(" ");
-            normal.addNGramSentence(items);
-            String[] analyzed = new String[items.length];
+            ArrayList<String> analyzed = new ArrayList<String>();
             for (int i = 0; i < items.length; i++){
                 String item = items[i];
+                if (fsm.getDictionary().getCorrectForm(item) != null){
+                    item = fsm.getDictionary().getCorrectForm(item);
+                }
                 FsmParseList parseList = fsm.morphologicalAnalysis(item);
+                if (parseList.size() == 0 && item.length() > 0){
+                    String item1 = (item.charAt(0) + "").toUpperCase(new Locale("tr")) + item.substring(1);
+                    parseList = fsm.morphologicalAnalysis(item1);
+                }
                 String longestRoot = "";
                 for (int j = 0; j < parseList.size(); j++){
                     if (parseList.getFsmParse(j).getWord().getName().length() > longestRoot.length()){
@@ -285,12 +290,21 @@ public class TestMorphologicalAnalysis {
                     }
                 }
                 if (longestRoot.length() > 0){
-                    analyzed[i] = longestRoot;
+                    analyzed.add(longestRoot);
                 } else {
-                    analyzed[i] = item;
+                    if (analyzed.size() > 1){
+                        Object[] gfg = analyzed.toArray();
+                        String[] s = Arrays.copyOf(gfg, gfg.length, String[].class);
+                        root.addNGramSentence(s);
+                    }
+                    analyzed = new ArrayList<String>();
                 }
             }
-            root.addNGramSentence(analyzed);
+            if (analyzed.size() > 1){
+                Object[] gfg = analyzed.toArray();
+                String[] s = Arrays.copyOf(gfg, gfg.length, String[].class);
+                root.addNGramSentence(s);
+            }
             k++;
             if (k % 1000 == 0){
                 System.out.println(k);
@@ -298,10 +312,9 @@ public class TestMorphologicalAnalysis {
         }
         input.close();
         root.saveAsText("root.txt");
-        normal.saveAsText("normal.txt");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException{
         //analyzeUnique();
         //analyzeAll();
         //allParses();
@@ -309,6 +322,7 @@ public class TestMorphologicalAnalysis {
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();
+        //createNGram();
     }
 
 }
