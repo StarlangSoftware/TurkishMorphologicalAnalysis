@@ -5,6 +5,7 @@ import java.util.*;
 import Corpus.*;
 import Dictionary.*;
 import DataStructure.CounterHashMap;
+import Ngram.NGram;
 
 public class TestMorphologicalAnalysis {
 
@@ -263,7 +264,44 @@ public class TestMorphologicalAnalysis {
         input.close();
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void createNGram() throws FileNotFoundException{
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+        Scanner input = new Scanner(new File("input.txt"));
+        NGram<String> root = new NGram<String>(2);
+        NGram<String> normal = new NGram<String>(2);
+        int k = 0;
+        while (input.hasNextLine()){
+            String line = input.nextLine();
+            String[] items = line.split(" ");
+            normal.addNGramSentence(items);
+            String[] analyzed = new String[items.length];
+            for (int i = 0; i < items.length; i++){
+                String item = items[i];
+                FsmParseList parseList = fsm.morphologicalAnalysis(item);
+                String longestRoot = "";
+                for (int j = 0; j < parseList.size(); j++){
+                    if (parseList.getFsmParse(j).getWord().getName().length() > longestRoot.length()){
+                        longestRoot = parseList.getFsmParse(j).getWord().getName();
+                    }
+                }
+                if (longestRoot.length() > 0){
+                    analyzed[i] = longestRoot;
+                } else {
+                    analyzed[i] = item;
+                }
+            }
+            root.addNGramSentence(analyzed);
+            k++;
+            if (k % 1000 == 0){
+                System.out.println(k);
+            }
+        }
+        input.close();
+        root.saveAsText("root.txt");
+        normal.saveAsText("normal.txt");
+    }
+
+    public static void main(String[] args) {
         //analyzeUnique();
         //analyzeAll();
         //allParses();

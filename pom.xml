@@ -21,6 +21,11 @@
         </dependency>
         <dependency>
             <groupId>NlpToolkit</groupId>
+            <artifactId>NGram</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>NlpToolkit</groupId>
             <artifactId>DataStructure</artifactId>
             <version>1.0.1</version>
         </dependency>
