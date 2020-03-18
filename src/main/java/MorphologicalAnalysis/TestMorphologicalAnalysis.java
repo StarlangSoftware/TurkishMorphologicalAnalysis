@@ -265,6 +265,8 @@ public class TestMorphologicalAnalysis {
     }
 
     public static void createNGram() throws FileNotFoundException{
+        Object[] tmpArray;
+        String[] sentence;
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
         Scanner input = new Scanner(new File("gazete.txt"));
         NGram<String> root = new NGram<String>(2);
@@ -293,17 +295,17 @@ public class TestMorphologicalAnalysis {
                     analyzed.add(longestRoot);
                 } else {
                     if (analyzed.size() > 1){
-                        Object[] gfg = analyzed.toArray();
-                        String[] s = Arrays.copyOf(gfg, gfg.length, String[].class);
-                        root.addNGramSentence(s);
+                        tmpArray = analyzed.toArray();
+                        sentence = Arrays.copyOf(tmpArray, tmpArray.length, String[].class);
+                        root.addNGramSentence(sentence);
                     }
                     analyzed = new ArrayList<String>();
                 }
             }
             if (analyzed.size() > 1){
-                Object[] gfg = analyzed.toArray();
-                String[] s = Arrays.copyOf(gfg, gfg.length, String[].class);
-                root.addNGramSentence(s);
+                tmpArray = analyzed.toArray();
+                sentence = Arrays.copyOf(tmpArray, tmpArray.length, String[].class);
+                root.addNGramSentence(sentence);
             }
             k++;
             if (k % 1000 == 0){
