@@ -22,7 +22,7 @@
         <dependency>
             <groupId>NlpToolkit</groupId>
             <artifactId>NGram</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>NlpToolkit</groupId>

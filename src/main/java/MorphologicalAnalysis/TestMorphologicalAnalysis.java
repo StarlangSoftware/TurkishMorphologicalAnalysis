@@ -245,7 +245,28 @@ public class TestMorphologicalAnalysis {
         }
     }
 
-    public static void createNGram() throws FileNotFoundException{
+    public static void createSurfaceNGram() throws FileNotFoundException{
+        Scanner input = new Scanner(new File("/Users/olcay/Downloads/title.txt"));
+        NGram<String> root = new NGram<String>(2);
+        int k = 0;
+        while (input.hasNextLine()){
+            String line = input.nextLine();
+            String[] countAndSentence = line.split(",");
+            if (countAndSentence.length == 2 && countAndSentence[0].matches("\\d+")){
+                int count = Integer.parseInt(countAndSentence[0]);
+                String[] items = countAndSentence[1].split(" ");
+                root.addNGramSentence(items, count);
+                k++;
+                if (k % 100000 == 0){
+                    System.out.println(k);
+                }
+            }
+        }
+        input.close();
+        root.saveAsText("surface.txt");
+    }
+
+    public static void createRootNGram() throws FileNotFoundException{
         Object[] tmpArray;
         String[] sentence;
         FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
@@ -300,11 +321,12 @@ public class TestMorphologicalAnalysis {
     public static void main(String[] args) throws FileNotFoundException{
         //analyzeAll();
         //allParses();
-        analyze();
+        //analyze();
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();
         //createNGram();
+        createSurfaceNGram();
     }
 
 }
