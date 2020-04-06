@@ -89,7 +89,7 @@ Use below line to generate jar file:
 
 ------------------------------------------------
 
-Deatiled Description
+Detailed Description
 ============
 + [Creating FsmMorphologicalAnalyzer](#creating-fsmmorphologicalanalyzer)
 + [Word level morphological analysis](#word-level-morphological-analysis)
