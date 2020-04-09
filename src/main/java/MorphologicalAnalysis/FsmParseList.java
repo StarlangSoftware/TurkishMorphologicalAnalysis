@@ -82,6 +82,24 @@ public class FsmParseList {
     }
 
     /**
+     * The getParseWithLongestRootWord method returns the parse with the longest root word. If more than one parse has the
+     * longest root word, the first parse with that root is returned.
+     *
+     * @return FsmParse Parse with the longest root word.
+     */
+    public FsmParse getParseWithLongestRootWord(){
+        int maxLength = -1;
+        FsmParse bestParse = null;
+        for (FsmParse currentParse : fsmParses) {
+            if (currentParse.getWord().getName().length() > maxLength) {
+                maxLength = currentParse.getWord().getName().length();
+                bestParse = currentParse;
+            }
+        }
+        return bestParse;
+    }
+
+    /**
      * The reduceToParsesWithSameRoot method takes a {@link String} currentWithPos as an input and loops i times till
      * i equals to the size of the fsmParses {@link ArrayList}. If the given currentRoot does not equal to the root of ith item of
      * fsmParses, it removes the ith item from the {@link ArrayList}.

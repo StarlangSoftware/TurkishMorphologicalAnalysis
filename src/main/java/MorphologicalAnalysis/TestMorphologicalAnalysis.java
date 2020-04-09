@@ -269,12 +269,23 @@ public class TestMorphologicalAnalysis {
     public static void createRootNGram() throws FileNotFoundException{
         Object[] tmpArray;
         String[] sentence;
-        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
-        Scanner input = new Scanner(new File("gazete.txt"));
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer(new TxtDictionary("gittigidiyor_dictionary.txt", new TurkishWordComparator(), "gittigidiyor_misspellings.txt"));
+        Scanner input = new Scanner(new File("sorted.txt"));
         NGram<String> root = new NGram<String>(2);
         int k = 0;
         while (input.hasNextLine()){
-            String line = input.nextLine();
+            String lineRead = input.nextLine();
+            String[] readItems = lineRead.split(",");
+            if (readItems.length != 2){
+                continue;
+            }
+            String line = readItems[0];
+            int count;
+            try{
+                count = Integer.parseInt(readItems[1]);
+            }catch (NumberFormatException e){
+                count = 0;
+            }
             String[] items = line.split(" ");
             ArrayList<String> analyzed = new ArrayList<String>();
             for (int i = 0; i < items.length; i++){
@@ -299,7 +310,7 @@ public class TestMorphologicalAnalysis {
                     if (analyzed.size() > 1){
                         tmpArray = analyzed.toArray();
                         sentence = Arrays.copyOf(tmpArray, tmpArray.length, String[].class);
-                        root.addNGramSentence(sentence);
+                        root.addNGramSentence(sentence, count);
                     }
                     analyzed = new ArrayList<String>();
                 }
@@ -307,26 +318,26 @@ public class TestMorphologicalAnalysis {
             if (analyzed.size() > 1){
                 tmpArray = analyzed.toArray();
                 sentence = Arrays.copyOf(tmpArray, tmpArray.length, String[].class);
-                root.addNGramSentence(sentence);
+                root.addNGramSentence(sentence, count);
             }
             k++;
-            if (k % 1000 == 0){
+            if (k % 10000 == 0){
                 System.out.println(k);
             }
         }
         input.close();
-        root.saveAsText("root.txt");
+        root.saveAsText("root-ngram.txt");
     }
 
     public static void main(String[] args) throws FileNotFoundException{
         //analyzeAll();
         //allParses();
-        //analyze();
+        analyze();
         //analyzeSentence();
         //checkSpeed();
         //checkSpeedSameWord();
         //createNGram();
-        createSurfaceNGram();
+        //createRootNGram();
     }
 
 }
