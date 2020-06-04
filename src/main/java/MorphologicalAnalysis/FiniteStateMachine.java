@@ -53,7 +53,7 @@ public class FiniteStateMachine {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        Document doc = null;
+        Document doc;
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             doc = builder.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
@@ -156,6 +156,14 @@ public class FiniteStateMachine {
     }
 
     /**
+     * the getStates method returns the states in the FiniteStateMachine.
+     * @return StateList.
+     */
+    public ArrayList<State> getStates(){
+        return states;
+    }
+
+    /**
      * The getState method is used to loop through the states {@link ArrayList} and return the state whose name equal
      * to the given input name.
      *
@@ -175,6 +183,7 @@ public class FiniteStateMachine {
      * The addTransition method creates a new {@link Transition} with given input parameters and adds the transition to
      * transitions {@link ArrayList}.
      *
+     * @param fromState  State type input indicating the from state.
      * @param toState  State type input indicating the next state.
      * @param with     String input indicating with what the transition will be made.
      * @param withName String input.
@@ -195,6 +204,7 @@ public class FiniteStateMachine {
      * Another addTransition method which takes additional argument; toPos and. It creates a new {@link Transition}
      * with given input parameters and adds the transition to transitions {@link ArrayList}.
      *
+     * @param fromState  State type input indicating the from state.
      * @param toState  State type input indicating the next state.
      * @param with     String input indicating with what the transition will be made.
      * @param withName String input.

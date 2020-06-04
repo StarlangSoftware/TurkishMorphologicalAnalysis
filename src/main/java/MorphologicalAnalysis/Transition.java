@@ -343,7 +343,7 @@ public class Transition {
                 formationToCheck = stem;
             } else {
                 //---showsSuRegularities---
-                //karasu->karasuyu, özsu->özsuyu, ağırsu->ağırsuyu, akarsu->akarsuyu, bengisu->bengisuyu
+                //karasu->karasuyu, su->suyu, ağırsu->ağırsuyu, akarsu->akarsuyu, bengisu->bengisuyu
                 if (rootWord && root.showsSuRegularities() && startWithVowelorConsonantDrops() && !with.startsWith("y")) {
                     formation = stem + 'y';
                     formationToCheck = formation;
@@ -403,7 +403,7 @@ public class Transition {
                                     }
                                     break;
                                 case 't':
-                                    //abat->abadı, adet->adedi, akort->akordu, armut->armudu
+                                    //adet->adedi, akort->akordu, armut->armudu
                                     //affet->affedi, yoket->yokedi, sabret->sabredi, rakset->raksedi
                                     if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'd';
@@ -423,7 +423,7 @@ public class Transition {
                                     break;
                                 case 'k':
                                     //ahenk->ahengi, künk->küngü, renk->rengi, pelesenk->pelesengi
-                                    if (startWithVowelorConsonantDrops() && rootWord && root.endingKChangesIntoG() && !root.isProperNoun()) {
+                                    if (startWithVowelorConsonantDrops() && rootWord && root.endingKChangesIntoG() && (!root.isProperNoun() || !startState.toString().equals("ProperRoot"))) {
                                         formation = stem.substring(0, stem.length() - 1) + 'g';
                                     } else {
                                         //ablak->ablağı, küllük->küllüğü, kitaplık->kitaplığı, evcilik->evciliği
@@ -552,19 +552,19 @@ public class Transition {
         }
         if (TurkishLanguage.isBackVowel(lastVowel(formationToCheck))) {
             if (root.notObeysVowelHarmonyDuringAgglutination() && rootWord) {
-                //alkole, anormale, ampule, tümamirali, spirali, sosyali
+                //alkole, anormale
                 return formation + 'e';
             } else {
-                //sakala, kabala, eve, kediye
+                //sakala, kabala
                 return formation + 'a';
             }
         }
         if (TurkishLanguage.isFrontVowel(lastVowel(formationToCheck))) {
             if (root.notObeysVowelHarmonyDuringAgglutination() && rootWord) {
-                //sakala, kabala, eve, kediye
+                //faika, halika
                 return formation + 'a';
             } else {
-                //alkole, anormale, ampule, tümamirali, spirali, sosyali
+                //kediye, eve
                 return formation + 'e';
             }
         }

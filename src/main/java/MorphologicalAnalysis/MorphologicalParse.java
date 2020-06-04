@@ -505,7 +505,7 @@ public class MorphologicalParse implements Serializable {
                             return "ADVP";
                         } else {
                             if (isCardinal()){
-                                return "QP";
+                                return "CD";
                             } else {
                                 if (containsTag(MorphologicalTag.POSTPOSITION)){
                                     return  "PP";
@@ -517,7 +517,7 @@ public class MorphologicalParse implements Serializable {
                                             return "DP";
                                         } else {
                                             if (containsTag(MorphologicalTag.INTERJECTION)){
-                                                return "INTJ";
+                                                return "INTJP";
                                             } else {
                                                 if (containsTag(MorphologicalTag.QUESTIONPRONOUN)){
                                                     return "WP";

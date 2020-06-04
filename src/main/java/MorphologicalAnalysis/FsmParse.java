@@ -4,7 +4,6 @@ import Dictionary.TxtWord;
 import Dictionary.Word;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class FsmParse extends MorphologicalParse implements Comparable {
 
@@ -44,12 +43,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         this.form = root.getName();
         this.pos = startState.getPos();
         this.initialPos = startState.getPos();
-        suffixList = new ArrayList<State>();
+        suffixList = new ArrayList<>();
         suffixList.add(startState);
-        formList = new ArrayList<String>();
+        formList = new ArrayList<>();
         formList.add(this.form);
-        transitionList = new ArrayList<String>();
-        withList = new ArrayList<String>();
+        transitionList = new ArrayList<>();
+        withList = new ArrayList<>();
     }
 
     /**
@@ -69,12 +68,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         this.form = root.getName();
         this.pos = startState.getPos();
         this.initialPos = startState.getPos();
-        suffixList = new ArrayList<State>();
+        suffixList = new ArrayList<>();
         suffixList.add(startState);
-        formList = new ArrayList<String>();
+        formList = new ArrayList<>();
         formList.add(this.form);
-        transitionList = new ArrayList<String>();
-        withList = new ArrayList<String>();
+        transitionList = new ArrayList<>();
+        withList = new ArrayList<>();
     }
 
     /**
@@ -92,12 +91,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         this.form = root.getName();
         this.pos = startState.getPos();
         this.initialPos = startState.getPos();
-        suffixList = new ArrayList<State>();
+        suffixList = new ArrayList<>();
         suffixList.add(startState);
-        formList = new ArrayList<String>();
+        formList = new ArrayList<>();
         formList.add(this.form);
-        transitionList = new ArrayList<String>();
-        withList = new ArrayList<String>();
+        transitionList = new ArrayList<>();
+        withList = new ArrayList<>();
     }
 
     /**
@@ -114,12 +113,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         this.form = root.getName();
         this.pos = startState.getPos();
         this.initialPos = startState.getPos();
-        suffixList = new ArrayList<State>();
+        suffixList = new ArrayList<>();
         suffixList.add(startState);
-        formList = new ArrayList<String>();
+        formList = new ArrayList<>();
         formList.add(this.form);
-        transitionList = new ArrayList<String>();
-        withList = new ArrayList<String>();
+        transitionList = new ArrayList<>();
+        withList = new ArrayList<>();
     }
 
     /**
@@ -133,13 +132,13 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         String parse = transitionList();
         int i;
         ArrayList<String> iGs;
-        iGs = new ArrayList<String>();
+        iGs = new ArrayList<>();
         while (parse.contains("^DB+")) {
             iGs.add(parse.substring(0, parse.indexOf("^DB+")));
             parse = parse.substring(parse.indexOf("^DB+") + 4);
         }
         iGs.add(parse);
-        inflectionalGroups = new ArrayList<InflectionalGroup>();
+        inflectionalGroups = new ArrayList<>();
         inflectionalGroups.add(new InflectionalGroup(iGs.get(0).substring(iGs.get(0).indexOf('+') + 1)));
         for (i = 1; i < iGs.size(); i++) {
             inflectionalGroups.add(new InflectionalGroup(iGs.get(i)));
@@ -321,19 +320,19 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         p.initialPos = initialPos;
         p.verbAgreement = verbAgreement;
         p.possesiveAgreement = possesiveAgreement;
-        p.suffixList = new ArrayList<State>();
+        p.suffixList = new ArrayList<>();
         for (i = 0; i < suffixList.size(); i++) {
             p.suffixList.add(suffixList.get(i));
         }
-        p.formList = new ArrayList<String>();
+        p.formList = new ArrayList<>();
         for (i = 0; i < formList.size(); i++) {
             p.formList.add(formList.get(i));
         }
-        p.transitionList = new ArrayList<String>();
+        p.transitionList = new ArrayList<>();
         for (i = 0; i < transitionList.size(); i++) {
             p.transitionList.add(transitionList.get(i));
         }
-        p.withList = new ArrayList<String>();
+        p.withList = new ArrayList<>();
         for (i = 0; i < withList.size(); i++) {
             p.withList.add(withList.get(i));
         }
