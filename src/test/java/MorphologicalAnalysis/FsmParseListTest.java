@@ -78,9 +78,9 @@ public class FsmParseListTest {
         parse6.reduceToParsesWithSameRoot("karşı");
         assertEquals(4, parse6.size());
         parse7.reduceToParsesWithSameRoot("esas");
-        assertEquals(4, parse6.size());
+        assertEquals(8, parse7.size());
         parse8.reduceToParsesWithSameRoot("güç");
-        assertEquals(4, parse6.size());
+        assertEquals(6, parse8.size());
     }
 
     @Test
