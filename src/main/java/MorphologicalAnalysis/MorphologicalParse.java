@@ -524,6 +524,20 @@ public class MorphologicalParse implements Serializable {
                                                 } else {
                                                     if (containsTag(MorphologicalTag.PRONOUN)){
                                                         return "NP";
+                                                    } else {
+                                                        if (isPunctuation()){
+                                                            switch (root.getName()){
+                                                                case "!":
+                                                                case "?":
+                                                                    return ".";
+                                                                case ";":
+                                                                case "-":
+                                                                case "--":
+                                                                    return ":";
+                                                                default:
+                                                                    return root.getName();
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
