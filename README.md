@@ -37,7 +37,7 @@ Use Git for cloning the code to your local or below line for Ubuntu:
 
 A directory called MorphologicalAnalysis will be created. Or you can use below link for exploring the code:
 
-	git clone https://github.com/olcaytaner/MorphologicalAnalysis.git
+	git clone https://github.com/starlangsoftware/TurkishMorphologicalAnalysis.git
 
 ## Open project with IntelliJ IDEA
 
