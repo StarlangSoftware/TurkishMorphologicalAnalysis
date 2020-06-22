@@ -504,11 +504,11 @@ public class MorphologicalParse implements Serializable {
                         if (containsTag(MorphologicalTag.ADVERB)){
                             return "ADVP";
                         } else {
-                            if (isCardinal()){
-                                return "CD";
+                            if (isNumber()){
+                                return "NUM";
                             } else {
                                 if (containsTag(MorphologicalTag.POSTPOSITION)){
-                                    return  "PP";
+                                    return "PP";
                                 } else {
                                     if (containsTag(MorphologicalTag.CONJUNCTION)){
                                         return "CONJP";
