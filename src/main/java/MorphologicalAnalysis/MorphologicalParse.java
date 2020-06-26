@@ -498,13 +498,13 @@ public class MorphologicalParse implements Serializable {
                 if (isAdjective()){
                     return "ADJP";
                 } else {
-                    if (isNoun()){
+                    if (isNoun() || isPercent()){
                         return "NP";
                     } else {
                         if (containsTag(MorphologicalTag.ADVERB)){
                             return "ADVP";
                         } else {
-                            if (isNumber()){
+                            if (isNumber() || isFraction()){
                                 return "NUM";
                             } else {
                                 if (containsTag(MorphologicalTag.POSTPOSITION)){
