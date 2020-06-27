@@ -492,50 +492,58 @@ public class MorphologicalParse implements Serializable {
         if (isProperNoun()){
             return "NP";
         } else {
-            if (isVerb()){
-                return "VP";
+            if (root.getName().equals("değil")){
+                return "NEG";
             } else {
-                if (isAdjective()){
-                    return "ADJP";
-                } else {
-                    if (isNoun() || isPercent()){
-                        return "NP";
+                if (isVerb()){
+                    if (lastIGContainsTag(MorphologicalTag.ZERO)){
+                        return "NOMP";
                     } else {
-                        if (containsTag(MorphologicalTag.ADVERB)){
-                            return "ADVP";
+                        return "VP";
+                    }
+                } else {
+                    if (isAdjective()){
+                        return "ADJP";
+                    } else {
+                        if (isNoun() || isPercent()){
+                            return "NP";
                         } else {
-                            if (isNumber() || isFraction()){
-                                return "NUM";
+                            if (containsTag(MorphologicalTag.ADVERB)){
+                                return "ADVP";
                             } else {
-                                if (containsTag(MorphologicalTag.POSTPOSITION)){
-                                    return "PP";
+                                if (isNumber() || isFraction()){
+                                    return "NUM";
                                 } else {
-                                    if (containsTag(MorphologicalTag.CONJUNCTION)){
-                                        return "CONJP";
+                                    if (containsTag(MorphologicalTag.POSTPOSITION)){
+                                        return "PP";
                                     } else {
-                                        if (containsTag(MorphologicalTag.DETERMINER)){
-                                            return "DP";
+                                        if (containsTag(MorphologicalTag.CONJUNCTION)){
+                                            return "CONJP";
                                         } else {
-                                            if (containsTag(MorphologicalTag.INTERJECTION)){
-                                                return "INTJP";
+                                            if (containsTag(MorphologicalTag.DETERMINER)){
+                                                return "DP";
                                             } else {
-                                                if (containsTag(MorphologicalTag.QUESTIONPRONOUN)){
-                                                    return "WP";
+                                                if (containsTag(MorphologicalTag.INTERJECTION)){
+                                                    return "INTJP";
                                                 } else {
-                                                    if (containsTag(MorphologicalTag.PRONOUN)){
-                                                        return "NP";
+                                                    if (containsTag(MorphologicalTag.QUESTIONPRONOUN)){
+                                                        return "WP";
                                                     } else {
-                                                        if (isPunctuation()){
-                                                            switch (root.getName()){
-                                                                case "!":
-                                                                case "?":
-                                                                    return ".";
-                                                                case ";":
-                                                                case "-":
-                                                                case "--":
-                                                                    return ":";
-                                                                default:
-                                                                    return root.getName();
+                                                        if (containsTag(MorphologicalTag.PRONOUN)){
+                                                            return "NP";
+                                                        } else {
+                                                            if (isPunctuation()){
+                                                                switch (root.getName()){
+                                                                    case "!":
+                                                                    case "?":
+                                                                        return ".";
+                                                                    case ";":
+                                                                    case "-":
+                                                                    case "--":
+                                                                        return ":";
+                                                                    default:
+                                                                        return root.getName();
+                                                                }
                                                             }
                                                         }
                                                     }

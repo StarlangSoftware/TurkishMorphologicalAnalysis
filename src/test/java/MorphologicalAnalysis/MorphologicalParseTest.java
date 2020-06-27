@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MorphologicalParseTest {
-    MorphologicalParse parse1, parse2, parse3, parse4, parse5, parse6, parse7;
+    MorphologicalParse parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9;
 
     @Before
     public void setUp(){
@@ -17,6 +17,8 @@ public class MorphologicalParseTest {
         parse5 = new MorphologicalParse("sür+VERB^DB+VERB+CAUS^DB+VERB+PASS+POS^DB+NOUN+INF2+A3SG+P3SG+NOM");
         parse6 = new MorphologicalParse("değiş+VERB^DB+VERB+CAUS^DB+VERB+PASS+POS^DB+VERB+ABLE+AOR^DB+ADJ+ZERO");
         parse7 = new MorphologicalParse("iyi+ADJ^DB+VERB+BECOME^DB+VERB+CAUS^DB+VERB+PASS+POS^DB+VERB+ABLE^DB+NOUN+INF2+A3PL+P3PL+ABL");
+        parse8 = new MorphologicalParse("değil+ADJ^DB+VERB+ZERO+PAST+A3SG");
+        parse9 = new MorphologicalParse("hazır+ADJ^DB+VERB+ZERO+PAST+A3SG");
     }
 
     @Test
@@ -28,6 +30,7 @@ public class MorphologicalParseTest {
         assertEquals("VERB+VERB+CAUS+VERB+PASS+POS+NOUN+INF2+A3SG+P3SG+NOM", parse5.getTransitionList());
         assertEquals("VERB+VERB+CAUS+VERB+PASS+POS+VERB+ABLE+AOR+ADJ+ZERO", parse6.getTransitionList());
         assertEquals("ADJ+VERB+BECOME+VERB+CAUS+VERB+PASS+POS+VERB+ABLE+NOUN+INF2+A3PL+P3PL+ABL", parse7.getTransitionList());
+        assertEquals("ADJ+VERB+ZERO+PAST+A3SG", parse8.getTransitionList());
     }
 
     @Test
@@ -50,6 +53,7 @@ public class MorphologicalParseTest {
         assertEquals(12, parse5.tagSize());
         assertEquals(12, parse6.tagSize());
         assertEquals(16, parse7.tagSize());
+        assertEquals(6, parse8.tagSize());
     }
 
     @Test
@@ -61,6 +65,7 @@ public class MorphologicalParseTest {
         assertEquals(4, parse5.size());
         assertEquals(5, parse6.size());
         assertEquals(6, parse7.size());
+        assertEquals(2, parse8.size());
     }
 
     @Test
@@ -72,6 +77,7 @@ public class MorphologicalParseTest {
         assertEquals("VERB", parse5.getRootPos());
         assertEquals("VERB", parse6.getRootPos());
         assertEquals("ADJ", parse7.getRootPos());
+        assertEquals("ADJ", parse8.getRootPos());
     }
 
     @Test
@@ -83,6 +89,7 @@ public class MorphologicalParseTest {
         assertEquals("NOUN", parse5.getPos());
         assertEquals("ADJ", parse6.getPos());
         assertEquals("NOUN", parse7.getPos());
+        assertEquals("VERB", parse8.getPos());
     }
 
     @Test
@@ -94,6 +101,7 @@ public class MorphologicalParseTest {
         assertEquals("sür+VERB", parse5.getWordWithPos().getName());
         assertEquals("değiş+VERB", parse6.getWordWithPos().getName());
         assertEquals("iyi+ADJ", parse7.getWordWithPos().getName());
+        assertEquals("değil+ADJ", parse8.getWordWithPos().getName());
     }
 
     @Test
@@ -157,6 +165,7 @@ public class MorphologicalParseTest {
     @Test
     public void testIsVerb() {
         assertTrue(parse4.isVerb());
+        assertTrue(parse8.isVerb());
     }
 
     @Test
@@ -165,6 +174,19 @@ public class MorphologicalParseTest {
         assertTrue(parse4.isRootVerb());
         assertTrue(parse5.isRootVerb());
         assertTrue(parse6.isRootVerb());
+    }
+
+    @Test
+    public void testGetTreePos() {
+        assertEquals("NP", parse1.getTreePos());
+        assertEquals("ADJP", parse2.getTreePos());
+        assertEquals("ADJP", parse3.getTreePos());
+        assertEquals("VP", parse4.getTreePos());
+        assertEquals("NP", parse5.getTreePos());
+        assertEquals("ADJP", parse6.getTreePos());
+        assertEquals("NP", parse7.getTreePos());
+        assertEquals("NEG", parse8.getTreePos());
+        assertEquals("NOMP", parse9.getTreePos());
     }
 
 }
