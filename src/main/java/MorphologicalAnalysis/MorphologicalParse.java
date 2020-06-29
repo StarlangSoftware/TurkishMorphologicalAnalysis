@@ -541,6 +541,14 @@ public class MorphologicalParse implements Serializable {
                                                                     case "-":
                                                                     case "--":
                                                                         return ":";
+                                                                    case "(":
+                                                                    case "-LRB-":
+                                                                    case "-lrb-":
+                                                                        return "-LRB-";
+                                                                    case ")":
+                                                                    case "-RRB-":
+                                                                    case "-rrb-":
+                                                                        return "-RRB-";
                                                                     default:
                                                                         return root.getName();
                                                                 }
