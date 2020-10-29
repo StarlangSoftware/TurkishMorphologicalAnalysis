@@ -1,11 +1,16 @@
 package MorphologicalAnalysis;
 
+import Dictionary.TurkishWordComparator;
 import Dictionary.TxtDictionary;
 import Dictionary.TxtWord;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 

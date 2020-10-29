@@ -1181,7 +1181,7 @@ public class FsmMorphologicalAnalyzer {
             }
         }
         fsmParseList = new FsmParseList(fsmParse);
-        if (cache != null) {
+        if (cache != null && fsmParseList.size() > 0) {
             cache.add(surfaceForm, fsmParseList);
         }
         return fsmParseList;
