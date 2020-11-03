@@ -322,7 +322,7 @@ public class MetamorphicParse implements Serializable {
             */
             MorphologicalTag.ALMOST,
             /**
-             * 2nd person singuular agreement
+             * 2nd person singular agreement
             */
             MorphologicalTag.A2SG,
             /**
@@ -386,7 +386,7 @@ public class MetamorphicParse implements Serializable {
             */
             MorphologicalTag.WITHOUTBEINGABLETOHAVEDONESO,
             /**
-             * Present partıcıple : Sarılan
+             * Present participle : Sarılan
             */
             MorphologicalTag.PRESENTPARTICIPLE,
             /**
@@ -410,7 +410,7 @@ public class MetamorphicParse implements Serializable {
             */
             MorphologicalTag.AGENT,
             /**
-             * 1st person singuular agreement
+             * 1st person singular agreement
             */
             MorphologicalTag.A1SG,
             /**
