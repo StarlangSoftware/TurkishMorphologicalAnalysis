@@ -804,49 +804,57 @@ public class MorphologicalParse implements Serializable {
         if (reflex != null){
             featureList.put("Reflex", reflex);
         }
-        String number = getNumber();
-        if (number != null){
-            featureList.put("Number", number);
-        }
-        String case_ = getCase();
-        if (case_ != null){
-            featureList.put("Case", case_);
-        }
-        String definite = getDefinite();
-        if (definite != null){
-            featureList.put("Definite", definite);
-        }
         String degree = getDegree();
         if (degree != null){
             featureList.put("Degree", degree);
         }
-        String polarity = getPolarity();
-        if (polarity != null){
-            featureList.put("Polarity", polarity);
+        if (isNoun() || isVerb()){
+            String number = getNumber();
+            if (number != null){
+                featureList.put("Number", number);
+            }
         }
-        String person = getPerson();
-        if (person != null){
-            featureList.put("Person", person);
+        if (isNoun()) {
+            String case_ = getCase();
+            if (case_ != null){
+                featureList.put("Case", case_);
+            }
         }
-        String voice = getVoice();
-        if (voice != null){
-            featureList.put("Voice", voice);
+        if (containsTag(MorphologicalTag.DETERMINER)){
+            String definite = getDefinite();
+            if (definite != null){
+                featureList.put("Definite", definite);
+            }
         }
-        String aspect = getAspect();
-        if (aspect != null){
-            featureList.put("Aspect", aspect);
-        }
-        String tense = getTense();
-        if (tense != null){
-            featureList.put("Tense", tense);
-        }
-        String mood = getMood();
-        if (mood != null){
-            featureList.put("Mood", mood);
-        }
-        String verbForm = getVerbForm();
-        if (verbForm != null){
-            featureList.put("VerbForm", verbForm);
+        if (isVerb()){
+            String polarity = getPolarity();
+            if (polarity != null){
+                featureList.put("Polarity", polarity);
+            }
+            String person = getPerson();
+            if (person != null){
+                featureList.put("Person", person);
+            }
+            String voice = getVoice();
+            if (voice != null){
+                featureList.put("Voice", voice);
+            }
+            String aspect = getAspect();
+            if (aspect != null){
+                featureList.put("Aspect", aspect);
+            }
+            String tense = getTense();
+            if (tense != null){
+                featureList.put("Tense", tense);
+            }
+            String mood = getMood();
+            if (mood != null){
+                featureList.put("Mood", mood);
+            }
+            String verbForm = getVerbForm();
+            if (verbForm != null){
+                featureList.put("VerbForm", verbForm);
+            }
         }
         return featureList;
     }
