@@ -766,9 +766,6 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.NECESSITY)){
             return "Nec";
         }
-        if (containsTag(MorphologicalTag.ABLE)){
-            return "Abil";
-        }
         if (containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.PROGRESSIVE1) || containsTag(MorphologicalTag.FUTURE)){
             return "Ind";
         }
@@ -857,7 +854,7 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("VerbForm=" + verbForm);
             }
         }
-        featureList.sort(String::compareTo);
+        featureList.sort(Comparator.comparing(String::toLowerCase));
         return featureList;
     }
 
