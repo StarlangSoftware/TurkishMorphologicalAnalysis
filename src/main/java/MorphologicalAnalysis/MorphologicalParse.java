@@ -4,6 +4,7 @@ import Dictionary.Word;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class MorphologicalParse implements Serializable {
@@ -790,72 +791,73 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
-    public HashMap<String, String> getUniversalDependencyFeatures(){
-        HashMap<String, String> featureList = new HashMap<>();
+    public ArrayList<String> getUniversalDependencyFeatures(){
+        ArrayList<String> featureList = new ArrayList<>();
         String pronType = getPronType();
         if (pronType != null){
-            featureList.put("PronType", pronType);
+            featureList.add("PronType=" + pronType);
         }
         String numType = getNumType();
         if (numType != null){
-            featureList.put("NumType", numType);
+            featureList.add("NumType=" + numType);
         }
         String reflex = getReflex();
         if (reflex != null){
-            featureList.put("Reflex", reflex);
+            featureList.add("Reflex=" + reflex);
         }
         String degree = getDegree();
         if (degree != null){
-            featureList.put("Degree", degree);
+            featureList.add("Degree=" + degree);
         }
         if (isNoun() || isVerb()){
             String number = getNumber();
             if (number != null){
-                featureList.put("Number", number);
+                featureList.add("Number=" + number);
             }
         }
         if (isNoun()) {
             String case_ = getCase();
             if (case_ != null){
-                featureList.put("Case", case_);
+                featureList.add("Case=" + case_);
             }
         }
         if (containsTag(MorphologicalTag.DETERMINER)){
             String definite = getDefinite();
             if (definite != null){
-                featureList.put("Definite", definite);
+                featureList.add("Definite=" + definite);
             }
         }
         if (isVerb()){
             String polarity = getPolarity();
             if (polarity != null){
-                featureList.put("Polarity", polarity);
+                featureList.add("Polarity=" + polarity);
             }
             String person = getPerson();
             if (person != null){
-                featureList.put("Person", person);
+                featureList.add("Person=" + person);
             }
             String voice = getVoice();
             if (voice != null){
-                featureList.put("Voice", voice);
+                featureList.add("Voice=" + voice);
             }
             String aspect = getAspect();
             if (aspect != null){
-                featureList.put("Aspect", aspect);
+                featureList.add("Aspect=" + aspect);
             }
             String tense = getTense();
             if (tense != null){
-                featureList.put("Tense", tense);
+                featureList.add("Tense=" + tense);
             }
             String mood = getMood();
             if (mood != null){
-                featureList.put("Mood", mood);
+                featureList.add("Mood=" + mood);
             }
             String verbForm = getVerbForm();
             if (verbForm != null){
-                featureList.put("VerbForm", verbForm);
+                featureList.add("VerbForm=" + verbForm);
             }
         }
+        featureList.sort(String::compareTo);
         return featureList;
     }
 
