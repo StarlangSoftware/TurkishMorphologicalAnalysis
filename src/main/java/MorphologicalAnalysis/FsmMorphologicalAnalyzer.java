@@ -4,12 +4,16 @@ import Corpus.Sentence;
 import DataStructure.Cache.LRUCache;
 import Dictionary.Trie.Trie;
 import Dictionary.*;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class FsmMorphologicalAnalyzer {
 
     private Trie dictionaryTrie;
+    private HashSet<String> parsedSurfaceForms = null;
     private FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
     private TxtDictionary dictionary;
@@ -93,6 +97,22 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmMorphologicalAnalyzer(TxtDictionary dictionary) {
         this("turkish_finite_state_machine.xml", dictionary, 10000000);
+    }
+
+    public void addParsedSurfaceForms(String fileName){
+        parsedSurfaceForms = new HashSet<>();
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        String line;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(classLoader.getResourceAsStream(fileName), StandardCharsets.UTF_8));
+            line = br.readLine();
+            while (line != null) {
+                parsedSurfaceForms.add(line);
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -756,6 +776,30 @@ public class FsmMorphologicalAnalyzer {
         return parseWord(initialFsmParse, surfaceForm);
     }
 
+    private HashSet<String> distinctSurfaceFormList(ArrayList<FsmParse> parseList){
+        HashSet<String> items = new HashSet<>();
+        for (FsmParse parse : parseList){
+            items.add(parse.getSurfaceForm());
+        }
+        return items;
+    }
+
+    public void outputAllParses(String outputFile){
+        try {
+            PrintWriter pw = new PrintWriter(outputFile);
+            for (int i = 0; i < getDictionary().size(); i++){
+                TxtWord word = (TxtWord) getDictionary().getWord(i);
+                ArrayList<FsmParse> parseList = generateAllParses(word, word.getName().length() + 4);
+                HashSet<String> possibilities = distinctSurfaceFormList(parseList);
+                for (String possibility : possibilities){
+                    pw.println(possibility);
+                }
+            }
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * The generateAllParses with 2 inputs is used to generate all parses with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
      * and maximum length.
@@ -1106,6 +1150,9 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmParseList morphologicalAnalysis(String surfaceForm) {
         FsmParseList fsmParseList;
+        if (parsedSurfaceForms != null && !parsedSurfaceForms.contains(surfaceForm.toLowerCase(new Locale("tr")))){
+            return new FsmParseList(new ArrayList<>());
+        }
         if (cache != null && cache.contains(surfaceForm)) {
             return cache.get(surfaceForm);
         }
