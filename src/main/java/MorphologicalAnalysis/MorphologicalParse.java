@@ -861,7 +861,7 @@ public class MorphologicalParse implements Serializable {
     public String getUniversalDependencyPos(){
         String lemma = root.getName();
         if (lemma.equals("değil")){
-            return "PART";
+            return "AUX";
         }
         if (isProperNoun()){
             return "PROPN";
@@ -887,7 +887,7 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.DETERMINER)){
             return "DET";
         }
-        if (isNumber() || isDate() || isTime()){
+        if (isNumber() || isDate() || isTime() || isOrdinal() || isFraction() || lemma.equals("%")){
             return "NUM";
         }
         if (getPos().equals("PRON")){
