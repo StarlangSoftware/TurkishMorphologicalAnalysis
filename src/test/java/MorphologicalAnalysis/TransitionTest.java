@@ -56,8 +56,6 @@ public class TransitionTest {
     public void testPresentTense() {
         assertTrue(fsm.morphologicalAnalysis("büyülüyor").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("bölümlüyor").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("adresliyor").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("alevliyor").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("buğuluyor").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("bulguluyor").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("açıklıyor").size() != 0);
@@ -171,7 +169,6 @@ public class TransitionTest {
     public void testLastIdropsDuringSuffixation() {
         assertTrue(fsm.morphologicalAnalysis("hizbi").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("kaybı").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("akdi").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("ahdi").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("nesci").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("zehri").size() != 0);
