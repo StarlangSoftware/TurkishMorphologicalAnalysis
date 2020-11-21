@@ -137,26 +137,8 @@ public class FsmParseList {
                     defaultCase = "P3SG+NOM";
                 }
                 break;
-            case "A2SG+P2SG$A3SG+P3SG":
-                defaultCase = "A3SG+P3SG";
-                break;
-            case "A3PL+P3PL+NOM$A3PL+P3SG+NOM$A3PL+PNON+ACC$A3SG+P3PL+NOM":
-                defaultCase = "A3PL+P3SG+NOM";
-                break;
-            case "P2SG$P3SG":
-                defaultCase = "P3SG";
-                break;
             case "A3PL+PNON+NOM$A3SG+PNON+NOM^DB+VERB+ZERO+PRES+A3PL":
                 defaultCase = "A3PL+PNON+NOM";
-                break;
-            case "P2SG+NOM$PNON+GEN":
-                defaultCase = "PNON+GEN";
-                break;
-            case "AOR^DB+ADJ+ZERO$AOR+A3SG":
-                defaultCase = "AOR+A3SG";
-                break;
-            case "P2SG$PNON":
-                defaultCase = "PNON";
                 break;
             case "ADV+SINCE$VERB+ZERO+PRES+COP+A3SG":
                 if (rootForm.equalsIgnoreCase("yıl") || rootForm.equalsIgnoreCase("süre") || rootForm.equalsIgnoreCase("zaman") || rootForm.equalsIgnoreCase("ay")) {
