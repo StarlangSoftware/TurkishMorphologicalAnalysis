@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FsmParseListTest {
-    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9;
+    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12;
 
     @Before
     public void setUp() {
@@ -22,6 +22,9 @@ public class FsmParseListTest {
         parse7 = fsm.morphologicalAnalysis("esaslarını");
         parse8 = fsm.morphologicalAnalysis("güçleriyle");
         parse9 = fsm.morphologicalAnalysis("bulmayacakları");
+        parse10 = fsm.morphologicalAnalysis("kitabı");
+        parse11 = fsm.morphologicalAnalysis("kitapları");
+        parse12 = fsm.morphologicalAnalysis("o");
     }
 
     @Test
@@ -95,4 +98,12 @@ public class FsmParseListTest {
         assertEquals(2, parse8.constructParseListForDifferentRootWithPos().size());
         assertEquals(1, parse9.constructParseListForDifferentRootWithPos().size());
     }
+
+    @Test
+    public void testParsesWithoutPrefixAndSuffix(){
+        assertEquals("P3SG+NOM$PNON+ACC", parse10.parsesWithoutPrefixAndSuffix());
+        assertEquals("A3PL+P3PL+NOM$A3PL+P3SG+NOM$A3PL+PNON+ACC$A3SG+P3PL+NOM", parse11.parsesWithoutPrefixAndSuffix());
+        assertEquals("DET$PRON+DEMONSP+A3SG+PNON+NOM$PRON+PERS+A3SG+PNON+NOM", parse12.parsesWithoutPrefixAndSuffix());
+    }
+
 }
