@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FsmParseListTest {
-    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12;
+    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12, parse13;
 
     @Before
     public void setUp() {
@@ -25,6 +25,7 @@ public class FsmParseListTest {
         parse10 = fsm.morphologicalAnalysis("kitabı");
         parse11 = fsm.morphologicalAnalysis("kitapları");
         parse12 = fsm.morphologicalAnalysis("o");
+        parse13 = fsm.morphologicalAnalysis("arabası");
     }
 
     @Test
@@ -104,6 +105,7 @@ public class FsmParseListTest {
         assertEquals("P3SG+NOM$PNON+ACC", parse10.parsesWithoutPrefixAndSuffix());
         assertEquals("A3PL+P3PL+NOM$A3PL+P3SG+NOM$A3PL+PNON+ACC$A3SG+P3PL+NOM", parse11.parsesWithoutPrefixAndSuffix());
         assertEquals("DET$PRON+DEMONSP+A3SG+PNON+NOM$PRON+PERS+A3SG+PNON+NOM", parse12.parsesWithoutPrefixAndSuffix());
+        assertEquals("NOUN+A3SG+P3SG+NOM$NOUN^DB+ADJ+ALMOST", parse13.parsesWithoutPrefixAndSuffix());
     }
 
 }
