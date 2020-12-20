@@ -888,18 +888,18 @@ public class FsmMorphologicalAnalyzer {
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+", surfaceForm)) {
-            initialFsmParse = new ArrayList<>(1);
-            fsmParse = new FsmParse(surfaceForm, new State(("DateRoot"), true, true));
-            fsmParse.constructInflectionalGroups();
-            initialFsmParse.add(fsmParse);
-            return initialFsmParse;
-        }
         if (patternMatches("\\d+/\\d+", surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("FractionRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
+            fsmParse = new FsmParse(surfaceForm, new State(("DateRoot"), true, true));
+            fsmParse.constructInflectionalGroups();
+            initialFsmParse.add(fsmParse);
+            return initialFsmParse;
+        }
+        if (isDate(surfaceForm)) {
+            initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("DateRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
@@ -912,21 +912,21 @@ public class FsmMorphologicalAnalyzer {
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (surfaceForm.equals("%") || patternMatches("%(\\d\\d|\\d)", surfaceForm) || patternMatches("%(\\d\\d|\\d)\\.\\d+", surfaceForm)) {
+        if (surfaceForm.equals("%") || isPercent(surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("PercentRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm)) {
+        if (isTime(surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("TimeRoot"), true, true));
             fsmParse.constructInflectionalGroups();
             initialFsmParse.add(fsmParse);
             return initialFsmParse;
         }
-        if (patternMatches("\\d+-\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)", surfaceForm)) {
+        if (isRange(surfaceForm)) {
             initialFsmParse = new ArrayList<>(1);
             fsmParse = new FsmParse(surfaceForm, new State(("RangeRoot"), true, true));
             fsmParse.constructInflectionalGroups();
@@ -1131,6 +1131,22 @@ public class FsmMorphologicalAnalyzer {
         return word.isEmpty() && count > 1;
     }
 
+    private boolean isPercent(String surfaceForm){
+        return patternMatches("%(\\d\\d|\\d)", surfaceForm) || patternMatches("%(\\d\\d|\\d)\\.\\d+", surfaceForm);
+    }
+
+    private boolean isTime(String surfaceForm) {
+        return patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm);
+    }
+
+    private boolean isRange(String surfaceForm) {
+        return patternMatches("\\d+-\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)", surfaceForm);
+    }
+
+    private boolean isDate(String surfaceForm) {
+        return patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+", surfaceForm) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+", surfaceForm);
+    }
+
     /**
      * The morphologicalAnalysis method is used to analyse a FsmParseList by comparing with the regex.
      * It creates an {@link ArrayList} fsmParse to hold the result of the analysis method. For each surfaceForm input,
@@ -1150,7 +1166,7 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmParseList morphologicalAnalysis(String surfaceForm) {
         FsmParseList fsmParseList;
-        if (parsedSurfaceForms != null && !parsedSurfaceForms.contains(surfaceForm.toLowerCase(new Locale("tr")))){
+        if (parsedSurfaceForms != null && !parsedSurfaceForms.contains(surfaceForm.toLowerCase(new Locale("tr"))) && !isInteger(surfaceForm) && !isDouble(surfaceForm) && !isPercent(surfaceForm) && !isTime(surfaceForm) && !isRange(surfaceForm) && !isDate(surfaceForm)){
             return new FsmParseList(new ArrayList<>());
         }
         if (cache != null && cache.contains(surfaceForm)) {
@@ -1175,7 +1191,7 @@ public class FsmMorphologicalAnalyzer {
                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
                     fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                 } else {
-                    if (patternMatches("(\\d\\d|\\d)/(\\d\\d|\\d)/\\d+", possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)\\.\\d+", possibleRoot)) {
+                    if (isDate(possibleRoot)) {
                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_DATE"));
                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                     } else {
@@ -1183,15 +1199,15 @@ public class FsmMorphologicalAnalyzer {
                             dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
                             fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                         } else {
-                            if (patternMatches("%(\\d\\d|\\d)", possibleRoot) || patternMatches("%(\\d\\d|\\d)\\.\\d+", possibleRoot)) {
+                            if (isPercent(possibleRoot)) {
                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_PERCENT"));
                                 fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                             } else {
-                                if (patternMatches("(\\d\\d|\\d):(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot)) {
+                                if (isTime(surfaceForm)) {
                                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_ZAMAN"));
                                     fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                 } else {
-                                    if (patternMatches("\\d+-\\d+", possibleRoot) || patternMatches("(\\d\\d|\\d):(\\d\\d|\\d)-(\\d\\d|\\d):(\\d\\d|\\d)", possibleRoot) || patternMatches("(\\d\\d|\\d)\\.(\\d\\d|\\d)-(\\d\\d|\\d)\\.(\\d\\d|\\d)", possibleRoot)) {
+                                    if (isRange(surfaceForm)) {
                                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_RANGE"));
                                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                     } else {
