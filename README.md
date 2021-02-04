@@ -1,7 +1,7 @@
 For Developers
 ============
 
-You can also see [Python](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Py), [C++](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CPP), or [C#](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CS) repository.
+You can also see [Python](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Py), [Cython](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Cy), [C++](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CPP), or [C#](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CS) repository.
 
 ## Requirements
 
