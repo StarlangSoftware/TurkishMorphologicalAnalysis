@@ -7,6 +7,14 @@ import static org.junit.Assert.*;
 public class InflectionalGroupTest {
 
     @Test
+    public void testGetMorphologicalTag() {
+        assertEquals(InflectionalGroup.getMorphologicalTag("noun"), MorphologicalTag.NOUN);
+        assertEquals(InflectionalGroup.getMorphologicalTag("without"), MorphologicalTag.WITHOUT);
+        assertEquals(InflectionalGroup.getMorphologicalTag("interj"), MorphologicalTag.INTERJECTION);
+        assertEquals(InflectionalGroup.getMorphologicalTag("inf2"), MorphologicalTag.INFINITIVE2);
+    }
+
+    @Test
     public void size() {
         InflectionalGroup inflectionalGroup1 = new InflectionalGroup("ADJ");
         assertEquals(1, inflectionalGroup1.size());
