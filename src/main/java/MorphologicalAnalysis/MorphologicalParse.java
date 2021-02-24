@@ -782,9 +782,6 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.SINCEDOINGSO) || containsTag(MorphologicalTag.WITHOUTHAVINGDONESO) || containsTag(MorphologicalTag.WITHOUTBEINGABLETOHAVEDONESO) || containsTag(MorphologicalTag.BYDOINGSO) || containsTag(MorphologicalTag.AFTERDOINGSO) || containsTag(MorphologicalTag.INFINITIVE3)){
             return "Conv";
         }
-        if (containsTag(MorphologicalTag.AORIST) || containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.PROGRESSIVE1) || containsTag(MorphologicalTag.FUTURE)){
-            return "Fin";
-        }
         return null;
     }
 
