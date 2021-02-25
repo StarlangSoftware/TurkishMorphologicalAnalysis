@@ -776,23 +776,20 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.PASTPARTICIPLE) || containsTag(MorphologicalTag.FUTUREPARTICIPLE) || containsTag(MorphologicalTag.PRESENTPARTICIPLE)){
             return "Part";
         }
-        if (containsTag(MorphologicalTag.INFINITIVE) || containsTag(MorphologicalTag.INFINITIVE2)){
-            return "Vnoun";
-        }
         if (containsTag(MorphologicalTag.SINCEDOINGSO) || containsTag(MorphologicalTag.WITHOUTHAVINGDONESO) || containsTag(MorphologicalTag.WITHOUTBEINGABLETOHAVEDONESO) || containsTag(MorphologicalTag.BYDOINGSO) || containsTag(MorphologicalTag.AFTERDOINGSO) || containsTag(MorphologicalTag.INFINITIVE3)){
             return "Conv";
         }
         return null;
     }
 
-    public ArrayList<String> getUniversalDependencyFeatures(){
+    public ArrayList<String> getUniversalDependencyFeatures(String uPos){
         ArrayList<String> featureList = new ArrayList<>();
         String pronType = getPronType();
-        if (pronType != null){
+        if (pronType != null && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("VERB") && !uPos.equalsIgnoreCase("CCONJ")){
             featureList.add("PronType=" + pronType);
         }
         String numType = getNumType();
-        if (numType != null){
+        if (numType != null && !uPos.equalsIgnoreCase("VERB")){
             featureList.add("NumType=" + numType);
         }
         String reflex = getReflex();
@@ -827,7 +824,7 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Polarity=" + polarity);
             }
             String person = getPerson();
-            if (person != null){
+            if (person != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("Person=" + person);
             }
             String voice = getVoice();
@@ -835,15 +832,15 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Voice=" + voice);
             }
             String aspect = getAspect();
-            if (aspect != null){
+            if (aspect != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("Aspect=" + aspect);
             }
             String tense = getTense();
-            if (tense != null){
+            if (tense != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("Tense=" + tense);
             }
             String mood = getMood();
-            if (mood != null){
+            if (mood != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("Mood=" + mood);
             }
             String verbForm = getVerbForm();
@@ -878,7 +875,7 @@ public class MorphologicalParse implements Serializable {
         if (isVerb()){
             return "VERB";
         }
-        if (isPunctuation()){
+        if (isPunctuation() || isHashTag()){
             return "PUNCT";
         }
         if (containsTag(MorphologicalTag.DETERMINER)){
