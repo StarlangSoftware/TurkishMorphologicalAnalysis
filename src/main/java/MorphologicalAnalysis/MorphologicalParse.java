@@ -294,36 +294,36 @@ public class MorphologicalParse implements Serializable {
     }
 
     /**
-     * The isNoun method returns true if the past of speech is NOUN, false otherwise.
+     * The isNoun method returns true if the part of speech is NOUN, false otherwise.
      *
-     * @return true if the past of speech is NOUN, false otherwise.
+     * @return true if the part of speech is NOUN, false otherwise.
      */
     public boolean isNoun() {
         return (getPos().equals("NOUN"));
     }
 
     /**
-     * The isVerb method returns true if the past of speech is VERB, false otherwise.
+     * The isVerb method returns true if the part of speech is VERB, false otherwise.
      *
-     * @return true if the past of speech is VERB, false otherwise.
+     * @return true if the part of speech is VERB, false otherwise.
      */
     public boolean isVerb() {
         return (getPos().equals("VERB"));
     }
 
     /**
-     * The isRootVerb method returns true if the past of speech of root is BERV, false otherwise.
+     * The isRootVerb method returns true if the part of speech of root is BERV, false otherwise.
      *
-     * @return true if the past of speech of root is VERB, false otherwise.
+     * @return true if the part of speech of root is VERB, false otherwise.
      */
     public boolean isRootVerb() {
         return (getRootPos().equals("VERB"));
     }
 
     /**
-     * The isAdjective method returns true if the past of speech is ADJ, false otherwise.
+     * The isAdjective method returns true if the part of speech is ADJ, false otherwise.
      *
-     * @return true if the past of speech is ADJ, false otherwise.
+     * @return true if the part of speech is ADJ, false otherwise.
      */
     public boolean isAdjective() {
         return (getPos().equals("ADJ"));

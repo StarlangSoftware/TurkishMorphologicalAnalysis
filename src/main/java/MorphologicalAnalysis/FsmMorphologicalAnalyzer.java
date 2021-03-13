@@ -4,6 +4,7 @@ import Corpus.Sentence;
 import DataStructure.Cache.LRUCache;
 import Dictionary.Trie.Trie;
 import Dictionary.*;
+import Util.FileUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -101,10 +102,9 @@ public class FsmMorphologicalAnalyzer {
 
     public void addParsedSurfaceForms(String fileName){
         parsedSurfaceForms = new HashSet<>();
-        ClassLoader classLoader = this.getClass().getClassLoader();
         String line;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(classLoader.getResourceAsStream(fileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(FileUtils.getInputStream(fileName), StandardCharsets.UTF_8));
             line = br.readLine();
             while (line != null) {
                 parsedSurfaceForms.add(line);

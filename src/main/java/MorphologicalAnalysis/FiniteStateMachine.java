@@ -1,5 +1,6 @@
 package MorphologicalAnalysis;
 
+import Util.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -55,8 +56,7 @@ public class FiniteStateMachine {
         }
         Document doc;
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            doc = builder.parse(new InputSource(classLoader.getResourceAsStream(fileName)));
+            doc = builder.parse(new InputSource(FileUtils.getInputStream(fileName)));
         } catch (SAXException | IOException e) {
             throw new RuntimeException("Fst file '" + fileName + "' could not be loaded from resources. Verify that file exists in project's resource folder.",e);
         }
