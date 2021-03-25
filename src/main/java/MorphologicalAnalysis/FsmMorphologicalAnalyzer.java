@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class FsmMorphologicalAnalyzer {
 
     private Trie dictionaryTrie;
-    private HashSet<String> parsedSurfaceForms = null;
+    private HashMap<String, String> parsedSurfaceForms = null;
     private FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
     private TxtDictionary dictionary;
@@ -101,13 +101,14 @@ public class FsmMorphologicalAnalyzer {
     }
 
     public void addParsedSurfaceForms(String fileName){
-        parsedSurfaceForms = new HashSet<>();
+        parsedSurfaceForms = new HashMap<>();
         String line;
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(FileUtils.getInputStream(fileName), StandardCharsets.UTF_8));
             line = br.readLine();
             while (line != null) {
-                parsedSurfaceForms.add(line);
+                String[] items = line.split(" ");
+                parsedSurfaceForms.put(items[0], items[1]);
                 line = br.readLine();
             }
         } catch (IOException e) {
@@ -1166,8 +1167,11 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmParseList morphologicalAnalysis(String surfaceForm) {
         FsmParseList fsmParseList;
-        if (parsedSurfaceForms != null && !parsedSurfaceForms.contains(surfaceForm.toLowerCase(new Locale("tr"))) && !isInteger(surfaceForm) && !isDouble(surfaceForm) && !isPercent(surfaceForm) && !isTime(surfaceForm) && !isRange(surfaceForm) && !isDate(surfaceForm)){
-            return new FsmParseList(new ArrayList<>());
+        String lowerCased = surfaceForm.toLowerCase(new Locale("tr"));
+        if (parsedSurfaceForms != null && parsedSurfaceForms.containsKey(lowerCased) && !isInteger(surfaceForm) && !isDouble(surfaceForm) && !isPercent(surfaceForm) && !isTime(surfaceForm) && !isRange(surfaceForm) && !isDate(surfaceForm)){
+            ArrayList<FsmParse> parses = new ArrayList<>();
+            parses.add(new FsmParse(new Word(parsedSurfaceForms.get(lowerCased))));
+            return new FsmParseList(parses);
         }
         if (cache != null && cache.contains(surfaceForm)) {
             return cache.get(surfaceForm);
