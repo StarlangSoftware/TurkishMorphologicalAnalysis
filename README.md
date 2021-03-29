@@ -26,7 +26,7 @@ To overcome the irregularities and also to accelerate the search for the barefor
 For Developers
 ============
 
-You can also see [Python](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Py), [Cython](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Cy), [C++](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CPP), or [C#](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CS) repository.
+You can also see [Python](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Py), [Cython](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Cy), [C++](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CPP), [Swift](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-Swift), or [C#](https://github.com/starlangsoftware/TurkishMorphologicalAnalysis-CS) repository.
 
 ## Requirements
 
