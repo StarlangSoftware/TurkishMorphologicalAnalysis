@@ -793,11 +793,11 @@ public class MorphologicalParse implements Serializable {
             featureList.add("NumType=" + numType);
         }
         String reflex = getReflex();
-        if (reflex != null){
+        if (reflex != null && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("VERB")){
             featureList.add("Reflex=" + reflex);
         }
         String degree = getDegree();
-        if (degree != null){
+        if (degree != null && !uPos.equalsIgnoreCase("ADJ")){
             featureList.add("Degree=" + degree);
         }
         if (isNoun() || isVerb()){
