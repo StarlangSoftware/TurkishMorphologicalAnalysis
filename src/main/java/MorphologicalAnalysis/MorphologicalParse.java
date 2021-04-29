@@ -592,14 +592,14 @@ public class MorphologicalParse implements Serializable {
 
     private String getNumType(){
         String lemma = root.getName();
-        if (containsTag(MorphologicalTag.CARDINAL) || containsTag(MorphologicalTag.NUMBER) || lemma.equals("kaç")){
-            return "Card";
-        }
         if (containsTag(MorphologicalTag.ORDINAL) || lemma.equals("kaçıncı")){
             return "Ord";
         }
         if (containsTag(MorphologicalTag.DISTRIBUTIVE)){
             return "Dist";
+        }
+        if (containsTag(MorphologicalTag.CARDINAL) || containsTag(MorphologicalTag.NUMBER) || lemma.equals("kaç")){
+            return "Card";
         }
         return null;
     }
@@ -613,12 +613,20 @@ public class MorphologicalParse implements Serializable {
     }
 
     private String getNumber(){
-        if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A3SG)
-        || containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P3SG)){
+        if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A3SG)){
             return "Sing";
         }
-        if (containsTag(MorphologicalTag.A1PL) || containsTag(MorphologicalTag.A2PL) || containsTag(MorphologicalTag.A3PL)
-                || containsTag(MorphologicalTag.P1PL) || containsTag(MorphologicalTag.P2PL) || containsTag(MorphologicalTag.P3PL)){
+        if (containsTag(MorphologicalTag.A1PL) || containsTag(MorphologicalTag.A2PL) || containsTag(MorphologicalTag.A3PL)){
+            return "Plur";
+        }
+        return null;
+    }
+
+    private String getPossessiveNumber(){
+        if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P3SG)){
+            return "Sing";
+        }
+        if (containsTag(MorphologicalTag.P1PL) || containsTag(MorphologicalTag.P2PL) || containsTag(MorphologicalTag.P3PL)){
             return "Plur";
         }
         return null;
@@ -684,22 +692,35 @@ public class MorphologicalParse implements Serializable {
     }
 
     private String getPerson(){
-        if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A1PL)
-                || containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P1PL)){
+        if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A1PL)){
             return "1";
         }
-        if (containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A2PL)
-                || containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P2PL)){
+        if (containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A2PL)){
             return "2";
         }
-        if (containsTag(MorphologicalTag.A3SG) || containsTag(MorphologicalTag.A3PL)
-                || containsTag(MorphologicalTag.P3SG) || containsTag(MorphologicalTag.P3PL)){
+        if (containsTag(MorphologicalTag.A3SG) || containsTag(MorphologicalTag.A3PL)){
+            return "3";
+        }
+        return null;
+    }
+
+    private String getPossessivePerson(){
+        if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P1PL)){
+            return "1";
+        }
+        if (containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P2PL)){
+            return "2";
+        }
+        if (containsTag(MorphologicalTag.P3SG) || containsTag(MorphologicalTag.P3PL)){
             return "3";
         }
         return null;
     }
 
     private String getVoice(){
+        if (containsTag(MorphologicalTag.CAUSATIVE) && containsTag(MorphologicalTag.PASSIVE)){
+            return "CauPass";
+        }
         if (containsTag(MorphologicalTag.PASSIVE)){
             return "Pass";
         }
@@ -776,8 +797,14 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.PASTPARTICIPLE) || containsTag(MorphologicalTag.FUTUREPARTICIPLE) || containsTag(MorphologicalTag.PRESENTPARTICIPLE)){
             return "Part";
         }
+        if (containsTag(MorphologicalTag.INFINITIVE) || containsTag(MorphologicalTag.INFINITIVE2)){
+            return "Vnoun";
+        }
         if (containsTag(MorphologicalTag.SINCEDOINGSO) || containsTag(MorphologicalTag.WITHOUTHAVINGDONESO) || containsTag(MorphologicalTag.WITHOUTBEINGABLETOHAVEDONESO) || containsTag(MorphologicalTag.BYDOINGSO) || containsTag(MorphologicalTag.AFTERDOINGSO) || containsTag(MorphologicalTag.INFINITIVE3)){
             return "Conv";
+        }
+        if (containsTag(MorphologicalTag.AORIST) || containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.PROGRESSIVE1) || containsTag(MorphologicalTag.FUTURE)){
+            return "Fin";
         }
         return null;
     }
@@ -805,6 +832,18 @@ public class MorphologicalParse implements Serializable {
             if (number != null){
                 featureList.add("Number=" + number);
             }
+            String possessiveNumber = getPossessiveNumber();
+            if (possessiveNumber != null){
+                featureList.add("Number[psor]=" + possessiveNumber);
+            }
+            String person = getPerson();
+            if (person != null && !uPos.equalsIgnoreCase("PROPN")){
+                featureList.add("Person=" + person);
+            }
+            String possessivePerson = getPossessivePerson();
+            if (possessivePerson != null && !uPos.equalsIgnoreCase("PROPN")){
+                featureList.add("Person[psor]=" + possessivePerson);
+            }
         }
         if (isNoun()) {
             String case_ = getCase();
@@ -823,10 +862,6 @@ public class MorphologicalParse implements Serializable {
             if (polarity != null){
                 featureList.add("Polarity=" + polarity);
             }
-            String person = getPerson();
-            if (person != null && !uPos.equalsIgnoreCase("PROPN")){
-                featureList.add("Person=" + person);
-            }
             String voice = getVoice();
             if (voice != null){
                 featureList.add("Voice=" + voice);
@@ -844,7 +879,7 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Mood=" + mood);
             }
             String verbForm = getVerbForm();
-            if (verbForm != null){
+            if (verbForm != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("VerbForm=" + verbForm);
             }
         }
