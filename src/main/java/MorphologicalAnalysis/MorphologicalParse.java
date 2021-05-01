@@ -812,11 +812,11 @@ public class MorphologicalParse implements Serializable {
     public ArrayList<String> getUniversalDependencyFeatures(String uPos){
         ArrayList<String> featureList = new ArrayList<>();
         String pronType = getPronType();
-        if (pronType != null && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("VERB") && !uPos.equalsIgnoreCase("CCONJ")){
+        if (pronType != null && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("VERB") && !uPos.equalsIgnoreCase("CCONJ") && !uPos.equalsIgnoreCase("PROPN")){
             featureList.add("PronType=" + pronType);
         }
         String numType = getNumType();
-        if (numType != null && !uPos.equalsIgnoreCase("VERB")){
+        if (numType != null && !uPos.equalsIgnoreCase("VERB") && !uPos.equalsIgnoreCase("NOUN") && !uPos.equalsIgnoreCase("ADV")){
             featureList.add("NumType=" + numType);
         }
         String reflex = getReflex();
