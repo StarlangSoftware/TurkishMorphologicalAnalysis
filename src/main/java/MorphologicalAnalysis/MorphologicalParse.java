@@ -584,7 +584,10 @@ public class MorphologicalParse implements Serializable {
         }
         if (lemma.equals("birçoğu") || lemma.equals("hep") || lemma.equals("kimse")
                 || lemma.equals("bazı") || lemma.equals("biri") || lemma.equals("çoğu")
-                || lemma.equals("hepsi") || lemma.equals("diğeri") || lemma.equals("tümü")){
+                || lemma.equals("hepsi") || lemma.equals("diğeri") || lemma.equals("tümü")
+                || lemma.equals("herkes") || lemma.equals("kimi") || lemma.equals("öbür")
+                || lemma.equals("öteki") || lemma.equals("birkaçı") || lemma.equals("topu")
+                || lemma.equals("başkası")){
             return "Ind";
         }
         if (lemma.equals("hiçbiri")){
