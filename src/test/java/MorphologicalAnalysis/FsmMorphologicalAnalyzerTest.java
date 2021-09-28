@@ -1,5 +1,6 @@
 package MorphologicalAnalysis;
 
+import Corpus.Sentence;
 import Dictionary.TurkishWordComparator;
 import Dictionary.TxtDictionary;
 import Dictionary.TxtWord;
@@ -221,5 +222,19 @@ public class FsmMorphologicalAnalyzerTest {
             }
         }
     }
-
+    @Test
+    public void testReplaceWord() {
+        assertEquals("şvesterine söyle kazağı güzelmiş", fsm.replaceWord(new Sentence("hemşirene söyle kazağı güzelmiş"), "hemşire", "şvester").toString());
+        assertEquals("burada çok abartma var", fsm.replaceWord(new Sentence("burada çok mübalağa var"), "mübalağa", "abartma").toString());
+        assertEquals("Bu bina çok kötü şekilsizleştirildi", fsm.replaceWord(new Sentence("Bu bina çok kötü biçimsizleştirildi"), "biçimsizleş", "şekilsizleş").toString());
+        assertEquals("Abim geçen yıl ölmüştü gibi", fsm.replaceWord(new Sentence("Abim geçen yıl son yolculuğa çıkmıştı gibi"), "son yolculuğa çık", "öl").toString());
+        assertEquals("hemşirenle evlendim", fsm.replaceWord(new Sentence("kız kardeşinle evlendim"), "kız kardeş", "hemşire").toString());
+        assertEquals("dün yaptığı güreş maçında yenildi", fsm.replaceWord(new Sentence("dün yaptığı güreş maçında mağlup oldu"), "mağlup ol", "yenil").toString());
+        assertEquals("Abim geçen yıl son yolculuğa çıkmıştı gibi", fsm.replaceWord(new Sentence("Abim geçen yıl ölmüştü gibi"), "öl", "son yolculuğa çık").toString());
+        assertEquals("kız kardeşinle evlendim", fsm.replaceWord(new Sentence("hemşirenle evlendim"), "hemşire", "kız kardeş").toString());
+        assertEquals("dün yaptığı güreş maçında mağlup oldu", fsm.replaceWord(new Sentence("dün yaptığı güreş maçında yenildi"), "yenil", "mağlup ol").toString());
+        assertEquals("dün yaptığı güreş maçında alt oldu sanki", fsm.replaceWord(new Sentence("dün yaptığı güreş maçında mağlup oldu sanki"), "mağlup ol", "alt ol").toString());
+        assertEquals("yemin billah vermişlerdi vazoyu kırmadığına", fsm.replaceWord(new Sentence("yemin etmişlerdi vazoyu kırmadığına"), "yemin et", "yemin billah ver").toString());
+        assertEquals("yemin etmişlerdi vazoyu kırmadığına", fsm.replaceWord(new Sentence("yemin billah vermişlerdi vazoyu kırmadığına"), "yemin billah ver", "yemin et").toString());
+    }
 }

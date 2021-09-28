@@ -689,6 +689,20 @@ public class FsmParse extends MorphologicalParse implements Comparable {
     }
 
     /**
+     * Replace root word of the current parse with the new root word and returns the new word.
+     * @param newRoot Replaced root word
+     * @return Root word of the parse will be replaced with the newRoot and the resulting surface form is returned.
+     */
+    public String replaceRootWord(TxtWord newRoot){
+        String result = newRoot.getName();
+        for (String aWith : withList){
+            Transition transition = new Transition(null, aWith, null);
+            result = transition.makeTransition(newRoot, result);
+        }
+        return result;
+    }
+
+    /**
      * The overridden toString method which returns transitionList method.
      *
      * @return returns transitionList method.

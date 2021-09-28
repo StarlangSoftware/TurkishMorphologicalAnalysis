@@ -836,6 +836,71 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
+     * Replaces previous lemma in the sentence with the new lemma. Both lemma can contain multiple words.
+     * @param original Original sentence to be replaced with.
+     * @param previousWord Root word in the original sentence
+     * @param newWord New word to be replaced.
+     * @return Newly generated sentence by replacing the previous word in the original sentence with the new word.
+     */
+    public Sentence replaceWord(Sentence original, String previousWord, String newWord){
+        int i;
+        String[] previousWordSplitted = null, newWordSplitted = null;
+        Sentence result = new Sentence();
+        String replacedWord = null, lastWord, newRootWord;
+        boolean previousWordMultiple = previousWord.contains(" ");
+        boolean newWordMultiple = newWord.contains(" ");
+        if (previousWordMultiple){
+            previousWordSplitted = previousWord.split(" ");
+            lastWord = previousWordSplitted[previousWordSplitted.length - 1];
+        } else {
+            lastWord = previousWord;
+        }
+        if (newWordMultiple){
+            newWordSplitted = newWord.split(" ");
+            newRootWord = newWordSplitted[newWordSplitted.length - 1];
+        } else {
+            newRootWord = newWord;
+        }
+        FsmParseList[] parseList = morphologicalAnalysis(original);
+        for (i = 0; i < parseList.length; i++){
+            boolean replaced = false;
+            for (int j = 0; j < parseList[i].size(); j++){
+                if (parseList[i].getFsmParse(j).root.getName().equals(lastWord)){
+                    replaced = true;
+                    replacedWord = parseList[i].getFsmParse(j).replaceRootWord((TxtWord) dictionary.getWord(newRootWord));
+                }
+            }
+            if (replaced && replacedWord != null){
+                if (previousWordMultiple){
+                    for (int k = 0; k < i - previousWordSplitted.length + 1; k++){
+                        result.addWord(original.getWord(k));
+                    }
+                }
+                if (newWordMultiple){
+                    for (int k = 0; k < newWordSplitted.length - 1; k++){
+                        result.addWord(new Word(newWordSplitted[k]));
+                    }
+                }
+                result.addWord(new Word(replacedWord));
+                if (previousWordMultiple){
+                    i++;
+                    break;
+                }
+            } else {
+                if (!previousWordMultiple){
+                    result.addWord(original.getWord(i));
+                }
+            }
+        }
+        if (previousWordMultiple){
+            for (; i < parseList.length; i++){
+                result.addWord(original.getWord(i));
+            }
+        }
+        return result;
+    }
+
+    /**
      * The analysisExists method checks several cases. If the given surfaceForm is a punctuation or double then it
      * returns true. If it is not a root word, then it initializes the parse list and returns the parseExists method with
      * this newly initialized list and surfaceForm.
