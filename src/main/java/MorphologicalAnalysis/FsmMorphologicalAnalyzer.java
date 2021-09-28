@@ -879,8 +879,15 @@ public class FsmMorphologicalAnalyzer {
                 }
                 if (newWordMultiple){
                     for (int k = 0; k < newWordSplitted.length - 1; k++){
-                        result.addWord(new Word(newWordSplitted[k]));
+                        if (result.wordCount() == 0){
+                            result.addWord(new Word((newWordSplitted[k].charAt(0) + "").toUpperCase(new Locale("tr")) + newWordSplitted[k].substring(1)));
+                        } else {
+                            result.addWord(new Word(newWordSplitted[k]));
+                        }
                     }
+                }
+                if (result.wordCount() == 0){
+                    replacedWord = (replacedWord.charAt(0) + "").toUpperCase(new Locale("tr")) + replacedWord.substring(1);
                 }
                 result.addWord(new Word(replacedWord));
                 if (previousWordMultiple){
