@@ -861,13 +861,14 @@ public class FsmMorphologicalAnalyzer {
         } else {
             newRootWord = newWord;
         }
+        TxtWord newRootTxtWord = (TxtWord) dictionary.getWord(newRootWord);
         FsmParseList[] parseList = morphologicalAnalysis(original);
         for (i = 0; i < parseList.length; i++){
             boolean replaced = false;
             for (int j = 0; j < parseList[i].size(); j++){
-                if (parseList[i].getFsmParse(j).root.getName().equals(lastWord)){
+                if (parseList[i].getFsmParse(j).root.getName().equals(lastWord) && newRootTxtWord != null){
                     replaced = true;
-                    replacedWord = parseList[i].getFsmParse(j).replaceRootWord((TxtWord) dictionary.getWord(newRootWord));
+                    replacedWord = parseList[i].getFsmParse(j).replaceRootWord(newRootTxtWord);
                 }
             }
             if (replaced && replacedWord != null){
