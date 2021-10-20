@@ -327,11 +327,14 @@ public class Transition {
             if (stem.equals("ben")) {
                 return "bana";
             }
+            if (stem.equals("sen")) {
+                return "sana";
+            }
         }
         formationToCheck = stem;
         //---vowelEChangesToIDuringYSuffixation---
         //de->d(i)yor, ye->y(i)yor
-        if (rootWord && withFirstChar() == 'y' && root.vowelEChangesToIDuringYSuffixation() && with.charAt(1) != 'H') {
+        if (rootWord && withFirstChar() == 'y' && root.vowelEChangesToIDuringYSuffixation() && (with.charAt(1) != 'H' || root.getName().equals("ye"))) {
             formation = stem.substring(0, stem.length() - 1) + 'i';
             formationToCheck = formation;
         } else {
@@ -348,7 +351,7 @@ public class Transition {
                     formation = stem + 'y';
                     formationToCheck = formation;
                 } else {
-                    if (rootWord && root.duplicatesDuringSuffixation() && TurkishLanguage.isConsonantDrop(with.charAt(0))) {
+                    if (rootWord && root.duplicatesDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && TurkishLanguage.isConsonantDrop(with.charAt(0))) {
                         //---duplicatesDuringSuffixation---
                         if (softenDuringSuffixation(root)) {
                             //--extra softenDuringSuffixation

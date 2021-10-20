@@ -124,6 +124,7 @@ public class TransitionTest {
 
     @Test
     public void testExceptions() {
+        assertTrue(fsm.morphologicalAnalysis("sana").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("bununla").size() != 0);
         assertEquals(0, fsm.morphologicalAnalysis("buyla").size());
         assertTrue(fsm.morphologicalAnalysis("onunla").size() != 0);

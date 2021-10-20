@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FsmParseTest {
-    FsmParse parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9;
+    FsmParse parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11;
 
     @Before
     public void setUp() {
@@ -20,6 +20,7 @@ public class FsmParseTest {
         parse7 = fsm.morphologicalAnalysis("esaslarını").getFsmParse(0);
         parse8 = fsm.morphologicalAnalysis("güçleriyle").getFsmParse(0);
         parse9 = fsm.morphologicalAnalysis("bulmayacakları").getFsmParse(0);
+        parse10 = fsm.morphologicalAnalysis("mü").getFsmParse(0);
     }
 
     @Test
@@ -51,6 +52,7 @@ public class FsmParseTest {
         assertEquals("esas+ADJ^DB+NOUN+ZERO+A3PL+P2SG+ACC", parse7.toString());
         assertEquals("güç+ADJ^DB+NOUN+ZERO+A3PL+P3PL+INS", parse8.toString());
         assertEquals("bul+VERB+NEG^DB+ADJ+FUTPART+P3PL", parse9.toString());
+        assertEquals("mi+QUES+PRES+A3SG", parse10.toString());
     }
 
     @Test

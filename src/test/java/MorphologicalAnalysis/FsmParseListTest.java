@@ -8,7 +8,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FsmParseListTest {
-    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12, parse13;
+    FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12,
+            parse13, parse14;
 
     @Before
     public void setUp() {
@@ -26,6 +27,7 @@ public class FsmParseListTest {
         parse11 = fsm.morphologicalAnalysis("kitapları");
         parse12 = fsm.morphologicalAnalysis("o");
         parse13 = fsm.morphologicalAnalysis("arabası");
+        parse14 = fsm.morphologicalAnalysis("sana");
     }
 
     @Test
@@ -39,6 +41,7 @@ public class FsmParseListTest {
         assertEquals(8, parse7.size());
         assertEquals(6, parse8.size());
         assertEquals(5, parse9.size());
+        assertEquals(4, parse14.size());
     }
 
     @Test

@@ -242,7 +242,7 @@ public class FsmMorphologicalAnalyzer {
                 }
             }
         }
-        if (rootWord && (root.getName().equals("ben") || root.lastIdropsDuringSuffixation() || root.lastIdropsDuringPassiveSuffixation())) {
+        if (rootWord && (root.getName().equals("ben") || root.getName().equals("sen") || root.lastIdropsDuringSuffixation() || root.lastIdropsDuringPassiveSuffixation())) {
             return (distance <= MAX_DISTANCE);
         } else {
             if (shortString.endsWith("e") || shortString.endsWith("a") || shortString.endsWith("p") || shortString.endsWith("ç") || shortString.endsWith("t") || shortString.endsWith("k") || (rootWord && (root.rootSoftenDuringSuffixation() || root.vowelEChangesToIDuringYSuffixation() || root.vowelAChangesToIDuringYSuffixation() || root.endingKChangesIntoG()))) {
