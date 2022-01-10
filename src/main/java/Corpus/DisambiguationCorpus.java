@@ -1,6 +1,5 @@
 package Corpus;
 
-import Corpus.*;
 import DataStructure.CounterHashMap;
 import MorphologicalAnalysis.MorphologicalParse;
 

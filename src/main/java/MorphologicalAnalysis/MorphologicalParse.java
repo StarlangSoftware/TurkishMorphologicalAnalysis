@@ -265,7 +265,7 @@ public class MorphologicalParse implements Serializable {
 
     /**
      * The lastIGContainsTag method takes a MorphologicalTag as an input and returns true if the last inflectional group's
-     * MorphologicalTag matches with one of the tags in the IG {@link ArrayList}, falze otherwise.
+     * MorphologicalTag matches with one of the tags in the IG {@link ArrayList}, false otherwise.
      *
      * @param tag {@link MorphologicalTag} type input.
      * @return true if the last inflectional group's MorphologicalTag matches with one of the tags in the IG {@link ArrayList}, false otherwise.
@@ -453,10 +453,11 @@ public class MorphologicalParse implements Serializable {
      * @return true if {@link InflectionalGroup}'s MorphologicalTags are from the agreement plural or possessive plural.
      */
     public boolean isPlural() {
-        for (InflectionalGroup inflectionalGroup : inflectionalGroups)
+        for (InflectionalGroup inflectionalGroup : inflectionalGroups){
             if (inflectionalGroup.containsPlural()) {
                 return true;
             }
+        }
         return false;
     }
 

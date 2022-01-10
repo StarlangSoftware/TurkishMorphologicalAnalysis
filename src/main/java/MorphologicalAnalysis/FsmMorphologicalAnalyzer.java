@@ -801,6 +801,7 @@ public class FsmMorphologicalAnalyzer {
             e.printStackTrace();
         }
     }
+
     /**
      * The generateAllParses with 2 inputs is used to generate all parses with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
      * and maximum length.

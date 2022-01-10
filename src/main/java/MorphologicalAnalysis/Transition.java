@@ -264,7 +264,7 @@ public class Transition {
      * @return true if it starts with vowel or consonant drops, false otherwise.
      */
     private boolean startWithVowelorConsonantDrops() {
-        if (TurkishLanguage.isConsonantDrop(withFirstChar()) && (!with.equalsIgnoreCase("ylA")) && (!with.equalsIgnoreCase("ysA")) && (!with.equalsIgnoreCase("ymHs")) && (!with.equalsIgnoreCase("yDH")) && (!with.equalsIgnoreCase("yken"))) {
+        if (TurkishLanguage.isConsonantDrop(withFirstChar()) && !with.equalsIgnoreCase("ylA") && !with.equalsIgnoreCase("ysA") && !with.equalsIgnoreCase("ymHs") && !with.equalsIgnoreCase("yDH") && !with.equalsIgnoreCase("yken")) {
             return true;
         }
         if (withFirstChar() == 'A' || withFirstChar() == 'H' || TurkishLanguage.isVowel(withFirstChar())) {
