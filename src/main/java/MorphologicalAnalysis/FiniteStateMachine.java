@@ -1,17 +1,9 @@
 package MorphologicalAnalysis;
 
 import Util.FileUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import Xml.XmlDocument;
+import Xml.XmlElement;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,61 +32,46 @@ public class FiniteStateMachine {
      * @param fileName the resource file to read the finite state machine. Only files in resources folder are supported.
      */
     public FiniteStateMachine(String fileName) {
-        int i;
         boolean startState, endState;
-        NodeList stateList;
-        Node stateNode, rootNode, transitionNode, withNode;
+        XmlElement stateNode, rootNode, transitionNode, withNode;
         State state, toState;
         String stateName, withName, originalPos, rootToPos, toPos;
-        NamedNodeMap attributes;
-        DocumentBuilder builder = null;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        Document doc;
-        try {
-            doc = builder.parse(new InputSource(FileUtils.getInputStream(fileName)));
-        } catch (SAXException | IOException e) {
-            throw new RuntimeException("Fst file '" + fileName + "' could not be loaded from resources. Verify that file exists in project's resource folder.",e);
-        }
+        XmlDocument doc;
+        doc = new XmlDocument(FileUtils.getInputStream(fileName));
+        doc.parse();
         transitions = new HashMap<>();
-        stateList = doc.getElementsByTagName("state");
+        rootNode = doc.getFirstChild();
+        stateNode = rootNode.getFirstChild();
         states = new ArrayList<>();
-        for (i = 0; i < stateList.getLength(); i++) {
-            stateNode = stateList.item(i);
-            attributes = stateNode.getAttributes();
-            stateName = attributes.getNamedItem("name").getNodeValue();
-            startState = attributes.getNamedItem("start").getNodeValue().equalsIgnoreCase("yes");
-            endState = attributes.getNamedItem("end").getNodeValue().equalsIgnoreCase("yes");
+        while (stateNode != null){
+            stateName = stateNode.getAttributeValue("name");
+            startState = stateNode.getAttributeValue("start").equalsIgnoreCase("yes");
+            endState = stateNode.getAttributeValue("end").equalsIgnoreCase("yes");
             if (startState) {
-                originalPos = attributes.getNamedItem("originalpos").getNodeValue();
+                originalPos = stateNode.getAttributeValue("originalpos");
                 states.add(new State(stateName, true, endState, originalPos));
             } else {
                 states.add(new State(stateName, false, endState));
             }
+            stateNode = stateNode.getNextSibling();
         }
         rootNode = doc.getFirstChild();
         stateNode = rootNode.getFirstChild();
         while (stateNode != null) {
             if (stateNode.hasAttributes()) {
-                attributes = stateNode.getAttributes();
-                stateName = attributes.getNamedItem("name").getNodeValue();
+                stateName = stateNode.getAttributeValue("name");
                 state = getState(stateName);
                 transitionNode = stateNode.getFirstChild();
                 while (transitionNode != null) {
                     if (transitionNode.hasAttributes()) {
-                        attributes = transitionNode.getAttributes();
-                        stateName = attributes.getNamedItem("name").getNodeValue();
-                        if (attributes.getNamedItem("transitionname") != null) {
-                            withName = attributes.getNamedItem("transitionname").getNodeValue();
+                        stateName = transitionNode.getAttributeValue("name");
+                        if (!transitionNode.getAttributeValue("transitionname").isEmpty()) {
+                            withName = transitionNode.getAttributeValue("transitionname");
                         } else {
                             withName = null;
                         }
-                        if (attributes.getNamedItem("topos") != null) {
-                            rootToPos = attributes.getNamedItem("topos").getNodeValue();
+                        if (!transitionNode.getAttributeValue("topos").isEmpty()) {
+                            rootToPos = transitionNode.getAttributeValue("topos");
                         } else {
                             rootToPos = null;
                         }
@@ -102,27 +79,24 @@ public class FiniteStateMachine {
                         if (toState != null) {
                             withNode = transitionNode.getFirstChild();
                             while (withNode != null) {
-                                if (withNode.getFirstChild() != null) {
-                                    if (withNode.hasAttributes()) {
-                                        attributes = withNode.getAttributes();
-                                        withName = attributes.getNamedItem("name").getNodeValue();
-                                        if (attributes.getNamedItem("topos") != null) {
-                                            toPos = attributes.getNamedItem("topos").getNodeValue();
-                                        } else {
-                                            toPos = null;
-                                        }
+                                if (withNode.hasAttributes()) {
+                                    withName = withNode.getAttributeValue("name");
+                                    if (!withNode.getAttributeValue("topos").isEmpty()) {
+                                        toPos = withNode.getAttributeValue("topos");
                                     } else {
                                         toPos = null;
                                     }
-                                    if (toPos == null) {
-                                        if (rootToPos == null) {
-                                            addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName);
-                                        } else {
-                                            addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName, rootToPos);
-                                        }
+                                } else {
+                                    toPos = null;
+                                }
+                                if (toPos == null) {
+                                    if (rootToPos == null) {
+                                        addTransition(state, toState, withNode.getPcData(), withName);
                                     } else {
-                                        addTransition(state, toState, withNode.getFirstChild().getNodeValue(), withName, toPos);
+                                        addTransition(state, toState, withNode.getPcData(), withName, rootToPos);
                                     }
+                                } else {
+                                    addTransition(state, toState, withNode.getPcData(), withName, toPos);
                                 }
                                 withNode = withNode.getNextSibling();
                             }
