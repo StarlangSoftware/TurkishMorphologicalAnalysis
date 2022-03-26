@@ -627,7 +627,7 @@ public class Transition {
         if (TurkishLanguage.isFrontRoundedVowel(lastVowel(formationToCheck)) || (TurkishLanguage.isBackRoundedVowel(lastVowel(formationToCheck)) && root.notObeysVowelHarmonyDuringAgglutination())) {
             return formation + 'ü';
         }
-        if (TurkishLanguage.isFrontUnroundedVowel(lastVowel(formationToCheck)) || (lastVowel(formationToCheck) == 'a' && root.notObeysVowelHarmonyDuringAgglutination())) {
+        if (TurkishLanguage.isFrontUnroundedVowel(lastVowel(formationToCheck)) || ((lastVowel(formationToCheck) == 'a' || lastVowel(formationToCheck) == 'â') && root.notObeysVowelHarmonyDuringAgglutination())) {
             return formation + 'i';
         }
         if (TurkishLanguage.isBackRoundedVowel(lastVowel(formationToCheck))) {
