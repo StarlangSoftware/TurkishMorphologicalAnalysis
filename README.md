@@ -1,4 +1,4 @@
-Morphological Analysis
+Morphological Analysis [<img src=video1.jpg width="5%">](https://youtu.be/KxguxpbgDQc)
 ============
 
 ## Morphology
