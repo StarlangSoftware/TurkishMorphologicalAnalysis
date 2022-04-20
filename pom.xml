@@ -7,7 +7,7 @@
 
     <groupId>io.github.starlangsoftware</groupId>
     <artifactId>MorphologicalAnalysis</artifactId>
-    <version>1.0.52</version>
+    <version>1.0.53</version>
     <packaging>jar</packaging>
 
     <name>NlpToolkit.MorphologicalAnalysis</name>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
             <artifactId>Corpus</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10</version>
         </dependency>
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
