@@ -281,6 +281,14 @@ public class FsmMorphologicalAnalyzer {
      * with the name of DuplicateRoot.
      * Ex : Allak,
      * <p>
+     * !isPlural, !isPortmanteau and isCode, if root holds the conditions then it gets the state
+     * with the name of CodeRoot.
+     * Ex : 9400f,
+     * <p>
+     * !isPlural, !isPortmanteau and isMetric, if root holds the conditions then it gets the state
+     * with the name of MetricRoot.
+     * Ex : 11x8x12,
+     * <p>
      * !isPlural, !isPortmanteau and isNumeral, if root holds the conditions then it gets the state
      * with the name of CardinalRoot.
      * Ex : Yüz, bin
@@ -420,6 +428,14 @@ public class FsmMorphologicalAnalyzer {
                     }
                     if (root.isDuplicate()) {
                         currentFsmParse = new FsmParse(root, finiteStateMachine.getState("DuplicateRoot"));
+                        fsmParse.add(currentFsmParse);
+                    }
+                    if (root.isCode()) {
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("CodeRoot"));
+                        fsmParse.add(currentFsmParse);
+                    }
+                    if (root.isMetric()) {
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("MetricRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isNumeral()) {
@@ -612,7 +628,7 @@ public class FsmMorphologicalAnalyzer {
      * @param currentFsmParse FsmParse type input.
      * @param fsmParse        an ArrayList of FsmParse.
      * @param maxLength     Maximum length of the parse.
-     * @param root            TxtWord used to make transition.
+     * @param root            MorphologicalAnalysis.TxtWord used to make transition.
      */
     private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, int maxLength, TxtWord root) {
         State currentState = currentFsmParse.getFinalSuffix();
@@ -638,7 +654,7 @@ public class FsmMorphologicalAnalyzer {
      * @param currentFsmParse FsmParse type input.
      * @param fsmParse        an ArrayList of FsmParse.
      * @param surfaceForm     String to use during transition.
-     * @param root            TxtWord used to make transition.
+     * @param root            MorphologicalAnalysis.TxtWord used to make transition.
      */
     private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, String surfaceForm, TxtWord root) {
         State currentState = currentFsmParse.getFinalSuffix();
@@ -765,7 +781,7 @@ public class FsmMorphologicalAnalyzer {
      * The morphologicalAnalysis with 3 inputs is used to initialize an {@link ArrayList} and add a new FsmParse
      * with given root and state.
      *
-     * @param root        TxtWord input.
+     * @param root        MorphologicalAnalysis.TxtWord input.
      * @param surfaceForm String input to use for parsing.
      * @param state       String input.
      * @return parseWord method with newly populated FsmParse ArrayList and input surfaceForm.
@@ -806,7 +822,7 @@ public class FsmMorphologicalAnalyzer {
      * The generateAllParses with 2 inputs is used to generate all parses with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
      * and maximum length.
      *
-     * @param root        TxtWord input.
+     * @param root        MorphologicalAnalysis.TxtWord input.
      * @param maxLength Maximum length of the surface form.
      * @return parseWord method with newly populated FsmParse ArrayList and maximum length.
      */
@@ -825,7 +841,7 @@ public class FsmMorphologicalAnalyzer {
      * with given root. Then it calls initializeParseListFromRoot method to initialize list with newly created ArrayList, input root,
      * and input surfaceForm.
      *
-     * @param root        TxtWord input.
+     * @param root        MorphologicalAnalysis.TxtWord input.
      * @param surfaceForm String input to use for parsing.
      * @return parseWord method with newly populated FsmParse ArrayList and input surfaceForm.
      */
@@ -914,7 +930,7 @@ public class FsmMorphologicalAnalyzer {
      * returns true. If it is not a root word, then it initializes the parse list and returns the parseExists method with
      * this newly initialized list and surfaceForm.
      *
-     * @param rootWord    TxtWord root.
+     * @param rootWord    MorphologicalAnalysis.TxtWord root.
      * @param surfaceForm String input.
      * @param isProper    boolean variable indicates a word is proper or not.
      * @return true if surfaceForm is punctuation or double, otherwise returns parseExist method with given surfaceForm.
@@ -1333,7 +1349,7 @@ public class FsmMorphologicalAnalyzer {
      * root and surfaceForm.
      *
      * @param surfaceForm String to check.
-     * @param rootWord    TxtWord input root.
+     * @param rootWord    MorphologicalAnalysis.TxtWord input root.
      * @return true an analysis exists, otherwise return false.
      */
     public boolean morphologicalAnalysisExists(TxtWord rootWord, String surfaceForm) {
