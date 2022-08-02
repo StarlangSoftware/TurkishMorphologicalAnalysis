@@ -20,6 +20,10 @@
 </state>
 <state name="DuplicateRoot" start="yes" end="yes" originalpos="DUP">
 </state>
+<state name="CodeRoot" start="yes" end="yes" originalpos="CODE">
+</state>
+<state name="MetricRoot" start="yes" end="yes" originalpos="METRIC">
+</state>
 <state name="DeterminerRoot" start="yes" end="yes" originalpos="DET">
 </state>
 <state name="ConjunctionRoot" start="yes" end="yes" originalpos="CONJ">
