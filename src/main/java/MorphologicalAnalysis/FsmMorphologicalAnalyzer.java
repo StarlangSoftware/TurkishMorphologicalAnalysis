@@ -281,6 +281,14 @@ public class FsmMorphologicalAnalyzer {
      * with the name of DuplicateRoot.
      * Ex : Allak,
      * <p>
+     * !isPlural, !isPortmanteau and isCode, if root holds the conditions then it gets the state
+     * with the name of CodeRoot.
+     * Ex : 9400f,
+     * <p>
+     * !isPlural, !isPortmanteau and isMetric, if root holds the conditions then it gets the state
+     * with the name of MetricRoot.
+     * Ex : 11x8x12,
+     * <p>
      * !isPlural, !isPortmanteau and isNumeral, if root holds the conditions then it gets the state
      * with the name of CardinalRoot.
      * Ex : Yüz, bin
@@ -420,6 +428,14 @@ public class FsmMorphologicalAnalyzer {
                     }
                     if (root.isDuplicate()) {
                         currentFsmParse = new FsmParse(root, finiteStateMachine.getState("DuplicateRoot"));
+                        fsmParse.add(currentFsmParse);
+                    }
+                    if (root.isCode()) {
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("CodeRoot"));
+                        fsmParse.add(currentFsmParse);
+                    }
+                    if (root.isMetric()) {
+                        currentFsmParse = new FsmParse(root, finiteStateMachine.getState("MetricRoot"));
                         fsmParse.add(currentFsmParse);
                     }
                     if (root.isNumeral()) {

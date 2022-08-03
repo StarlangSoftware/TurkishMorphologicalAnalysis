@@ -488,6 +488,12 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * If it is "DuplicateRoot", it assigns concatenation of first item of formList and +DUP to the result String.
      * Ex : Allak
      * <p>
+     * If it is "CodeRoot", it assigns concatenation of first item of formList and +CODE to the result String.
+     * Ex : 5000-WX
+     * <p>
+     * If it is "MetricRoot", it assigns concatenation of first item of formList and +METRIC to the result String.
+     * Ex : 6cmx12cm
+     * <p>
      * If it is "QuestionRoot", it assigns concatenation of first item of formList and +QUES to the result String.
      * Ex : Mı
      * <p>
@@ -587,40 +593,48 @@ public class FsmParse extends MorphologicalParse implements Comparable {
                                                                                 if (suffixList.get(0).getName().equalsIgnoreCase("DuplicateRoot")) {
                                                                                     result = formList.get(0) + "+DUP";
                                                                                 } else {
-                                                                                    if (suffixList.get(0).getName().equalsIgnoreCase("QuestionRoot")) {
-                                                                                        result = "mi+QUES";
+                                                                                    if (suffixList.get(0).getName().equalsIgnoreCase("CodeRoot")) {
+                                                                                        result = formList.get(0) + "+CODE";
                                                                                     } else {
-                                                                                        if (suffixList.get(0).getName().equalsIgnoreCase("PostP")) {
-                                                                                            if (formList.get(0).equalsIgnoreCase("karşı") || formList.get(0).equalsIgnoreCase("ilişkin") || formList.get(0).equalsIgnoreCase("göre") || formList.get(0).equalsIgnoreCase("kadar") || formList.get(0).equalsIgnoreCase("ait") || formList.get(0).equalsIgnoreCase("yönelik") || formList.get(0).equalsIgnoreCase("rağmen") || formList.get(0).equalsIgnoreCase("değin") || formList.get(0).equalsIgnoreCase("dek") || formList.get(0).equalsIgnoreCase("doğru") || formList.get(0).equalsIgnoreCase("karşın") || formList.get(0).equalsIgnoreCase("dair") || formList.get(0).equalsIgnoreCase("atfen") || formList.get(0).equalsIgnoreCase("binaen") || formList.get(0).equalsIgnoreCase("hitaben") || formList.get(0).equalsIgnoreCase("istinaden") || formList.get(0).equalsIgnoreCase("mahsuben") || formList.get(0).equalsIgnoreCase("mukabil") || formList.get(0).equalsIgnoreCase("nazaran")) {
-                                                                                                result = formList.get(0) + "+POSTP+PCDAT";
+                                                                                        if (suffixList.get(0).getName().equalsIgnoreCase("MetricRoot")) {
+                                                                                            result = formList.get(0) + "+METRIC";
+                                                                                        } else {
+                                                                                            if (suffixList.get(0).getName().equalsIgnoreCase("QuestionRoot")) {
+                                                                                                result = "mi+QUES";
                                                                                             } else {
-                                                                                                if (formList.get(0).equalsIgnoreCase("sonra") || formList.get(0).equalsIgnoreCase("önce") || formList.get(0).equalsIgnoreCase("beri") || formList.get(0).equalsIgnoreCase("fazla") || formList.get(0).equalsIgnoreCase("dolayı") || formList.get(0).equalsIgnoreCase("itibaren") || formList.get(0).equalsIgnoreCase("başka") || formList.get(0).equalsIgnoreCase("çok") || formList.get(0).equalsIgnoreCase("evvel") || formList.get(0).equalsIgnoreCase("ötürü") || formList.get(0).equalsIgnoreCase("yana") || formList.get(0).equalsIgnoreCase("öte") || formList.get(0).equalsIgnoreCase("aşağı") || formList.get(0).equalsIgnoreCase("yukarı") || formList.get(0).equalsIgnoreCase("dışarı") || formList.get(0).equalsIgnoreCase("az") || formList.get(0).equalsIgnoreCase("gayrı")) {
-                                                                                                    result = formList.get(0) + "+POSTP+PCABL";
-                                                                                                } else {
-                                                                                                    if (formList.get(0).equalsIgnoreCase("yanısıra")) {
-                                                                                                        result = formList.get(0) + "+POSTP+PCGEN";
+                                                                                                if (suffixList.get(0).getName().equalsIgnoreCase("PostP")) {
+                                                                                                    if (formList.get(0).equalsIgnoreCase("karşı") || formList.get(0).equalsIgnoreCase("ilişkin") || formList.get(0).equalsIgnoreCase("göre") || formList.get(0).equalsIgnoreCase("kadar") || formList.get(0).equalsIgnoreCase("ait") || formList.get(0).equalsIgnoreCase("yönelik") || formList.get(0).equalsIgnoreCase("rağmen") || formList.get(0).equalsIgnoreCase("değin") || formList.get(0).equalsIgnoreCase("dek") || formList.get(0).equalsIgnoreCase("doğru") || formList.get(0).equalsIgnoreCase("karşın") || formList.get(0).equalsIgnoreCase("dair") || formList.get(0).equalsIgnoreCase("atfen") || formList.get(0).equalsIgnoreCase("binaen") || formList.get(0).equalsIgnoreCase("hitaben") || formList.get(0).equalsIgnoreCase("istinaden") || formList.get(0).equalsIgnoreCase("mahsuben") || formList.get(0).equalsIgnoreCase("mukabil") || formList.get(0).equalsIgnoreCase("nazaran")) {
+                                                                                                        result = formList.get(0) + "+POSTP+PCDAT";
                                                                                                     } else {
-                                                                                                        if (formList.get(0).equalsIgnoreCase("birlikte") || formList.get(0).equalsIgnoreCase("beraber")) {
-                                                                                                            result = formList.get(0) + "+POSTP+PCINS";
+                                                                                                        if (formList.get(0).equalsIgnoreCase("sonra") || formList.get(0).equalsIgnoreCase("önce") || formList.get(0).equalsIgnoreCase("beri") || formList.get(0).equalsIgnoreCase("fazla") || formList.get(0).equalsIgnoreCase("dolayı") || formList.get(0).equalsIgnoreCase("itibaren") || formList.get(0).equalsIgnoreCase("başka") || formList.get(0).equalsIgnoreCase("çok") || formList.get(0).equalsIgnoreCase("evvel") || formList.get(0).equalsIgnoreCase("ötürü") || formList.get(0).equalsIgnoreCase("yana") || formList.get(0).equalsIgnoreCase("öte") || formList.get(0).equalsIgnoreCase("aşağı") || formList.get(0).equalsIgnoreCase("yukarı") || formList.get(0).equalsIgnoreCase("dışarı") || formList.get(0).equalsIgnoreCase("az") || formList.get(0).equalsIgnoreCase("gayrı")) {
+                                                                                                            result = formList.get(0) + "+POSTP+PCABL";
                                                                                                         } else {
-                                                                                                            if (formList.get(0).equalsIgnoreCase("aşkın") || formList.get(0).equalsIgnoreCase("takiben")) {
-                                                                                                                result = formList.get(0) + "+POSTP+PCACC";
+                                                                                                            if (formList.get(0).equalsIgnoreCase("yanısıra")) {
+                                                                                                                result = formList.get(0) + "+POSTP+PCGEN";
                                                                                                             } else {
-                                                                                                                result = formList.get(0) + "+POSTP+PCNOM";
+                                                                                                                if (formList.get(0).equalsIgnoreCase("birlikte") || formList.get(0).equalsIgnoreCase("beraber")) {
+                                                                                                                    result = formList.get(0) + "+POSTP+PCINS";
+                                                                                                                } else {
+                                                                                                                    if (formList.get(0).equalsIgnoreCase("aşkın") || formList.get(0).equalsIgnoreCase("takiben")) {
+                                                                                                                        result = formList.get(0) + "+POSTP+PCACC";
+                                                                                                                    } else {
+                                                                                                                        result = formList.get(0) + "+POSTP+PCNOM";
+                                                                                                                    }
+                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     }
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            if (suffixList.get(0).getName().startsWith("PronounRoot")) {
-                                                                                                result = pronounTransition();
-                                                                                            } else {
-                                                                                                if (suffixList.get(0).getName().equalsIgnoreCase("OrdinalRoot")) {
-                                                                                                    result = formList.get(0) + "+NUM+ORD";
                                                                                                 } else {
-                                                                                                    if (suffixList.get(0).getName().startsWith("Adjective")) {
-                                                                                                        result = formList.get(0) + "+ADJ";
+                                                                                                    if (suffixList.get(0).getName().startsWith("PronounRoot")) {
+                                                                                                        result = pronounTransition();
+                                                                                                    } else {
+                                                                                                        if (suffixList.get(0).getName().equalsIgnoreCase("OrdinalRoot")) {
+                                                                                                            result = formList.get(0) + "+NUM+ORD";
+                                                                                                        } else {
+                                                                                                            if (suffixList.get(0).getName().startsWith("Adjective")) {
+                                                                                                                result = formList.get(0) + "+ADJ";
+                                                                                                            }
+                                                                                                        }
                                                                                                     }
                                                                                                 }
                                                                                             }
