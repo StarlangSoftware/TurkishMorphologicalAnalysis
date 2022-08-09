@@ -21,7 +21,7 @@ public class FiniteStateMachineTest {
 
     @org.junit.Test
     public void testStateCount() {
-        assertEquals(139, stateList.size());
+        assertEquals(141, stateList.size());
     }
 
     @org.junit.Test
@@ -32,7 +32,7 @@ public class FiniteStateMachineTest {
                 endStateCount++;
             }
         }
-        assertEquals(35, endStateCount);
+        assertEquals(37, endStateCount);
         CounterHashMap<String> posCounts = new CounterHashMap<>();
         for (State state : stateList){
             posCounts.put(state.getPos());
