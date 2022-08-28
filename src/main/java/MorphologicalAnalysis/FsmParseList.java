@@ -83,7 +83,8 @@ public class FsmParseList {
 
     /**
      * The getParseWithLongestRootWord method returns the parse with the longest root word. If more than one parse has the
-     * longest root word, the first parse with that root is returned.
+     * longest root word, the first parse with that root is returned. If the longest root word belongs to an exceptional
+     * case, the parse with the next longest root word that does not, is returned.
      *
      * @return FsmParse Parse with the longest root word.
      */
@@ -99,17 +100,27 @@ public class FsmParseList {
         return bestParse;
     }
 
+    /**
+     * The isLongestRootException method returns true if the longest root word belongs to an exceptional case, false otherwise.
+     *
+     * @param fsmParse {@link FsmParse} input.
+     * @return true if the longest root belongs to an exceptional case, false otherwise.
+     */
     private boolean isLongestRootException(FsmParse fsmParse) {
         String surfaceForm = fsmParse.getSurfaceForm();
         String root = fsmParse.getWord().getName();
-        String parse = fsmParse.toString();
 
         for (int i = 0; i < longestRootExceptions.length; i++) {
-            if(surfaceForm.endsWith(longestRootExceptions[i].split(" ")[0]) && root.endsWith(longestRootExceptions[i].split(" ")[1])
-                    && (parse.split("\\+",2)[1].startsWith(longestRootExceptions[i].split(" ")[2]))){
+            String[] exceptionItems = longestRootExceptions[i].split(" ");
+            String surfaceFormEnding = exceptionItems[0];
+            String longestRootEnding = exceptionItems[1];
+            String longestRootPos = exceptionItems[2];
+            String possibleRootPos = exceptionItems[3];
+            String possibleRoot = surfaceForm.replaceFirst(surfaceFormEnding,"");
+
+            if((surfaceForm.endsWith(surfaceFormEnding)) && (root.endsWith(longestRootEnding)) && (fsmParse.getRootPos().equals(longestRootPos))) {
                 for (FsmParse currentParse: fsmParses) {
-                    if(currentParse.toString().split("\\+",2)[0].equals(surfaceForm.replaceFirst(longestRootExceptions[i].split(" ")[0],""))
-                            && currentParse.toString().split("\\+",2)[1].startsWith(longestRootExceptions[i].split(" ")[3])) {
+                    if((currentParse.getWord().getName().equals(possibleRoot)) && (currentParse.getRootPos().equals(possibleRootPos))) {
                         return true;
                     }
                 }
