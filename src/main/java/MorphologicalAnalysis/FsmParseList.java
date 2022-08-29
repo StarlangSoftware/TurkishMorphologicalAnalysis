@@ -110,17 +110,17 @@ public class FsmParseList {
         String surfaceForm = fsmParse.getSurfaceForm();
         String root = fsmParse.getWord().getName();
 
-        for (int i = 0; i < longestRootExceptions.length; i++) {
-            String[] exceptionItems = longestRootExceptions[i].split(" ");
+        for (String longestRootException : longestRootExceptions) {
+            String[] exceptionItems = longestRootException.split(" ");
             String surfaceFormEnding = exceptionItems[0];
             String longestRootEnding = exceptionItems[1];
             String longestRootPos = exceptionItems[2];
             String possibleRootPos = exceptionItems[3];
-            String possibleRoot = surfaceForm.replaceFirst(surfaceFormEnding,"");
+            String possibleRoot = surfaceForm.replaceFirst(surfaceFormEnding, "");
 
-            if((surfaceForm.endsWith(surfaceFormEnding)) && (root.endsWith(longestRootEnding)) && (fsmParse.getRootPos().equals(longestRootPos))) {
-                for (FsmParse currentParse: fsmParses) {
-                    if((currentParse.getWord().getName().equals(possibleRoot)) && (currentParse.getRootPos().equals(possibleRootPos))) {
+            if ((surfaceForm.endsWith(surfaceFormEnding)) && (root.endsWith(longestRootEnding)) && (fsmParse.getRootPos().equals(longestRootPos))) {
+                for (FsmParse currentParse : fsmParses) {
+                    if ((currentParse.getWord().getName().equals(possibleRoot)) && (currentParse.getRootPos().equals(possibleRootPos))) {
                         return true;
                     }
                 }
