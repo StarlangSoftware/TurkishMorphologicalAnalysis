@@ -1,13 +1,16 @@
 package MorphologicalAnalysis;
 
 import Corpus.Sentence;
-import Dictionary.TurkishWordComparator;
 import Dictionary.TxtDictionary;
 import Dictionary.TxtWord;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -232,5 +235,37 @@ public class FsmMorphologicalAnalyzerTest {
         assertEquals("Dün yaptığı güreş maçında alt oldu sanki", fsm.replaceWord(new Sentence("Dün yaptığı güreş maçında mağlup oldu sanki"), "mağlup ol", "alt ol").toString());
         assertEquals("Yemin billah vermişlerdi vazoyu kırmadığına", fsm.replaceWord(new Sentence("Yemin etmişlerdi vazoyu kırmadığına"), "yemin et", "yemin billah ver").toString());
         assertEquals("Yemin etmişlerdi vazoyu kırmadığına", fsm.replaceWord(new Sentence("Yemin billah vermişlerdi vazoyu kırmadığına"), "yemin billah ver", "yemin et").toString());
+    }
+
+    @Test
+    public void testGenerateAllParses() {
+        String[] testWords = {"açıkla", "yıldönümü", "resim", "hal", "cenk", "emlak", "git", "kalp", "kavur", "ye", "yemek", "göç", "ak", "sıska", "yıka", "bul",
+                "cevapla", "coş", "böl", "del", "giy", "kaydol", "anla", "çök", "çık", "doldur", "azal", "göster", "aksa"};
+        ArrayList<TxtWord> words = new ArrayList<>();
+        ArrayList<FsmParse> parsesGenerated;
+        BufferedReader reader;
+        String line;
+
+        for (int i = 1; i < testWords.length; i++) {
+            words.add((TxtWord)fsm.getDictionary().getWord(testWords[i]));
+        }
+        try {
+            for (TxtWord word : words) {
+                ArrayList<String> parsesExpected = new ArrayList<>();
+                reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("\\parses\\" + word.getName() + ".txt")), StandardCharsets.UTF_8));
+                while ((line = reader.readLine()) != null) {
+                    parsesExpected.add(line.split(" ")[1]);
+                }
+                reader.close();
+                parsesGenerated = fsm.generateAllParses(word, word.getName().length() + 5);
+                assertEquals("\"" + word.getName() + ".txt\"", parsesExpected.size(), parsesGenerated.size());
+                for (FsmParse parseGenerated : parsesGenerated) {
+                    assertTrue( "\"" + word.getName() + ".txt\"", parsesExpected.contains(parseGenerated.toString()));
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
