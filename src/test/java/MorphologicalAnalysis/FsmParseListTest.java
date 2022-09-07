@@ -1,6 +1,5 @@
 package MorphologicalAnalysis;
 
-import Corpus.Corpus;
 import Dictionary.Word;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class FsmParseListTest {
     FsmParseList parse1, parse2, parse3, parse4, parse5, parse6, parse7, parse8, parse9, parse10, parse11, parse12,
-            parse13, parse14;
+            parse13, parse14, parse15, parse16, parse17, parse18;
 
     @Before
     public void setUp() {
@@ -28,6 +27,10 @@ public class FsmParseListTest {
         parse12 = fsm.morphologicalAnalysis("o");
         parse13 = fsm.morphologicalAnalysis("arabası");
         parse14 = fsm.morphologicalAnalysis("sana");
+        parse15 = fsm.morphologicalAnalysis("açacağını");
+        parse16 = fsm.morphologicalAnalysis("kollarımız");
+        parse17 = fsm.morphologicalAnalysis("yapmamızı");
+        parse18 = fsm.morphologicalAnalysis("koşmalıyız");
     }
 
     @Test
@@ -64,6 +67,10 @@ public class FsmParseListTest {
         assertEquals(new Word("değerlendirme"), parse4.getParseWithLongestRootWord().root);
         assertEquals(new Word("soruşturma"), parse5.getParseWithLongestRootWord().root);
         assertEquals(new Word("karşılaştırmalı"), parse6.getParseWithLongestRootWord().root);
+        assertEquals(new Word("aç"), parse15.getParseWithLongestRootWord().root);
+        assertEquals(new Word("kol"), parse16.getParseWithLongestRootWord().root);
+        assertEquals(new Word("yap"), parse17.getParseWithLongestRootWord().root);
+        assertEquals(new Word("koş"), parse18.getParseWithLongestRootWord().root);
     }
 
     @Test
