@@ -245,7 +245,7 @@ public class FsmMorphologicalAnalyzerTest {
         ArrayList<FsmParse> parsesGenerated;
         BufferedReader reader;
         String line;
-        for (int i = 1; i < testWords.length; i++) {
+        for (int i = 0; i < testWords.length; i++) {
             TxtWord word = (TxtWord) fsm.getDictionary().getWord(testWords[i]);
             ArrayList<String> parsesExpected = new ArrayList<>();
             reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("parses/" + word.getName() + ".txt")), StandardCharsets.UTF_8));
