@@ -722,7 +722,7 @@ public class FsmMorphologicalAnalyzer {
             if (currentState.isEndState() && currentSurfaceForm.length() <= maxLength) {
                 exists = false;
                 for (i = 0; i < result.size(); i++) {
-                    if (currentFsmParse.suffixList().equalsIgnoreCase(result.get(i).suffixList())) {
+                    if (currentFsmParse.suffixList().equals(result.get(i).suffixList())) {
                         exists = true;
                         break;
                     }
@@ -762,7 +762,7 @@ public class FsmMorphologicalAnalyzer {
             if (currentState.isEndState() && currentSurfaceForm.compareTo(surfaceForm) == 0) {
                 exists = false;
                 for (i = 0; i < result.size(); i++) {
-                    if (currentFsmParse.suffixList().equalsIgnoreCase(result.get(i).suffixList())) {
+                    if (currentFsmParse.suffixList().equals(result.get(i).suffixList())) {
                         exists = true;
                         break;
                     }
