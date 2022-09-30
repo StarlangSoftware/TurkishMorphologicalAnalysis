@@ -137,7 +137,7 @@ public class FsmParseList {
     public FsmParse getParseWithLongestRootWord() {
         int maxLength = -1;
         FsmParse bestParse;
-        if(fsmParses.size() != 0) {
+        if(fsmParses.size() > 0) {
             bestParse = fsmParses.get(0);
         }
         else {
