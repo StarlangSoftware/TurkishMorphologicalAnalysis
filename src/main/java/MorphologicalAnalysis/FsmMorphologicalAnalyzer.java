@@ -707,12 +707,12 @@ public class FsmMorphologicalAnalyzer {
      */
     private ArrayList<FsmParse> parseWord(ArrayList<FsmParse> fsmParse, int maxLength) {
         ArrayList<FsmParse> result;
+        ArrayList<String> resultSuffixList = new ArrayList<>();
         FsmParse currentFsmParse;
         TxtWord root;
         State currentState;
         String currentSurfaceForm;
-        int i;
-        boolean exists;
+        String currentSuffixList;
         result = new ArrayList<>();
         while (fsmParse.size() > 0) {
             currentFsmParse = fsmParse.remove(0);
@@ -720,16 +720,11 @@ public class FsmMorphologicalAnalyzer {
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.length() <= maxLength) {
-                exists = false;
-                for (i = 0; i < result.size(); i++) {
-                    if (currentFsmParse.suffixList().equals(result.get(i).suffixList())) {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists) {
+                currentSuffixList = currentFsmParse.suffixList();
+                if (!resultSuffixList.contains(currentSuffixList)) {
                     result.add(currentFsmParse);
                     currentFsmParse.constructInflectionalGroups();
+                    resultSuffixList.add(currentSuffixList);
                 }
             }
             addNewParsesFromCurrentParse(currentFsmParse, fsmParse, maxLength, root);
@@ -747,12 +742,12 @@ public class FsmMorphologicalAnalyzer {
      */
     private ArrayList<FsmParse> parseWord(ArrayList<FsmParse> fsmParse, String surfaceForm) {
         ArrayList<FsmParse> result;
+        ArrayList<String> resultSuffixList = new ArrayList<>();
         FsmParse currentFsmParse;
         TxtWord root;
         State currentState;
         String currentSurfaceForm;
-        int i;
-        boolean exists;
+        String currentSuffixList;
         result = new ArrayList<>();
         while (fsmParse.size() > 0) {
             currentFsmParse = fsmParse.remove(0);
@@ -760,16 +755,11 @@ public class FsmMorphologicalAnalyzer {
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.compareTo(surfaceForm) == 0) {
-                exists = false;
-                for (i = 0; i < result.size(); i++) {
-                    if (currentFsmParse.suffixList().equals(result.get(i).suffixList())) {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists) {
+                currentSuffixList = currentFsmParse.suffixList();
+                if (!resultSuffixList.contains(currentSuffixList)) {
                     result.add(currentFsmParse);
                     currentFsmParse.constructInflectionalGroups();
+                    resultSuffixList.add(currentSuffixList);
                 }
             }
             addNewParsesFromCurrentParse(currentFsmParse, fsmParse, surfaceForm, root);
