@@ -8,7 +8,6 @@ public class Transition {
     private State toState;
     private String with;
     private String withName;
-    private String formationToCheck;
     private String toPos;
 
     /**
@@ -270,7 +269,7 @@ public class Transition {
                 return "sana";
             }
         }
-        formationToCheck = stem;
+        String formationToCheck;
         //---vowelEChangesToIDuringYSuffixation---
         //de->d(i)yor, ye->y(i)yor
         if (rootWord && withFirstChar() == 'y' && root.vowelEChangesToIDuringYSuffixation() && (with.charAt(1) != 'H' || root.getName().equals("ye"))) {
