@@ -630,7 +630,7 @@ public class FsmMorphologicalAnalyzer {
      * @param maxLength     Maximum length of the parse.
      * @param root            TxtWord used to make transition.
      */
-    private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, int maxLength, TxtWord root) {
+    private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, Queue<FsmParse> fsmParse, int maxLength, TxtWord root) {
         State currentState = currentFsmParse.getFinalSuffix();
         String currentSurfaceForm = currentFsmParse.getSurfaceForm();
         for (Transition currentTransition : finiteStateMachine.getTransitions(currentState)) {
@@ -656,7 +656,7 @@ public class FsmMorphologicalAnalyzer {
      * @param surfaceForm     String to use during transition.
      * @param root            TxtWord used to make transition.
      */
-    private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, ArrayList<FsmParse> fsmParse, String surfaceForm, TxtWord root) {
+    private void addNewParsesFromCurrentParse(FsmParse currentFsmParse, Queue<FsmParse> fsmParse, String surfaceForm, TxtWord root) {
         State currentState = currentFsmParse.getFinalSuffix();
         String currentSurfaceForm = currentFsmParse.getSurfaceForm();
         for (Transition currentTransition : finiteStateMachine.getTransitions(currentState)) {
@@ -684,15 +684,16 @@ public class FsmMorphologicalAnalyzer {
         TxtWord root;
         State currentState;
         String currentSurfaceForm;
-        while (fsmParse.size() > 0) {
-            currentFsmParse = fsmParse.remove(0);
+        LinkedList<FsmParse> parseQueue = new LinkedList<>(fsmParse);
+        while (!parseQueue.isEmpty()) {
+            currentFsmParse = parseQueue.remove();
             root = (TxtWord) currentFsmParse.getWord();
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.compareTo(surfaceForm) == 0) {
                 return true;
             }
-            addNewParsesFromCurrentParse(currentFsmParse, fsmParse, surfaceForm, root);
+            addNewParsesFromCurrentParse(currentFsmParse, parseQueue, surfaceForm, root);
         }
         return false;
     }
@@ -713,9 +714,10 @@ public class FsmMorphologicalAnalyzer {
         State currentState;
         String currentSurfaceForm;
         String currentSuffixList;
+        LinkedList<FsmParse> parseQueue = new LinkedList<>(fsmParse);
         result = new ArrayList<>();
-        while (fsmParse.size() > 0) {
-            currentFsmParse = fsmParse.remove(0);
+        while (!parseQueue.isEmpty()) {
+            currentFsmParse = parseQueue.remove();
             root = (TxtWord) currentFsmParse.getWord();
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
@@ -727,7 +729,7 @@ public class FsmMorphologicalAnalyzer {
                     resultSuffixList.add(currentSuffixList);
                 }
             }
-            addNewParsesFromCurrentParse(currentFsmParse, fsmParse, maxLength, root);
+            addNewParsesFromCurrentParse(currentFsmParse, parseQueue, maxLength, root);
         }
         return result;
     }
@@ -748,9 +750,10 @@ public class FsmMorphologicalAnalyzer {
         State currentState;
         String currentSurfaceForm;
         String currentSuffixList;
+        LinkedList<FsmParse> parseQueue = new LinkedList<>(fsmParse);
         result = new ArrayList<>();
-        while (fsmParse.size() > 0) {
-            currentFsmParse = fsmParse.remove(0);
+        while (!parseQueue.isEmpty()) {
+            currentFsmParse = parseQueue.remove();
             root = (TxtWord) currentFsmParse.getWord();
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
@@ -762,7 +765,7 @@ public class FsmMorphologicalAnalyzer {
                     resultSuffixList.add(currentSuffixList);
                 }
             }
-            addNewParsesFromCurrentParse(currentFsmParse, fsmParse, surfaceForm, root);
+            addNewParsesFromCurrentParse(currentFsmParse, parseQueue, surfaceForm, root);
         }
         return result;
     }
