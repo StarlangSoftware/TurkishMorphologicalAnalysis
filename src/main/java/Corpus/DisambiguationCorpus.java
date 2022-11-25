@@ -12,8 +12,7 @@ public class DisambiguationCorpus extends Corpus {
      * Constructor which creates an {@link ArrayList} of sentences and a {@link CounterHashMap} of wordList.
      */
     public DisambiguationCorpus() {
-        sentences = new ArrayList<>();
-        wordList = new CounterHashMap<>();
+        super();
     }
 
     /**
