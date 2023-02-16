@@ -5,7 +5,6 @@ import DataStructure.Cache.LRUCache;
 import Dictionary.Trie.Trie;
 import Dictionary.*;
 import Util.FileUtils;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -1080,9 +1079,23 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
+     * The isCode method takes surfaceForm String as input and checks if it consists of both letters and numbers
+     *
+     * @param surfaceForm String to check for code-like word.
+     * @return true if it is a code-like word, return false otherwise.
+     */
+    public boolean isCode(String surfaceForm) {
+        if (surfaceForm == null || surfaceForm.length() == 0) {
+            return false;
+        }
+        return patternMatches(".*[0-9].*", surfaceForm) && patternMatches(".*[a-zA-ZçöğüşıÇÖĞÜŞİ].*", surfaceForm);
+    }
+
+    /**
      * The robustMorphologicalAnalysis is used to analyse surfaceForm String. First it gets the currentParse of the surfaceForm
      * then, if the size of the currentParse is 0, and given surfaceForm is a proper noun, it adds the surfaceForm
-     * whose state name is ProperRoot to an {@link ArrayList}, of it is not a proper noon, it adds the surfaceForm
+     * whose state name is ProperRoot to an {@link ArrayList}, if it is a code-like word, it adds the surfaceForm
+     * whose state name is CodeRoot to the {@link ArrayList} and if it is neither, it adds the surfaceForm
      * whose state name is NominalRoot to the {@link ArrayList}.
      *
      * @param surfaceForm String to analyse.
@@ -1100,7 +1113,12 @@ public class FsmMorphologicalAnalyzer {
             if (isProperNoun(surfaceForm)) {
                 fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("ProperRoot")));
                 return new FsmParseList(parseWord(fsmParse, surfaceForm));
-            } else {
+            }
+            else if (isCode(surfaceForm)) {
+                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
+                return new FsmParseList(parseWord(fsmParse, surfaceForm));
+            }
+            else {
                 fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
                 return new FsmParseList(parseWord(fsmParse, surfaceForm));
             }
@@ -1154,18 +1172,18 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
-     * The isInteger method compares input surfaceForm with regex \+?\d+ and returns the result.
+     * The isInteger method compares input surfaceForm with regex [-+]?\d+ and returns the result.
      * Supports positive integer checks only.
      *
      * @param surfaceForm String to check.
      * @return true if surfaceForm matches with the regex.
      */
     private boolean isInteger(String surfaceForm) {
-        if (!patternMatches("\\+?\\d+", surfaceForm))
+        if (!patternMatches("[-+]?\\d+", surfaceForm))
             return false;
         int len = surfaceForm.length();
         if (len < 10) {
-            return true;        //Most common scenario. Return after a single check.
+            return true;
         } else {
             if (len > 10) {
                 return false;
@@ -1176,13 +1194,13 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
-     * The isDouble method compares input surfaceForm with regex \+?(\d+)?\.\d* and returns the result.
+     * The isDouble method compares input surfaceForm with the regex ([-+]?\d+\.\d+)|(\d*\.\d+) and returns the result.
      *
      * @param surfaceForm String to check.
      * @return true if surfaceForm matches with the regex.
      */
     private boolean isDouble(String surfaceForm) {
-        return patternMatches("\\+?(\\d+)?\\.\\d*", surfaceForm);
+        return patternMatches("([-+]?\\d+\\.\\d+)|(\\d*\\.\\d+)", surfaceForm);
     }
 
     /**
