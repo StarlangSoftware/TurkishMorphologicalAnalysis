@@ -1084,7 +1084,7 @@ public class FsmMorphologicalAnalyzer {
      * @param surfaceForm String to check for code-like word.
      * @return true if it is a code-like word, return false otherwise.
      */
-    public boolean isCode(String surfaceForm) {
+    private boolean isCode(String surfaceForm) {
         if (surfaceForm == null || surfaceForm.length() == 0) {
             return false;
         }
