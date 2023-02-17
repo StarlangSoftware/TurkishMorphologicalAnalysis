@@ -1112,16 +1112,14 @@ public class FsmMorphologicalAnalyzer {
             fsmParse = new ArrayList<>(1);
             if (isProperNoun(surfaceForm)) {
                 fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("ProperRoot")));
-                return new FsmParseList(parseWord(fsmParse, surfaceForm));
+            } else {
+                if (isCode(surfaceForm)) {
+                    fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
+                } else {
+                    fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
+                }
             }
-            else if (isCode(surfaceForm)) {
-                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
-                return new FsmParseList(parseWord(fsmParse, surfaceForm));
-            }
-            else {
-                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
-                return new FsmParseList(parseWord(fsmParse, surfaceForm));
-            }
+            return new FsmParseList(parseWord(fsmParse, surfaceForm));
         } else {
             return currentParse;
         }
