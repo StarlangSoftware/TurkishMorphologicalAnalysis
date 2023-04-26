@@ -23,6 +23,16 @@ public class FsmMorphologicalAnalyzerTest {
     }
 
     @Test
+    public void morphologicalAnalysisSpecialProperNoun() {
+        assertTrue(fsm.morphologicalAnalysis("Times'ın").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Times'tır").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Times'mış").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Twitter'ın").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Twitter'dır").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Twitter'mış").size() != 0);
+    }
+
+    @Test
     public void morphologicalAnalysisDataTimeNumber() {
         assertTrue(fsm.morphologicalAnalysis("3/4").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("3\\/4").size() != 0);
