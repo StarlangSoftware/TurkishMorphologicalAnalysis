@@ -564,6 +564,37 @@ public class MetamorphicParse implements Serializable {
     }
 
     /**
+     * Given a combined meta-suffix such as 'yDHlAr', it returns an array list of meta-suffixes as 'yDH' and 'lAr'
+     * @param combinedSuffix A string of combined meta suffixes
+     * @return Returns an array list of meta-suffixes
+     */
+    public static ArrayList<String> createWithList(String combinedSuffix) {
+        ArrayList<String> list = new ArrayList<>();
+        if (combinedSuffix.equals("HnA")) {
+            list.add("H");
+            list.add("nA");
+            return list;
+        }
+        while (combinedSuffix.length() > 0) {
+            for (int i = combinedSuffix.length(); i >= 0; i--) {
+                boolean found = false;
+                for (String metaMorpheme : metaMorphemes) {
+                    if (combinedSuffix.substring(0, i).equals(metaMorpheme)) {
+                        list.add(combinedSuffix.substring(0, i));
+                        combinedSuffix = combinedSuffix.substring(i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * The size method returns the size of the metaMorphemeList.
      *
      * @return the size of the metaMorphemeList.

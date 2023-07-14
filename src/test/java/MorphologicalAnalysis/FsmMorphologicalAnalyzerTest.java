@@ -3,6 +3,7 @@ package MorphologicalAnalysis;
 import Corpus.Sentence;
 import Dictionary.TxtDictionary;
 import Dictionary.TxtWord;
+import Util.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Scanner;
 
+import static MorphologicalAnalysis.MetamorphicParse.createWithList;
 import static org.junit.Assert.*;
 
 public class FsmMorphologicalAnalyzerTest {
@@ -20,6 +23,34 @@ public class FsmMorphologicalAnalyzerTest {
     @Before
     public void setUp() {
         fsm = new FsmMorphologicalAnalyzer();
+    }
+
+    private void createSuffixList(String fileName, String[] examples){
+        Scanner suffixInput;
+        String metaSuffix;
+        suffixInput = new Scanner(FileUtils.getInputStream(fileName));
+        while (suffixInput.hasNext()) {
+            metaSuffix = suffixInput.next();
+            ArrayList<String> list = createWithList(metaSuffix);
+            for (String word : examples) {
+                String added = word;
+                for (String suffix : list) {
+                    Transition transition = new Transition(suffix);
+                    added = transition.makeTransition((TxtWord) fsm.getDictionary().getWord(word), added);
+                }
+                if (added.startsWith(word)) {
+                    System.out.println(added.substring(word.length()));
+                }
+            }
+        }
+        suffixInput.close();
+    }
+    @Test
+    public void createSuffixList() {
+        String[] nouns = {"yara", "av", "ev", "sene", "yapı", "kırım", "kedi", "zeytin", "koro", "kor", "indikatör", "banliyö", "boru", "iridyum", "güdü", "ölüm"};
+        String[] verbs = {"kamçıla", "kanatlan", "kandilleş", "kaşele", "kaşı", "kaşın", "ekşi", "kemir", "hallol", "göm", "koru", "koştur", "sürü", "köpür"};
+        createSuffixList("noun-meta-suffixes.txt", nouns);
+        createSuffixList("verb-meta-suffixes.txt", verbs);
     }
 
     @Test

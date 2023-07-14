@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static MorphologicalAnalysis.MetamorphicParse.createWithList;
+
 public class FsmMorphologicalAnalyzer {
 
     private Trie dictionaryTrie;
