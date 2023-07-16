@@ -64,6 +64,14 @@ public class FsmMorphologicalAnalyzerTest {
     }
 
     @Test
+    public void morphologicalAnalysisNewWords() {
+        assertTrue(fsm.robustMorphologicalAnalysis("googlecılardan").size() != 0);
+        assertTrue(fsm.robustMorphologicalAnalysis("zaptıraplaştırılmayana").size() != 0);
+        assertTrue(fsm.robustMorphologicalAnalysis("abzürtleşenmiş").size() != 0);
+        assertTrue(fsm.robustMorphologicalAnalysis("vışlığından").size() != 0);
+    }
+
+    @Test
     public void morphologicalAnalysisDataTimeNumber() {
         assertTrue(fsm.morphologicalAnalysis("3/4").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("3\\/4").size() != 0);

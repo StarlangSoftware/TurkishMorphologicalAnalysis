@@ -10,11 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static MorphologicalAnalysis.MetamorphicParse.createWithList;
-
 public class FsmMorphologicalAnalyzer {
 
     private Trie dictionaryTrie;
+    private Trie suffixTrie;
     private HashMap<String, String> parsedSurfaceForms = null;
     private FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
@@ -72,6 +71,7 @@ public class FsmMorphologicalAnalyzer {
     public FsmMorphologicalAnalyzer(String fileName, TxtDictionary dictionary, int cacheSize) {
         this.dictionary = dictionary;
         finiteStateMachine = new FiniteStateMachine(fileName);
+        prepareSuffixTrie();
         dictionaryTrie = dictionary.prepareTrie();
         if (cacheSize > 0){
             cache = new LRUCache<>(cacheSize);
@@ -99,6 +99,25 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmMorphologicalAnalyzer(TxtDictionary dictionary) {
         this("turkish_finite_state_machine.xml", dictionary, 10000000);
+    }
+
+    private String reverseString(String s){
+        StringBuilder result = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--){
+            result.append(s.charAt(i));
+        }
+        return result.toString();
+    }
+
+    private void prepareSuffixTrie(){
+        suffixTrie = new Trie();
+        Scanner inputFile = new Scanner(FileUtils.getInputStream("suffixes.txt"));
+        while (inputFile.hasNext()){
+            String suffix = inputFile.next();
+            String reverseSuffix = reverseString(suffix);
+            suffixTrie.addWord(reverseSuffix, new Word(reverseSuffix));
+        }
+        inputFile.close();
     }
 
     public void addParsedSurfaceForms(String fileName){
@@ -1093,6 +1112,32 @@ public class FsmMorphologicalAnalyzer {
         return patternMatches(".*[0-9].*", surfaceForm) && patternMatches(".*[a-zA-ZçöğüşıÇÖĞÜŞİ].*", surfaceForm);
     }
 
+    private TxtWord rootOfPossiblyNewWord(String surfaceForm){
+        HashSet<Word> words = suffixTrie.getWordsWithPrefix(reverseString(surfaceForm));
+        int maxLength = 0;
+        String longestWord = null;
+        for (Word word : words){
+            if (word.getName().length() > maxLength){
+                longestWord = surfaceForm.substring(0, surfaceForm.length() - word.getName().length());
+                maxLength = word.getName().length();
+            }
+        }
+        if (maxLength != 0){
+            TxtWord newWord;
+            if (longestWord.endsWith("ğ")){
+                longestWord = longestWord.substring(0, longestWord.length() - 1) + "k";
+                newWord = new TxtWord(longestWord, "CL_ISIM");
+                newWord.addFlag("IS_SD");
+            } else {
+                newWord = new TxtWord(longestWord, "CL_ISIM");
+                newWord.addFlag("CL_FIIL");
+            }
+            dictionaryTrie.addWord(longestWord, newWord);
+            return newWord;
+        }
+        return null;
+    }
+
     /**
      * The robustMorphologicalAnalysis is used to analyse surfaceForm String. First it gets the currentParse of the surfaceForm
      * then, if the size of the currentParse is 0, and given surfaceForm is a proper noun, it adds the surfaceForm
@@ -1118,7 +1163,13 @@ public class FsmMorphologicalAnalyzer {
                 if (isCode(surfaceForm)) {
                     fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
                 } else {
-                    fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
+                    TxtWord newRoot = rootOfPossiblyNewWord(surfaceForm);
+                    if (newRoot != null){
+                        fsmParse.add(new FsmParse(newRoot, finiteStateMachine.getState("VerbalRoot")));
+                        fsmParse.add(new FsmParse(newRoot, finiteStateMachine.getState("NominalRoot")));
+                    } else {
+                        fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
+                    }
                 }
             }
             return new FsmParseList(parseWord(fsmParse, surfaceForm));
