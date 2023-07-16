@@ -47,8 +47,8 @@ public class FsmMorphologicalAnalyzerTest {
     }
     @Test
     public void createSuffixList() {
-        String[] nouns = {"yara", "av", "ev", "sene", "yapı", "kırım", "kedi", "zeytin", "koro", "kor", "indikatör", "banliyö", "boru", "iridyum", "güdü", "ölüm"};
-        String[] verbs = {"kamçıla", "kanatlan", "kandilleş", "kaşele", "kaşı", "kaşın", "ekşi", "kemir", "hallol", "göm", "koru", "koştur", "sürü", "köpür"};
+        String[] nouns = {"yara", "kitap", "ev", "sene", "ebediyet", "kalıt", "yapı", "kırım", "karbonit", "kedi", "zeytin", "koro", "kor", "katot", "kızılkök", "indikatör", "banliyö", "boru", "iridyum", "küp", "güdü", "ölüm"};
+        String[] verbs = {"kamçıla", "yap", "kanatlan", "kandilleş", "kaşele", "kaşı", "kaşın", "yırt", "ekşi", "kemir", "dik", "dök", "hallol", "göm", "sok", "koru", "koştur", "büyüt", "sürü", "köpür"};
         createSuffixList("noun-meta-suffixes.txt", nouns);
         createSuffixList("verb-meta-suffixes.txt", verbs);
     }
