@@ -45,7 +45,6 @@ public class FsmMorphologicalAnalyzerTest {
         }
         suffixInput.close();
     }
-    @Test
     public void createSuffixList() {
         String[] nouns = {"yara", "kitap", "ev", "sene", "ebediyet", "kalıt", "yapı", "kırım", "karbonit", "kedi", "zeytin", "koro", "kor", "katot", "kızılkök", "indikatör", "banliyö", "boru", "iridyum", "küp", "güdü", "ölüm"};
         String[] verbs = {"kamçıla", "yap", "kanatlan", "kandilleş", "kaşele", "kaşı", "kaşın", "yırt", "ekşi", "kemir", "dik", "dök", "hallol", "göm", "sok", "koru", "koştur", "büyüt", "sürü", "köpür"};
