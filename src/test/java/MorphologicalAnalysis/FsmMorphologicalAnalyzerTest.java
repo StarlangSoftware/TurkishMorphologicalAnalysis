@@ -81,18 +81,14 @@ public class FsmMorphologicalAnalyzerTest {
             if (word.isNominal() || word.isAdjective()) {
                 for (ArrayList<String> list : nounList) {
                     String added = addSuffixes(word.getName(), list);
-                    if (fsm.morphologicalAnalysis(added).size() > 0){
-                        output.println(added);
-                    }
+                    output.println(added);
                 }
                 output.println(word.getName());
             }
             if (word.isVerb()) {
                 for (ArrayList<String> list : verbList) {
                     String added = addSuffixes(word.getName(), list);
-                    if (fsm.morphologicalAnalysis(added).size() > 0){
-                        output.println(added);
-                    }
+                    output.println(added);
                 }
                 output.println(word.getName());
             }
