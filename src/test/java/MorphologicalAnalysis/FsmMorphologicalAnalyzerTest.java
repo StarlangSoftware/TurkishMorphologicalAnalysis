@@ -3,6 +3,7 @@ package MorphologicalAnalysis;
 import Corpus.Sentence;
 import Dictionary.TxtDictionary;
 import Dictionary.TxtWord;
+import Dictionary.Word;
 import Util.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,31 +26,84 @@ public class FsmMorphologicalAnalyzerTest {
         fsm = new FsmMorphologicalAnalyzer();
     }
 
-    private void createSuffixList(String fileName, String[] examples){
+    private ArrayList<ArrayList<String>> createWithLists(String fileName) {
+        ArrayList<ArrayList<String>> withList = new ArrayList<>();
         Scanner suffixInput;
         String metaSuffix;
         suffixInput = new Scanner(FileUtils.getInputStream(fileName));
         while (suffixInput.hasNext()) {
             metaSuffix = suffixInput.next();
-            ArrayList<String> list = createWithList(metaSuffix);
+            withList.add(createWithList(metaSuffix));
+        }
+        suffixInput.close();
+        return withList;
+    }
+
+    private String addSuffixes(String word, ArrayList<String> list){
+        String added = word;
+        for (String suffix : list) {
+            Transition transition = new Transition(suffix);
+            added = transition.makeTransition((TxtWord) fsm.getDictionary().getWord(word), added);
+        }
+        return added;
+    }
+
+    private void createSuffixList(String fileName, String[] examples) {
+        ArrayList<ArrayList<String>> withList = createWithLists(fileName);
+        for (ArrayList<String> list : withList) {
             for (String word : examples) {
-                String added = word;
-                for (String suffix : list) {
-                    Transition transition = new Transition(suffix);
-                    added = transition.makeTransition((TxtWord) fsm.getDictionary().getWord(word), added);
-                }
+                String added = addSuffixes(word, list);
                 if (added.startsWith(word)) {
                     System.out.println(added.substring(word.length()));
                 }
             }
         }
-        suffixInput.close();
     }
+
     public void createSuffixList() {
         String[] nouns = {"yara", "kitap", "ev", "sene", "ebediyet", "kalıt", "yapı", "kırım", "karbonit", "kedi", "zeytin", "koro", "kor", "katot", "kızılkök", "indikatör", "banliyö", "boru", "iridyum", "küp", "güdü", "ölüm"};
         String[] verbs = {"kamçıla", "yap", "kanatlan", "kandilleş", "kaşele", "kaşı", "kaşın", "yırt", "ekşi", "kemir", "dik", "dök", "hallol", "göm", "sok", "koru", "koştur", "büyüt", "sürü", "köpür"};
         createSuffixList("noun-meta-suffixes.txt", nouns);
         createSuffixList("verb-meta-suffixes.txt", verbs);
+    }
+
+    public void createGeneratedWords() throws FileNotFoundException {
+        PrintWriter output = new PrintWriter("generated_words.txt");
+        FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+        ArrayList<ArrayList<String>> nounList = createWithLists("noun-meta-suffixes.txt");
+        ArrayList<ArrayList<String>> verbList = createWithLists("verb-meta-suffixes.txt");
+        TxtDictionary dictionary = new TxtDictionary();
+        for (int i = 0; i < dictionary.size(); i++) {
+            if (i % 500 == 0){
+                System.out.println(i);
+            }
+            TxtWord word = (TxtWord) dictionary.getWord(i);
+            if (word.isNominal() || word.isAdjective()) {
+                for (ArrayList<String> list : nounList) {
+                    String added = addSuffixes(word.getName(), list);
+                    if (fsm.morphologicalAnalysis(added).size() > 0){
+                        output.println(added);
+                    }
+                }
+                output.println(word.getName());
+            }
+            if (word.isVerb()) {
+                for (ArrayList<String> list : verbList) {
+                    String added = addSuffixes(word.getName(), list);
+                    if (fsm.morphologicalAnalysis(added).size() > 0){
+                        output.println(added);
+                    }
+                }
+                output.println(word.getName());
+            }
+            if (word.isAdverb() || word.isPronoun() || word.isConjunction() || word.isDuplicate() || word.isInterjection() || word.isDeterminer()) {
+                output.println(word.getName());
+            }
+            if (word.isProperNoun()) {
+                output.println(Word.toCapital(word.getName()));
+            }
+        }
+        output.close();
     }
 
     @Test

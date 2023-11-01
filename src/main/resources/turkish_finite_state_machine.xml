@@ -1702,7 +1702,7 @@
 <state name="Adverb1" start="no" end="no">
 <to name="Adverb">
 <with>0</with>
-<with name="AdvTAdv">DAn</with>
+<with name="^DB+ADV">DAn</with>
 </to>
 </state>
 <state name="Adverb2" start="no" end="no">
