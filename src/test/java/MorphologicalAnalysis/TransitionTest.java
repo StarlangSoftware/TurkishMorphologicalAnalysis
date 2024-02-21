@@ -93,9 +93,9 @@ public class TransitionTest {
 
     @Test
     public void testNumberWithD() {
+        assertTrue(fsm.morphologicalAnalysis("3'tü").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("1'di").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("2'ydi").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("3'tü").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("4'tü").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("5'ti").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("6'ydı").size() != 0);
