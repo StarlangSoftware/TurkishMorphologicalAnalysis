@@ -11,8 +11,8 @@ import java.util.HashMap;
  * Created by olcay on 12/08/2018.
  */
 public class FiniteStateMachine {
-    private ArrayList<State> states;
-    private HashMap<State, ArrayList<Transition>> transitions;
+    private final ArrayList<State> states;
+    private final HashMap<State, ArrayList<Transition>> transitions;
 
     /**
      * Constructor reads the finite state machine in the given input file. It has a NodeList which holds the states
@@ -157,7 +157,7 @@ public class FiniteStateMachine {
      * The addTransition method creates a new {@link Transition} with given input parameters and adds the transition to
      * transitions {@link ArrayList}.
      *
-     * @param fromState  State type input indicating the from state.
+     * @param fromState  State type input indicating the 'from' state.
      * @param toState  State type input indicating the next state.
      * @param with     String input indicating with what the transition will be made.
      * @param withName String input.

@@ -535,90 +535,90 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * @return String result accumulated with items of formList.
      */
     public String transitionList() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         if (suffixList.get(0).getName().equalsIgnoreCase("NominalRoot") || suffixList.get(0).getName().equalsIgnoreCase("NominalRootNoPossesive") || suffixList.get(0).getName().equalsIgnoreCase("CompoundNounRoot") || suffixList.get(0).getName().equalsIgnoreCase("NominalRootPlural")) {
-            result = formList.get(0) + "+NOUN";
+            result = new StringBuilder(formList.get(0) + "+NOUN");
         } else {
             if (suffixList.get(0).getName().startsWith("VerbalRoot") || suffixList.get(0).getName().equalsIgnoreCase("PassiveHn")) {
-                result = formList.get(0) + "+VERB";
+                result = new StringBuilder(formList.get(0) + "+VERB");
             } else {
                 if (suffixList.get(0).getName().equalsIgnoreCase("CardinalRoot")) {
-                    result = formList.get(0) + "+NUM+CARD";
+                    result = new StringBuilder(formList.get(0) + "+NUM+CARD");
                 } else {
                     if (suffixList.get(0).getName().equalsIgnoreCase("FractionRoot")) {
-                        result = formList.get(0) + "+NUM+FRACTION";
+                        result = new StringBuilder(formList.get(0) + "+NUM+FRACTION");
                     } else {
                         if (suffixList.get(0).getName().equalsIgnoreCase("TimeRoot")) {
-                            result = formList.get(0) + "+TIME";
+                            result = new StringBuilder(formList.get(0) + "+TIME");
                         } else {
                             if (suffixList.get(0).getName().equalsIgnoreCase("RealRoot")) {
-                                result = formList.get(0) + "+NUM+REAL";
+                                result = new StringBuilder(formList.get(0) + "+NUM+REAL");
                             } else {
                                 if (suffixList.get(0).getName().equalsIgnoreCase("Punctuation")) {
-                                    result = formList.get(0) + "+PUNC";
+                                    result = new StringBuilder(formList.get(0) + "+PUNC");
                                 } else {
                                     if (suffixList.get(0).getName().equalsIgnoreCase("Hashtag")) {
-                                        result = formList.get(0) + "+HASHTAG";
+                                        result = new StringBuilder(formList.get(0) + "+HASHTAG");
                                     } else {
                                         if (suffixList.get(0).getName().equalsIgnoreCase("DateRoot")) {
-                                            result = formList.get(0) + "+DATE";
+                                            result = new StringBuilder(formList.get(0) + "+DATE");
                                         } else {
                                             if (suffixList.get(0).getName().equalsIgnoreCase("RangeRoot")) {
-                                                result = formList.get(0) + "+RANGE";
+                                                result = new StringBuilder(formList.get(0) + "+RANGE");
                                             } else {
                                                 if (suffixList.get(0).getName().equalsIgnoreCase("Email")) {
-                                                    result = formList.get(0) + "+EMAIL";
+                                                    result = new StringBuilder(formList.get(0) + "+EMAIL");
                                                 } else {
                                                     if (suffixList.get(0).getName().equalsIgnoreCase("PercentRoot")) {
-                                                        result = formList.get(0) + "+PERCENT";
+                                                        result = new StringBuilder(formList.get(0) + "+PERCENT");
                                                     } else {
                                                         if (suffixList.get(0).getName().equalsIgnoreCase("DeterminerRoot")) {
-                                                            result = formList.get(0) + "+DET";
+                                                            result = new StringBuilder(formList.get(0) + "+DET");
                                                         } else {
                                                             if (suffixList.get(0).getName().equalsIgnoreCase("ConjunctionRoot")) {
-                                                                result = formList.get(0) + "+CONJ";
+                                                                result = new StringBuilder(formList.get(0) + "+CONJ");
                                                             } else {
                                                                 if (suffixList.get(0).getName().equalsIgnoreCase("AdverbRoot")) {
-                                                                    result = formList.get(0) + "+ADV";
+                                                                    result = new StringBuilder(formList.get(0) + "+ADV");
                                                                 } else {
                                                                     if (suffixList.get(0).getName().equalsIgnoreCase("ProperRoot")) {
-                                                                        result = formList.get(0) + "+NOUN+PROP";
+                                                                        result = new StringBuilder(formList.get(0) + "+NOUN+PROP");
                                                                     } else {
                                                                         if (suffixList.get(0).getName().equalsIgnoreCase("HeaderRoot")) {
-                                                                            result = headerTransition();
+                                                                            result = new StringBuilder(headerTransition());
                                                                         } else {
                                                                             if (suffixList.get(0).getName().equalsIgnoreCase("InterjectionRoot")) {
-                                                                                result = formList.get(0) + "+INTERJ";
+                                                                                result = new StringBuilder(formList.get(0) + "+INTERJ");
                                                                             } else {
                                                                                 if (suffixList.get(0).getName().equalsIgnoreCase("DuplicateRoot")) {
-                                                                                    result = formList.get(0) + "+DUP";
+                                                                                    result = new StringBuilder(formList.get(0) + "+DUP");
                                                                                 } else {
                                                                                     if (suffixList.get(0).getName().equalsIgnoreCase("CodeRoot")) {
-                                                                                        result = formList.get(0) + "+CODE";
+                                                                                        result = new StringBuilder(formList.get(0) + "+CODE");
                                                                                     } else {
                                                                                         if (suffixList.get(0).getName().equalsIgnoreCase("MetricRoot")) {
-                                                                                            result = formList.get(0) + "+METRIC";
+                                                                                            result = new StringBuilder(formList.get(0) + "+METRIC");
                                                                                         } else {
                                                                                             if (suffixList.get(0).getName().equalsIgnoreCase("QuestionRoot")) {
-                                                                                                result = "mi+QUES";
+                                                                                                result = new StringBuilder("mi+QUES");
                                                                                             } else {
                                                                                                 if (suffixList.get(0).getName().equalsIgnoreCase("PostP")) {
                                                                                                     if (formList.get(0).equalsIgnoreCase("karşı") || formList.get(0).equalsIgnoreCase("ilişkin") || formList.get(0).equalsIgnoreCase("göre") || formList.get(0).equalsIgnoreCase("kadar") || formList.get(0).equalsIgnoreCase("ait") || formList.get(0).equalsIgnoreCase("yönelik") || formList.get(0).equalsIgnoreCase("rağmen") || formList.get(0).equalsIgnoreCase("değin") || formList.get(0).equalsIgnoreCase("dek") || formList.get(0).equalsIgnoreCase("doğru") || formList.get(0).equalsIgnoreCase("karşın") || formList.get(0).equalsIgnoreCase("dair") || formList.get(0).equalsIgnoreCase("atfen") || formList.get(0).equalsIgnoreCase("binaen") || formList.get(0).equalsIgnoreCase("hitaben") || formList.get(0).equalsIgnoreCase("istinaden") || formList.get(0).equalsIgnoreCase("mahsuben") || formList.get(0).equalsIgnoreCase("mukabil") || formList.get(0).equalsIgnoreCase("nazaran")) {
-                                                                                                        result = formList.get(0) + "+POSTP+PCDAT";
+                                                                                                        result = new StringBuilder(formList.get(0) + "+POSTP+PCDAT");
                                                                                                     } else {
                                                                                                         if (formList.get(0).equalsIgnoreCase("sonra") || formList.get(0).equalsIgnoreCase("önce") || formList.get(0).equalsIgnoreCase("beri") || formList.get(0).equalsIgnoreCase("fazla") || formList.get(0).equalsIgnoreCase("dolayı") || formList.get(0).equalsIgnoreCase("itibaren") || formList.get(0).equalsIgnoreCase("başka") || formList.get(0).equalsIgnoreCase("çok") || formList.get(0).equalsIgnoreCase("evvel") || formList.get(0).equalsIgnoreCase("ötürü") || formList.get(0).equalsIgnoreCase("yana") || formList.get(0).equalsIgnoreCase("öte") || formList.get(0).equalsIgnoreCase("aşağı") || formList.get(0).equalsIgnoreCase("yukarı") || formList.get(0).equalsIgnoreCase("dışarı") || formList.get(0).equalsIgnoreCase("az") || formList.get(0).equalsIgnoreCase("gayrı")) {
-                                                                                                            result = formList.get(0) + "+POSTP+PCABL";
+                                                                                                            result = new StringBuilder(formList.get(0) + "+POSTP+PCABL");
                                                                                                         } else {
                                                                                                             if (formList.get(0).equalsIgnoreCase("yanısıra")) {
-                                                                                                                result = formList.get(0) + "+POSTP+PCGEN";
+                                                                                                                result = new StringBuilder(formList.get(0) + "+POSTP+PCGEN");
                                                                                                             } else {
                                                                                                                 if (formList.get(0).equalsIgnoreCase("birlikte") || formList.get(0).equalsIgnoreCase("beraber")) {
-                                                                                                                    result = formList.get(0) + "+POSTP+PCINS";
+                                                                                                                    result = new StringBuilder(formList.get(0) + "+POSTP+PCINS");
                                                                                                                 } else {
                                                                                                                     if (formList.get(0).equalsIgnoreCase("aşkın") || formList.get(0).equalsIgnoreCase("takiben")) {
-                                                                                                                        result = formList.get(0) + "+POSTP+PCACC";
+                                                                                                                        result = new StringBuilder(formList.get(0) + "+POSTP+PCACC");
                                                                                                                     } else {
-                                                                                                                        result = formList.get(0) + "+POSTP+PCNOM";
+                                                                                                                        result = new StringBuilder(formList.get(0) + "+POSTP+PCNOM");
                                                                                                                     }
                                                                                                                 }
                                                                                                             }
@@ -626,13 +626,13 @@ public class FsmParse extends MorphologicalParse implements Comparable {
                                                                                                     }
                                                                                                 } else {
                                                                                                     if (suffixList.get(0).getName().startsWith("PronounRoot")) {
-                                                                                                        result = pronounTransition();
+                                                                                                        result = new StringBuilder(pronounTransition());
                                                                                                     } else {
                                                                                                         if (suffixList.get(0).getName().equalsIgnoreCase("OrdinalRoot")) {
-                                                                                                            result = formList.get(0) + "+NUM+ORD";
+                                                                                                            result = new StringBuilder(formList.get(0) + "+NUM+ORD");
                                                                                                         } else {
                                                                                                             if (suffixList.get(0).getName().startsWith("Adjective")) {
-                                                                                                                result = formList.get(0) + "+ADJ";
+                                                                                                                result = new StringBuilder(formList.get(0) + "+ADJ");
                                                                                                             }
                                                                                                         }
                                                                                                     }
@@ -662,13 +662,13 @@ public class FsmParse extends MorphologicalParse implements Comparable {
         for (String transition : transitionList) {
             if (transition != null) {
                 if (!transition.startsWith("^")) {
-                    result = result + "+" + transition;
+                    result.append("+").append(transition);
                 } else {
-                    result = result + transition;
+                    result.append(transition);
                 }
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -679,13 +679,13 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * @return result {@link String} accumulated with the items of formList and suffixList.
      */
     public String suffixList() {
-        String result = suffixList.get(0).getName() + '(' + formList.get(0) + ')';
+        StringBuilder result = new StringBuilder(suffixList.get(0).getName() + '(' + formList.get(0) + ')');
         for (int i = 1; i < formList.size(); i++) {
             if (!formList.get(i).equalsIgnoreCase(formList.get(i - 1))) {
-                result = result + "+" + suffixList.get(i).getName() + '(' + formList.get(i) + ')';
+                result.append("+").append(suffixList.get(i).getName()).append('(').append(formList.get(i)).append(')');
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -695,11 +695,11 @@ public class FsmParse extends MorphologicalParse implements Comparable {
      * @return result {@link String} accumulated with items of withList.
      */
     public String withList() {
-        String result = root.getName();
+        StringBuilder result = new StringBuilder(root.getName());
         for (String aWith : withList) {
-            result = result + "+" + aWith;
+            result.append("+").append(aWith);
         }
-        return result;
+        return result.toString();
     }
 
     /**

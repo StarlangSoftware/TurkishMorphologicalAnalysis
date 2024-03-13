@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class FsmParseList {
-    private ArrayList<FsmParse> fsmParses;
+    private final ArrayList<FsmParse> fsmParses;
     private static final String[] longestRootExceptions = {
             "acağı acak NOUN VERB", "acağım acak NOUN VERB", "acağımı acak NOUN VERB", "acağımız acak NOUN VERB", "acağın acak NOUN VERB",
             "acağına acak NOUN VERB", "acağını acak NOUN VERB", "acağının acak NOUN VERB", "acağınız acak NOUN VERB", "acağınıza acak NOUN VERB",
@@ -99,14 +99,15 @@ public class FsmParseList {
      * @return String result that has root words.
      */
     public String rootWords() {
-        String result = fsmParses.get(0).getWord().getName(), currentRoot = result;
+        StringBuilder result = new StringBuilder(fsmParses.get(0).getWord().getName());
+        String currentRoot = result.toString();
         for (int i = 1; i < fsmParses.size(); i++) {
             if (!fsmParses.get(i).getWord().getName().equals(currentRoot)) {
                 currentRoot = fsmParses.get(i).getWord().getName();
-                result = result + "$" + currentRoot;
+                result.append("$").append(currentRoot);
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -137,7 +138,7 @@ public class FsmParseList {
     public FsmParse getParseWithLongestRootWord() {
         int maxLength = -1;
         FsmParse bestParse;
-        if (fsmParses.size() > 0) {
+        if (!fsmParses.isEmpty()) {
             bestParse = fsmParses.get(0);
         }
         else {
@@ -258,7 +259,6 @@ public class FsmParseList {
             analyses[i] = fsmParses.get(i).transitionList();
         }
         while (removePrefix) {
-            removePrefix = true;
             for (int i = 0; i < fsmParses.size() - 1; i++) {
                 if (!analyses[i].contains("+") || !analyses[i + 1].contains("+") ||
                         !analyses[i].substring(0, analyses[i].indexOf("+") + 1).equals(analyses[i + 1].substring(0, analyses[i + 1].indexOf("+") + 1))) {
@@ -273,7 +273,6 @@ public class FsmParseList {
             }
         }
         while (removeSuffix) {
-            removeSuffix = true;
             for (int i = 0; i < fsmParses.size() - 1; i++) {
                 if (!analyses[i].contains("+") || !analyses[i + 1].contains("+") ||
                         !analyses[i].substring(analyses[i].lastIndexOf("+")).equals(analyses[i + 1].substring(analyses[i + 1].lastIndexOf("+")))) {
@@ -296,11 +295,11 @@ public class FsmParseList {
                 }
             }
         }
-        String result = analyses[0];
+        StringBuilder result = new StringBuilder(analyses[0]);
         for (int i = 1; i < analyses.length; i++) {
-            result = result + "$" + analyses[i];
+            result.append("$").append(analyses[i]);
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -309,11 +308,11 @@ public class FsmParseList {
      * @return result {@link String} that has the items of fsmParses {@link ArrayList}.
      */
     public String toString() {
-        String result = "";
-        for (int i = 0; i < fsmParses.size(); i++) {
-            result += fsmParses.get(i) + "\n";
+        StringBuilder result = new StringBuilder();
+        for (FsmParse fsmPars : fsmParses) {
+            result.append(fsmPars).append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -323,12 +322,12 @@ public class FsmParseList {
      * @return String output.
      */
     public String toJson() {
-        String json = "[\n";
+        StringBuilder json = new StringBuilder("[\n");
         for (int i = 0; i < fsmParses.size(); i++) {
             if (i == 0) {
-                json = json + "\"" + fsmParses.get(i).toString() + "\"";
+                json.append("\"").append(fsmParses.get(i).toString()).append("\"");
             } else {
-                json = json + ",\n\"" + fsmParses.get(i).toString() + "\"";
+                json.append(",\n\"").append(fsmParses.get(i).toString()).append("\"");
             }
         }
         return json + "\n]";

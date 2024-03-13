@@ -4,7 +4,7 @@ import Dictionary.Word;
 import MorphologicalAnalysis.MorphologicalParse;
 
 public class DisambiguatedWord extends Word {
-    private MorphologicalParse parse;
+    private final MorphologicalParse parse;
 
     /**
      * The constructor of {@link DisambiguatedWord} class which takes a {@link String} and a {@link MorphologicalParse}

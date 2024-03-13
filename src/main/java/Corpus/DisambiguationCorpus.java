@@ -52,8 +52,7 @@ public class DisambiguationCorpus extends Corpus {
                         if (word.equals("</S>")) {
                             addSentence(newSentence);
                         } else {
-                            if (word.equals("<DOC>") || word.equals("</DOC>") || word.equals("<TITLE>") || word.equals("</TITLE>")) {
-                            } else {
+                            if (!word.equals("<DOC>") && !word.equals("</DOC>") && !word.equals("<TITLE>") && !word.equals("</TITLE>")) {
                                 if (newSentence != null) {
                                     newSentence.addWord(newWord);
                                 } else {
@@ -68,8 +67,7 @@ public class DisambiguationCorpus extends Corpus {
                 i++;
                 line = br.readLine();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
@@ -94,8 +92,7 @@ public class DisambiguationCorpus extends Corpus {
             }
             writer.println("</DOC>\t</DOC>+EDTag");
             writer.close();
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException | UnsupportedEncodingException ignored) {
         }
     }
 

@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 
 public class FsmMorphologicalAnalyzer {
 
-    private Trie dictionaryTrie;
+    private final Trie dictionaryTrie;
     private Trie suffixTrie;
     private HashMap<String, String> parsedSurfaceForms = null;
-    private FiniteStateMachine finiteStateMachine;
+    private final FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
-    private TxtDictionary dictionary;
-    private LRUCache<String, FsmParseList> cache;
-    private HashMap<String, Pattern> mostUsedPatterns = new HashMap<>();
+    private final TxtDictionary dictionary;
+    private final LRUCache<String, FsmParseList> cache;
+    private final HashMap<String, Pattern> mostUsedPatterns = new HashMap<>();
 
     /**
      * First no-arg constructor of FsmMorphologicalAnalyzer class. It generates a new TxtDictionary type dictionary from
@@ -131,8 +131,7 @@ public class FsmMorphologicalAnalyzer {
                 parsedSurfaceForms.put(items[0], items[1]);
                 line = br.readLine();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
@@ -274,7 +273,7 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
-     * The initializeParseList method initializes the given given fsm ArrayList with given root words by parsing them.
+     * The initializeParseList method initializes the given fsm ArrayList with given root words by parsing them.
      * <p>
      * It checks many conditions;
      * isPlural; if root holds the condition then it gets the state with the name of NominalRootPlural, then
@@ -629,7 +628,7 @@ public class FsmMorphologicalAnalyzer {
         TxtWord root;
         ArrayList<FsmParse> initialFsmParse;
         initialFsmParse = new ArrayList<>();
-        if (surfaceForm.length() == 0) {
+        if (surfaceForm.isEmpty()) {
             return initialFsmParse;
         }
         HashSet<Word> words = dictionaryTrie.getWordsWithPrefix(surfaceForm);
@@ -826,8 +825,7 @@ public class FsmMorphologicalAnalyzer {
                 }
             }
             pw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException ignored) {
         }
     }
 
@@ -1093,10 +1091,10 @@ public class FsmMorphologicalAnalyzer {
      * @return false if surfaceForm is null or length of 0, return true if it is a letter.
      */
     public boolean isProperNoun(String surfaceForm) {
-        if (surfaceForm == null || surfaceForm.length() == 0) {
+        if (surfaceForm == null || surfaceForm.isEmpty()) {
             return false;
         }
-        return (surfaceForm.charAt(0) >= 'A' && surfaceForm.charAt(0) <= 'Z') || (surfaceForm.charAt(0) == '\u0130') || (surfaceForm.charAt(0) == '\u00dc') || (surfaceForm.charAt(0) == '\u011e') || (surfaceForm.charAt(0) == '\u015e') || (surfaceForm.charAt(0) == '\u00c7') || (surfaceForm.charAt(0) == '\u00d6'); // İ, Ü, Ğ, Ş, Ç, Ö
+        return (surfaceForm.charAt(0) >= 'A' && surfaceForm.charAt(0) <= 'Z') || (surfaceForm.charAt(0) == 'İ') || (surfaceForm.charAt(0) == 'Ü') || (surfaceForm.charAt(0) == 'Ğ') || (surfaceForm.charAt(0) == 'Ş') || (surfaceForm.charAt(0) == 'Ç') || (surfaceForm.charAt(0) == 'Ö'); // İ, Ü, Ğ, Ş, Ç, Ö
     }
 
     /**
@@ -1106,7 +1104,7 @@ public class FsmMorphologicalAnalyzer {
      * @return true if it is a code-like word, return false otherwise.
      */
     private boolean isCode(String surfaceForm) {
-        if (surfaceForm == null || surfaceForm.length() == 0) {
+        if (surfaceForm == null || surfaceForm.isEmpty()) {
             return false;
         }
         return patternMatches(".*[0-9].*", surfaceForm) && patternMatches(".*[a-zA-ZçöğüşıÇÖĞÜŞİ].*", surfaceForm);
@@ -1332,7 +1330,7 @@ public class FsmMorphologicalAnalyzer {
             dictionaryTrie.addWord(surfaceForm.toLowerCase(new Locale("tr")), new TxtWord(surfaceForm.toLowerCase(new Locale("tr")), "IS_OA"));
         }
         ArrayList<FsmParse> defaultFsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
-        if (defaultFsmParse.size() > 0) {
+        if (!defaultFsmParse.isEmpty()) {
             fsmParseList = new FsmParseList(defaultFsmParse);
             if (cache != null) {
                 cache.add(surfaceForm, fsmParseList);
@@ -1384,7 +1382,7 @@ public class FsmMorphologicalAnalyzer {
                                                         dictionaryTrie.addWord(possibleRoot.toLowerCase(new Locale("tr")), newWord);
                                                     }
                                                     fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
-                                                    if (fsmParse.size() == 0 && newWord != null) {
+                                                    if (fsmParse.isEmpty() && newWord != null) {
                                                         newWord.addFlag("IS_KIS");
                                                         fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
                                                     }

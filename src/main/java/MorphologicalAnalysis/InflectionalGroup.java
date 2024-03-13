@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class InflectionalGroup implements Serializable {
-    private ArrayList<MorphologicalTag> IG;
+    private final ArrayList<MorphologicalTag> IG;
     public static final String[] tags = {"NOUN", "ADV", "ADJ", "VERB", "A1SG",
             "A2SG", "A3SG", "A1PL", "A2PL", "A3PL",
             "P1SG", "P2SG", "P3SG", "P1PL", "P2PL",
@@ -99,7 +99,7 @@ public class InflectionalGroup implements Serializable {
     public InflectionalGroup(String IG) {
         MorphologicalTag tag;
         String morphologicalTag;
-        this.IG = new ArrayList<MorphologicalTag>();
+        this.IG = new ArrayList<>();
         String st = IG;
         while (st.contains("+")) {
             morphologicalTag = st.substring(0, st.indexOf("+"));
@@ -145,11 +145,11 @@ public class InflectionalGroup implements Serializable {
      * @return String result.
      */
     public String toString() {
-        String result = getTag(IG.get(0));
+        StringBuilder result = new StringBuilder(getTag(IG.get(0)));
         for (int i = 1; i < IG.size(); i++) {
-            result = result + "+" + getTag(IG.get(i));
+            result.append("+").append(getTag(IG.get(i)));
         }
-        return result;
+        return result.toString();
     }
 
     /**

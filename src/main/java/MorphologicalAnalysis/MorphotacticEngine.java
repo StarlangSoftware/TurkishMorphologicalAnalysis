@@ -118,7 +118,28 @@ public class MorphotacticEngine {
         return formation;
     }
 
+    public static String resolveHforSpecialCaseTenseSuffix(String formationToCheck, String formation){
+        if (TurkishLanguage.isFrontRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
+            //büyülüyor, bölümlüyor, çözümlüyor, döşüyor
+            return formation.substring(0, formation.length() - 1) + 'ü';
+        }
+        if (TurkishLanguage.isFrontUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
+            //adresliyor, alevliyor, ateşliyor, bekliyor
+            return formation.substring(0, formation.length() - 1) + 'i';
+        }
+        if (TurkishLanguage.isBackRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
+            //buğuluyor, bulguluyor, çamurluyor, aforozluyor
+            return formation.substring(0, formation.length() - 1) + 'u';
+        }
+        if (TurkishLanguage.isBackUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
+            //açıklıyor, çalkalıyor, gazlıyor, gıcırdıyor
+            return formation.substring(0, formation.length() - 1) + 'ı';
+        }
+        return null;
+    }
+
     public static String resolveH(TxtWord root, String formation, boolean beginningOfSuffix, boolean specialCaseTenseSuffix, boolean rootWord, String formationToCheck) {
+        String result;
         if (root.isAbbreviation())
             return formation + 'i';
         if (beginningOfSuffix && TurkishLanguage.isVowel(Word.lastPhoneme(formationToCheck)) && !specialCaseTenseSuffix) {
@@ -128,36 +149,16 @@ public class MorphotacticEngine {
             //eğer ek Hyor eki ise,
             if (rootWord) {
                 if (root.vowelAChangesToIDuringYSuffixation()) {
-                    if (TurkishLanguage.isFrontRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                        //büyülüyor, bölümlüyor, çözümlüyor, döşüyor
-                        return formation.substring(0, formation.length() - 1) + 'ü';
-                    }
-                    if (TurkishLanguage.isFrontUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                        //adresliyor, alevliyor, ateşliyor, bekliyor
-                        return formation.substring(0, formation.length() - 1) + 'i';
-                    }
-                    if (TurkishLanguage.isBackRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                        //buğuluyor, bulguluyor, çamurluyor, aforozluyor
-                        return formation.substring(0, formation.length() - 1) + 'u';
-                    }
-                    if (TurkishLanguage.isBackUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                        //açıklıyor, çalkalıyor, gazlıyor, gıcırdıyor
-                        return formation.substring(0, formation.length() - 1) + 'ı';
+                    result = resolveHforSpecialCaseTenseSuffix(formationToCheck, formation);
+                    if (result != null){
+                        return result;
                     }
                 }
             }
             if (TurkishLanguage.isVowel(Word.lastPhoneme(formationToCheck))) {
-                if (TurkishLanguage.isFrontRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                    return formation.substring(0, formation.length() - 1) + 'ü';
-                }
-                if (TurkishLanguage.isFrontUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                    return formation.substring(0, formation.length() - 1) + 'i';
-                }
-                if (TurkishLanguage.isBackRoundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                    return formation.substring(0, formation.length() - 1) + 'u';
-                }
-                if (TurkishLanguage.isBackUnroundedVowel(Word.beforeLastVowel(formationToCheck))) {
-                    return formation.substring(0, formation.length() - 1) + 'ı';
+                result = resolveHforSpecialCaseTenseSuffix(formationToCheck, formation);
+                if (result != null){
+                    return result;
                 }
             }
         }

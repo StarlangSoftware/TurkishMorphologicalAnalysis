@@ -5,10 +5,10 @@ import Dictionary.Word;
 import Language.TurkishLanguage;
 
 public class Transition {
-    private State toState;
-    private String with;
-    private String withName;
-    private String toPos;
+    private final State toState;
+    private final String with;
+    private final String withName;
+    private final String toPos;
 
     /**
      * A constructor of {@link Transition} class which takes  a {@link State}, and two {@link String}s as input. Then it
@@ -90,7 +90,7 @@ public class Transition {
      * @return true when the transition is possible according to Turkish grammar, false otherwise.
      */
     public boolean transitionPossible(String currentSurfaceForm, String realSurfaceForm) {
-        if (currentSurfaceForm.length() == 0 || currentSurfaceForm.length() >= realSurfaceForm.length()) {
+        if (currentSurfaceForm.isEmpty() || currentSurfaceForm.length() >= realSurfaceForm.length()) {
             return true;
         }
         String searchString = realSurfaceForm.substring(currentSurfaceForm.length());
@@ -137,9 +137,7 @@ public class Transition {
             if (currentFsmParse.getVerbAgreement().equalsIgnoreCase("A3PL") && withName.equalsIgnoreCase("^DB+VERB+ZERO+PRES+A1SG")) {
                 return false;
             }
-            if (currentFsmParse.getVerbAgreement().equalsIgnoreCase("A3SG") && (currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P1SG") || currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P2SG")) && withName.equalsIgnoreCase("^DB+VERB+ZERO+PRES+A1PL")) {
-                return false;
-            }
+            return !currentFsmParse.getVerbAgreement().equalsIgnoreCase("A3SG") || (!currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P1SG") && !currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P2SG")) || !withName.equalsIgnoreCase("^DB+VERB+ZERO+PRES+A1PL");
         }
         return true;
     }
@@ -179,7 +177,7 @@ public class Transition {
      * @return the first character of the with variable.
      */
     private char withFirstChar() {
-        if (with.length() == 0) {
+        if (with.isEmpty()) {
             return '$';
         }
         if (with.charAt(0) != '\'') {
@@ -205,10 +203,7 @@ public class Transition {
         if (TurkishLanguage.isConsonantDrop(withFirstChar()) && !with.equalsIgnoreCase("ylA") && !with.equalsIgnoreCase("ysA") && !with.equalsIgnoreCase("ymHs") && !with.equalsIgnoreCase("yDH") && !with.equalsIgnoreCase("yken")) {
             return true;
         }
-        if (withFirstChar() == 'A' || withFirstChar() == 'H' || TurkishLanguage.isVowel(withFirstChar())) {
-            return true;
-        }
-        return false;
+        return withFirstChar() == 'A' || withFirstChar() == 'H' || TurkishLanguage.isVowel(withFirstChar());
     }
 
     /**
@@ -227,10 +222,7 @@ public class Transition {
         if ((root.isNominal() || root.isAdjective()) && root.nounSoftenDuringSuffixation() && (with.equalsIgnoreCase("Hm") || with.equalsIgnoreCase("nDAn") || with.equalsIgnoreCase("ncA") || with.equalsIgnoreCase("nDA") || with.equalsIgnoreCase("yA") || with.equalsIgnoreCase("yHm") || with.equalsIgnoreCase("yHz") || with.equalsIgnoreCase("yH") || with.equalsIgnoreCase("nH") || with.equalsIgnoreCase("nA") || with.equalsIgnoreCase("nHn") || with.equalsIgnoreCase("H") || with.equalsIgnoreCase("sH") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("HnHz") || with.equalsIgnoreCase("HmHz"))) {
             return true;
         }
-        if (root.isVerb() && root.verbSoftenDuringSuffixation() && (with.startsWith("Hyor") || with.equalsIgnoreCase("yHs") || with.equalsIgnoreCase("yAn") || with.equalsIgnoreCase("yA") || with.startsWith("yAcAk") || with.equalsIgnoreCase("yAsH") || with.equalsIgnoreCase("yHncA") || with.equalsIgnoreCase("yHp") || with.equalsIgnoreCase("yAlH") || with.equalsIgnoreCase("yArAk") || with.equalsIgnoreCase("yAdur") || with.equalsIgnoreCase("yHver") || with.equalsIgnoreCase("yAgel") || with.equalsIgnoreCase("yAgor") || with.equalsIgnoreCase("yAbil") || with.equalsIgnoreCase("yAyaz") || with.equalsIgnoreCase("yAkal") || with.equalsIgnoreCase("yAkoy") || with.equalsIgnoreCase("yAmA") || with.equalsIgnoreCase("yHcH") || with.equalsIgnoreCase("HCH") || with.startsWith("Hr") || with.equalsIgnoreCase("Hs") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("yHn") || with.equalsIgnoreCase("yHnHz") || with.startsWith("Ar") || with.equalsIgnoreCase("Hl"))) {
-            return true;
-        }
-        return false;
+        return root.isVerb() && root.verbSoftenDuringSuffixation() && (with.startsWith("Hyor") || with.equalsIgnoreCase("yHs") || with.equalsIgnoreCase("yAn") || with.equalsIgnoreCase("yA") || with.startsWith("yAcAk") || with.equalsIgnoreCase("yAsH") || with.equalsIgnoreCase("yHncA") || with.equalsIgnoreCase("yHp") || with.equalsIgnoreCase("yAlH") || with.equalsIgnoreCase("yArAk") || with.equalsIgnoreCase("yAdur") || with.equalsIgnoreCase("yHver") || with.equalsIgnoreCase("yAgel") || with.equalsIgnoreCase("yAgor") || with.equalsIgnoreCase("yAbil") || with.equalsIgnoreCase("yAyaz") || with.equalsIgnoreCase("yAkal") || with.equalsIgnoreCase("yAkoy") || with.equalsIgnoreCase("yAmA") || with.equalsIgnoreCase("yHcH") || with.equalsIgnoreCase("HCH") || with.startsWith("Hr") || with.equalsIgnoreCase("Hs") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("yHn") || with.equalsIgnoreCase("yHnHz") || with.startsWith("Ar") || with.equalsIgnoreCase("Hl"));
     }
 
     /**
@@ -312,26 +304,27 @@ public class Transition {
                     } else {
                         if (rootWord && root.lastIdropsDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && !startState.getName().startsWith("ProperRoot") && startWithVowelorConsonantDrops()) {
                             //---lastIdropsDuringSuffixation---
+                            String stemExceptLastTwo = stem.substring(0, stem.length() - 2);
                             if (softenDuringSuffixation(root)) {
                                 //---softenDuringSuffixation---
                                 switch (Word.lastPhoneme(stem)) {
                                     case 'p':
                                         //hizip->hizbi, kayıp->kaybı, kayıt->kaydı, kutup->kutbu
-                                        formation = stem.substring(0, stem.length() - 2) + 'b';
+                                        formation = stemExceptLastTwo + 'b';
                                         break;
                                     case 't':
                                         //akit->akdi, ahit->ahdi, lahit->lahdi, nakit->nakdi, vecit->vecdi
-                                        formation = stem.substring(0, stem.length() - 2) + 'd';
+                                        formation = stemExceptLastTwo + 'd';
                                         break;
                                     case 'ç':
                                         //eviç->evci, nesiç->nesci
-                                        formation = stem.substring(0, stem.length() - 2) + 'c';
+                                        formation = stemExceptLastTwo + 'c';
                                         break;
                                 }
                             } else {
                                 //sarıağız->sarıağzı, zehir->zehri, zikir->zikri, nutuk->nutku, omuz->omzu, ömür->ömrü
                                 //lütuf->lütfu, metin->metni, kavim->kavmi, kasıt->kastı
-                                formation = stem.substring(0, stem.length() - 2) + stem.charAt(stem.length() - 1);
+                                formation = stemExceptLastTwo + stem.charAt(stem.length() - 1);
                             }
                             formationToCheck = stem;
                         } else {

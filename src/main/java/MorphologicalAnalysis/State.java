@@ -2,10 +2,10 @@ package MorphologicalAnalysis;
 
 public class State {
 
-    private boolean startState;
-    private boolean endState;
-    private String name;
-    private String pos;
+    private final boolean startState;
+    private final boolean endState;
+    private final String name;
+    private final String pos;
 
 
     /**

@@ -5,7 +5,6 @@ import Dictionary.Word;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 
 public class MorphologicalParse implements Serializable {
     protected ArrayList<InflectionalGroup> inflectionalGroups;
@@ -56,14 +55,14 @@ public class MorphologicalParse implements Serializable {
     public MorphologicalParse(String parse) {
         int i;
         ArrayList<String> iGs;
-        iGs = new ArrayList<String>();
+        iGs = new ArrayList<>();
         String st = parse;
         while (st.contains("^DB+")) {
             iGs.add(st.substring(0, st.indexOf("^DB+")));
             st = st.substring(st.indexOf("^DB+") + 4);
         }
         iGs.add(st);
-        inflectionalGroups = new ArrayList<InflectionalGroup>();
+        inflectionalGroups = new ArrayList<>();
         if (iGs.get(0).equals("++Punc")) {
             root = new Word("+");
             inflectionalGroups.add(new InflectionalGroup("Punc"));
@@ -98,7 +97,7 @@ public class MorphologicalParse implements Serializable {
      */
     public MorphologicalParse(ArrayList<String> inflectionalGroups) {
         int i;
-        this.inflectionalGroups = new ArrayList<InflectionalGroup>();
+        this.inflectionalGroups = new ArrayList<>();
         if (inflectionalGroups.get(0).indexOf('+') != -1) {
             root = new Word(inflectionalGroups.get(0).substring(0, inflectionalGroups.get(0).indexOf('+')));
             this.inflectionalGroups.add(new InflectionalGroup(inflectionalGroups.get(0).substring(inflectionalGroups.get(0).indexOf('+') + 1)));
@@ -117,11 +116,11 @@ public class MorphologicalParse implements Serializable {
      * @return String that contains transition list.
      */
     public String getTransitionList() {
-        String result = inflectionalGroups.get(0).toString();
+        StringBuilder result = new StringBuilder(inflectionalGroups.get(0).toString());
         for (int i = 1; i < inflectionalGroups.size(); i++) {
-            result = result + "+" + inflectionalGroups.get(i).toString();
+            result.append("+").append(inflectionalGroups.get(i).toString());
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -999,10 +998,10 @@ public class MorphologicalParse implements Serializable {
      * @return result {@link String}.
      */
     public String toString() {
-        String result = root.getName() + "+" + inflectionalGroups.get(0).toString();
+        StringBuilder result = new StringBuilder(root.getName() + "+" + inflectionalGroups.get(0).toString());
         for (int i = 1; i < inflectionalGroups.size(); i++)
-            result = result + "^DB+" + inflectionalGroups.get(i).toString();
-        return result;
+            result.append("^DB+").append(inflectionalGroups.get(i).toString());
+        return result.toString();
     }
 
 }
