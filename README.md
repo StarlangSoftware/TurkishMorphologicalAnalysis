@@ -114,7 +114,7 @@ Use below line to generate jar file:
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
             <artifactId>MorphologicalAnalysis</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.62</version>
         </dependency>
 
 Detailed Description
