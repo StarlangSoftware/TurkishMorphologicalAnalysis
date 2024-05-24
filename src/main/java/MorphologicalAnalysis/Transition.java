@@ -124,7 +124,7 @@ public class Transition {
     }
 
     /**
-     * The transitionPossible method takes a {@link FsmParse} currentFsmParse as an input. It then checks some special cases;
+     * The transitionPossible method takes a current parse as an input. It then checks some special  cases.
      *
      * @param currentFsmParse Parse to be checked
      * @return true if transition is possible false otherwise
@@ -142,6 +142,13 @@ public class Transition {
         return true;
     }
 
+    /**
+     * The transitionPossible method takes root and current parse as inputs. It then checks some special cases.
+     *
+     * @param root Current root word
+     * @param fromState From which state we arrived to this state.
+     * @return true if transition is possible false otherwise
+     */
     public boolean transitionPossible(TxtWord root, State fromState) {
         if (root.isAdjective() && ((root.isNominal() && !root.isExceptional()) || root.isPronoun()) && toState.getName().equalsIgnoreCase("NominalRoot(ADJ)") && with.equalsIgnoreCase("0")) {
             return false;
@@ -195,7 +202,7 @@ public class Transition {
      * The startWithVowelorConsonantDrops method checks for some cases. If the first character of with variable is "nsy",
      * and with variable does not equal to one of the Strings; "ylA, ysA, ymHs, yDH, yken", it returns true. If
      * <p>
-     * Or, if the first character of with variable is 'A, H: or any other vowels, it returns true.
+     * Or, if the first character of with variable is 'A', 'H': or any other vowels, it returns true.
      *
      * @return true if it starts with vowel or consonant drops, false otherwise.
      */
@@ -242,7 +249,23 @@ public class Transition {
         }
     }
 
-    //// TODO: 7/21/2018
+    /**
+     * The method is main driving method to accomplish the current transition from one state to another depending on
+     * the root form of the word, current value of the word form, and the type of the start state. The method
+     * (a) returns the original word form if the transition is an epsilon transition, (b) adds 'nunla' if the current
+     * stem is 'bu', 'şu' or 'o', (c) returns 'bana' or 'sana' if the current stem is 'ben' or 'sen' respectively.
+     * For other cases, the method first modifies current stem and then adds the transition using special metamorpheme
+     * resolving methods. These cases are: (d) Converts 'y' of the first character of the transition to 'i' if the
+     * current stem is 'ye' or 'de'. (e) Drops the last two characters and adds last character when the transition is
+     * ('Hl' or 'Hn') and last 'I' drops during passive suffixation. (f) Adds 'y' character when the word ends with 'su'
+     * and the transition does not start with 'y'. (g) Adds the last character again when the root duplicates during
+     * suffixation. (h) Drops the last two characters and adds the last character when last 'i' drops during
+     * suffixation. (i) Replaces the last character with a soft one when the root soften during suffixation.
+     * @param root Root of the current word form
+     * @param stem Current word form
+     * @param startState The state from which this Fsm morphological analysis search has started.
+     * @return The current value of the word form after this transition is completed in the finite state machine.
+     */
     public String makeTransition(TxtWord root, String stem, State startState) {
         boolean rootWord = root.getName().equalsIgnoreCase(stem) || (root.getName() + "'").equalsIgnoreCase(stem);
         String formation = stem;

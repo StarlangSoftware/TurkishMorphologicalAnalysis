@@ -571,6 +571,12 @@ public class MorphologicalParse implements Serializable {
         return "-XXX-";
     }
 
+    /**
+     * Returns the pronoun type of the parse for universal dependency feature ProType.
+     * @return "Art" if the pronoun is also a determiner; "Prs" if the pronoun is personal pronoun; "Rcp" if the
+     * pronoun is 'birbiri'; "Ind" if the pronoun is an indeterminate pronoun; "Neg" if the pronoun is 'hiçbiri';
+     * "Int" if the pronoun is a question pronoun; "Dem" if the pronoun is a demonstrative pronoun.
+     */
     private String getPronType(){
         String lemma = root.getName();
         if (containsTag(MorphologicalTag.DETERMINER)){
@@ -604,6 +610,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the numeral type of the parse for universal dependency feature NumType.
+     * @return "Ord" if the parse is Time, Ordinal or the word is '%' or 'kaçıncı'; "Dist" if the word is a
+     * distributive number such as 'beşinci'; "Card" if the number is cardinal or any number or the word is 'kaç'.
+     */
     private String getNumType(){
         String lemma = root.getName();
         if (lemma.equals("%") || containsTag(MorphologicalTag.TIME)){
@@ -621,6 +632,10 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the value for the dependency feature Reflex.
+     * @return "Yes" if the root word is 'kendi', null otherwise.
+     */
     private String getReflex(){
         String lemma = root.getName();
         if (lemma.equals("kendi")){
@@ -629,6 +644,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the agreement of the parse for the universal dependency feature Number.
+     * @return "Sing" if the agreement of the parse is singular (contains A1SG, A2SG, A3SG); "Plur" if the agreement
+     * of the parse is plural (contains A1PL, A2PL, A3PL).
+     */
     private String getNumber(){
         if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A3SG)){
             return "Sing";
@@ -639,6 +659,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the possessive agreement of the parse for the universal dependency feature [Pos].
+     * @return "Sing" if the possessive agreement of the parse is singular (contains P1SG, P2SG, P3SG); "Plur" if the
+     * possessive agreement of the parse is plural (contains P1PL, P2PL, P3PL).
+     */
     private String getPossessiveNumber(){
         if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P3SG)){
             return "Sing";
@@ -649,6 +674,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the case marking of the parse for the universal dependency feature case.
+     * @return "Acc" for accusative marker; "Dat" for dative marker; "Gen" for genitive marker; "Loc" for locative
+     * marker; "Ins" for instrumentative marker; "Abl" for ablative marker; "Nom" for nominative marker.
+     */
     private String getCase(){
         if (containsTag(MorphologicalTag.ACCUSATIVE) || containsTag(MorphologicalTag.PCACCUSATIVE)){
             return "Acc";
@@ -674,6 +704,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the definiteness of the parse for the universal dependency feature definite. It applies only for
+     * determiners in Turkish.
+     * @return "Ind" for 'bir', 'bazı', or 'birkaç'. "Def" for 'her', 'bu', 'şu', 'o', 'bütün'.
+     */
     private String getDefinite(){
         String lemma = root.getName();
         if (containsTag(MorphologicalTag.DETERMINER)){
@@ -687,6 +722,10 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the degree of the parse for the universal dependency feature degree.
+     * @return "Cmp" for comparative adverb 'daha'; "Sup" for superlative adjective or adverb 'en'.
+     */
     private String getDegree(){
         String lemma = root.getName();
         if (lemma.equals("daha")){
@@ -698,6 +737,10 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the polarity of the verb for the universal dependency feature polarity.
+     * @return "Pos" for positive polarity containing tag POS; "Neg" for negative polarity containing tag NEG.
+     */
     private String getPolarity(){
         if (containsTag(MorphologicalTag.POSITIVE)){
             return "Pos";
@@ -708,6 +751,10 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the person of the agreement of the parse for the universal dependency feature person.
+     * @return "1" for first person; "2" for second person; "3" for third person.
+     */
     private String getPerson(){
         if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A1PL)){
             return "1";
@@ -721,6 +768,10 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the person of the possessive agreement of the parse for the universal dependency feature [pos].
+     * @return "1" for first person; "2" for second person; "3" for third person.
+     */
     private String getPossessivePerson(){
         if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P1PL)){
             return "1";
@@ -734,6 +785,12 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the voice of the verb parse for the universal dependency feature voice.
+     * @return "CauPass" if the verb parse is both causative and passive; "Pass" if the verb parse is only passive;
+     * "Rcp" if the verb parse is reciprocal; "Cau" if the verb parse is only causative; "Rfl" if the verb parse is
+     * reflexive.
+     */
     private String getVoice(){
         if (containsTag(MorphologicalTag.CAUSATIVE) && containsTag(MorphologicalTag.PASSIVE)){
             return "CauPass";
@@ -753,6 +810,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the aspect of the verb parse for the universal dependency feature aspect.
+     * @return "Perf" for past, narrative and future tenses; "Prog" for progressive tenses; "Hab" for Aorist; "Rapid"
+     * for parses containing HASTILY tag; "Dur" for parses containing START, STAY or REPEAT tags.
+     */
     private String getAspect(){
         if (containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.NARRATIVE) || containsTag(MorphologicalTag.FUTURE)){
             return "Perf";
@@ -772,6 +834,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the tense of the verb parse for universal dependency feature tense.
+     * @return "Past" for simple past tense; "Fut" for future tense; "Pqp" for narrative past tense; "Pres" for other
+     * past tenses.
+     */
     private String getTense(){
         if (containsTag(MorphologicalTag.PASTTENSE)){
             return "Past";
@@ -788,21 +855,34 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the modality of the verb parse for the universal dependency feature mood.
+     * @return "GenNecPot" if both necessitative and potential is combined with a suffix of general modality;
+     * "CndGenPot" if both conditional and potential is combined with a suffix of general modality;
+     * "GenNec" if necessitative is combined with a suffix of general modality;
+     * "GenPot" if potential is combined with a suffix of general modality;
+     * "NecPot" if necessitative is combined with potential;
+     * "DesPot" if desiderative is combined with potential;
+     * "CndPot" if conditional is combined with potential;
+     * "CndGen" if conditional is combined with a suffix of general modality;
+     * "Imp" for imperative; "Cnd" for simple conditional; "Des" for simple desiderative; "Opt" for optative; "Nec" for
+     * simple necessitative; "Pot" for simple potential; "Gen" for simple suffix of a general modality.
+     */
     private String getMood(){
         if ((containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.AORIST)) && containsTag(MorphologicalTag.NECESSITY) && containsTag(MorphologicalTag.ABLE)){
             return "GenNecPot";
         }
-        if (containsTag(MorphologicalTag.CONDITIONAL) && (containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.AORIST)) && containsTag(MorphologicalTag.ABLE)){
+        if ((containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.AORIST)) && containsTag(MorphologicalTag.CONDITIONAL) && containsTag(MorphologicalTag.ABLE)){
             return "CndGenPot";
         }
         if ((containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.AORIST)) && containsTag(MorphologicalTag.NECESSITY)){
             return "GenNec";
         }
-        if (containsTag(MorphologicalTag.NECESSITY) && containsTag(MorphologicalTag.ABLE)){
-            return "NecPot";
-        }
         if ((containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.AORIST)) && containsTag(MorphologicalTag.ABLE)){
             return "GenPot";
+        }
+        if (containsTag(MorphologicalTag.NECESSITY) && containsTag(MorphologicalTag.ABLE)){
+            return "NecPot";
         }
         if (containsTag(MorphologicalTag.DESIRE) && containsTag(MorphologicalTag.ABLE)){
             return "DesPot";
@@ -843,6 +923,11 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Returns the form of the verb parse for the universal dependency feature verbForm.
+     * @return "Part" for participles; "Vnoun" for infinitives; "Conv" for parses contaning tags SINCEDOINGSO,
+     * WITHOUTHAVINGDONESO, WITHOUTBEINGABLETOHAVEDONESO, BYDOINGSO, AFTERDOINGSO, INFINITIVE3; "Fin" for others.
+     */
     private String getVerbForm(){
         if (containsTag(MorphologicalTag.PASTPARTICIPLE) || containsTag(MorphologicalTag.FUTUREPARTICIPLE) || containsTag(MorphologicalTag.PRESENTPARTICIPLE)){
             return "Part";
@@ -862,6 +947,12 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    /**
+     * Construct the universal dependency features as an array of strings. Each element represents a single feature.
+     * Every feature is given as featureType = featureValue.
+     * @param uPos Universal dependency part of speech tag for the parse.
+     * @return An array of universal dependency features for this parse.
+     */
     public ArrayList<String> getUniversalDependencyFeatures(String uPos){
         ArrayList<String> featureList = new ArrayList<>();
         String pronType = getPronType();
@@ -940,6 +1031,12 @@ public class MorphologicalParse implements Serializable {
         return featureList;
     }
 
+    /**
+     * Returns the universal dependency part of speech for this parse.
+     * @return "AUX" for word 'değil; "PROPN" for proper nouns; "NOUN for nouns; "ADJ" for adjectives; "ADV" for
+     * adverbs; "INTJ" for interjections; "VERB" for verbs; "PUNCT" for punctuation symbols; "DET" for determiners;
+     * "NUM" for numerals; "PRON" for pronouns; "ADP" for post participles; "SCONJ" or "CCONJ" for conjunctions.
+     */
     public String getUniversalDependencyPos(){
         String lemma = root.getName();
         if (lemma.equals("değil")){
