@@ -224,7 +224,7 @@ public class MorphotacticEngine {
         if (TurkishLanguage.isFrontRoundedVowel(Word.lastVowel(formationToCheck)) || (TurkishLanguage.isBackRoundedVowel(Word.lastVowel(formationToCheck)) && root.notObeysVowelHarmonyDuringAgglutination())) {
             return formation + 'ü';
         }
-        if ((TurkishLanguage.isFrontUnroundedVowel(Word.lastVowel(formationToCheck)) && !root.notObeysVowelHarmonyDuringAgglutination()) || ((Word.lastVowel(formationToCheck) == 'a' || Word.lastVowel(formationToCheck) == 'â') && root.notObeysVowelHarmonyDuringAgglutination())) {
+        if ((TurkishLanguage.isFrontUnroundedVowel(Word.lastVowel(formationToCheck)) && (!root.notObeysVowelHarmonyDuringAgglutination() || !rootWord)) || ((Word.lastVowel(formationToCheck) == 'a' || Word.lastVowel(formationToCheck) == 'â') && root.notObeysVowelHarmonyDuringAgglutination())) {
             return formation + 'i';
         }
         if (TurkishLanguage.isBackRoundedVowel(Word.lastVowel(formationToCheck))) {

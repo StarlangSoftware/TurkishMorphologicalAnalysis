@@ -1160,30 +1160,24 @@ public class FsmMorphologicalAnalyzer {
      * @param surfaceForm Surface form for which we will identify a possible new root form.
      * @return Possible new root form.
      */
-    private TxtWord rootOfPossiblyNewWord(String surfaceForm){
+    private ArrayList<TxtWord> rootOfPossiblyNewWord(String surfaceForm){
         HashSet<Word> words = suffixTrie.getWordsWithPrefix(reverseString(surfaceForm));
-        int maxLength = 0;
-        String longestWord = null;
+        ArrayList<TxtWord> candidateList = new ArrayList<>();
         for (Word word : words){
-            if (word.getName().length() > maxLength){
-                longestWord = surfaceForm.substring(0, surfaceForm.length() - word.getName().length());
-                maxLength = word.getName().length();
-            }
-        }
-        if (maxLength != 0){
+            String candidateWord = surfaceForm.substring(0, surfaceForm.length() - word.getName().length());
             TxtWord newWord;
-            if (longestWord.endsWith("ğ")){
-                longestWord = longestWord.substring(0, longestWord.length() - 1) + "k";
-                newWord = new TxtWord(longestWord, "CL_ISIM");
+            if (candidateWord.endsWith("ğ")){
+                candidateWord = candidateWord.substring(0, candidateWord.length() - 1) + "k";
+                newWord = new TxtWord(candidateWord, "CL_ISIM");
                 newWord.addFlag("IS_SD");
             } else {
-                newWord = new TxtWord(longestWord, "CL_ISIM");
+                newWord = new TxtWord(candidateWord, "CL_ISIM");
                 newWord.addFlag("CL_FIIL");
             }
-            dictionaryTrie.addWord(longestWord, newWord);
-            return newWord;
+            candidateList.add(newWord);
+            dictionaryTrie.addWord(candidateWord, newWord);
         }
-        return null;
+        return candidateList;
     }
 
     /**
@@ -1207,19 +1201,18 @@ public class FsmMorphologicalAnalyzer {
             fsmParse = new ArrayList<>(1);
             if (isProperNoun(surfaceForm)) {
                 fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("ProperRoot")));
-            } else {
-                if (isCode(surfaceForm)) {
-                    fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
-                } else {
-                    TxtWord newRoot = rootOfPossiblyNewWord(surfaceForm);
-                    if (newRoot != null){
-                        fsmParse.add(new FsmParse(newRoot, finiteStateMachine.getState("VerbalRoot")));
-                        fsmParse.add(new FsmParse(newRoot, finiteStateMachine.getState("NominalRoot")));
-                    } else {
-                        fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
-                    }
+            }
+            if (isCode(surfaceForm)) {
+                fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("CodeRoot")));
+            }
+            ArrayList<TxtWord> newCandidateList = rootOfPossiblyNewWord(surfaceForm);
+            if (!newCandidateList.isEmpty()){
+                for (TxtWord word : newCandidateList){
+                    fsmParse.add(new FsmParse(word, finiteStateMachine.getState("VerbalRoot")));
+                    fsmParse.add(new FsmParse(word, finiteStateMachine.getState("NominalRoot")));
                 }
             }
+            fsmParse.add(new FsmParse(surfaceForm, finiteStateMachine.getState("NominalRoot")));
             return new FsmParseList(parseWord(fsmParse, surfaceForm));
         } else {
             return currentParse;
