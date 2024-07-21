@@ -397,7 +397,7 @@ public class Transition {
                 }
             }
         }
-        if (TurkishLanguage.isConsonantDrop(withFirstChar()) && !TurkishLanguage.isVowel(stem.charAt(stem.length() - 1)) && (root.isNumeral() || root.isReal() || root.isFraction() || root.isTime() || root.isDate() || root.isPercent() || root.isRange()) && (root.getName().endsWith("1") || root.getName().endsWith("3") || root.getName().endsWith("4") || root.getName().endsWith("5") || root.getName().endsWith("8") || root.getName().endsWith("9") || root.getName().endsWith("10") || root.getName().endsWith("30") || root.getName().endsWith("40") || root.getName().endsWith("60") || root.getName().endsWith("70") || root.getName().endsWith("80") || root.getName().endsWith("90") || root.getName().endsWith("00"))) {
+        if (TurkishLanguage.isConsonantDrop(withFirstChar()) && stem.length() > 1 && !TurkishLanguage.isVowel(stem.charAt(stem.length() - 1)) && (root.isNumeral() || root.isReal() || root.isFraction() || root.isTime() || root.isDate() || root.isPercent() || root.isRange()) && (root.getName().endsWith("1") || root.getName().endsWith("3") || root.getName().endsWith("4") || root.getName().endsWith("5") || root.getName().endsWith("8") || root.getName().endsWith("9") || root.getName().endsWith("10") || root.getName().endsWith("30") || root.getName().endsWith("40") || root.getName().endsWith("60") || root.getName().endsWith("70") || root.getName().endsWith("80") || root.getName().endsWith("90") || root.getName().endsWith("00"))) {
             if (with.charAt(0) == '\'') {
                 formation = formation + '\'';
                 i = 2;
