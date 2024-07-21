@@ -1439,7 +1439,7 @@ public class FsmMorphologicalAnalyzer {
                                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_REELSAYI"));
                                                 fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                             } else {
-                                                if (Word.isCapital(possibleRoot)) {
+                                                if (Word.isCapital(possibleRoot) || "QXW".contains(possibleRoot.substring(0, 1))) {
                                                     possibleRootLowerCased = possibleRoot.toLowerCase(new Locale("tr"));
                                                     if (pronunciations.containsKey(possibleRootLowerCased)){
                                                         isRootReplaced = true;
