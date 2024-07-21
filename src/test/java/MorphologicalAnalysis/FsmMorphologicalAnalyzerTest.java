@@ -104,12 +104,9 @@ public class FsmMorphologicalAnalyzerTest {
 
     @Test
     public void morphologicalAnalysisSpecialProperNoun() {
-        assertTrue(fsm.morphologicalAnalysis("Times'ın").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("Times'tır").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("Times'mış").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("Twitter'ın").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("Twitter'dır").size() != 0);
-        assertTrue(fsm.morphologicalAnalysis("Twitter'mış").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Slack'in").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("SPK'ya").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("Stephen'ın").size() != 0);
     }
 
     @Test

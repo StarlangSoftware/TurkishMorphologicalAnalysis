@@ -15,6 +15,7 @@ public class FsmMorphologicalAnalyzer {
     private final Trie dictionaryTrie;
     private Trie suffixTrie;
     private HashMap<String, String> parsedSurfaceForms = null;
+    private HashMap<String, String> pronunciations;
     private final FiniteStateMachine finiteStateMachine;
     private static final int MAX_DISTANCE = 2;
     private final TxtDictionary dictionary;
@@ -78,6 +79,7 @@ public class FsmMorphologicalAnalyzer {
         } else {
             cache = null;
         }
+        addPronunciations("pronunciations.txt");
     }
 
     /**
@@ -131,23 +133,20 @@ public class FsmMorphologicalAnalyzer {
     }
 
     /**
+     * Reads the file for foreign words and their pronunciations.
+     * @param fileName Input file containing foreign words and their pronunciations.
+     */
+    public void addPronunciations(String fileName){
+        pronunciations = FileUtils.readHashMap(fileName);
+    }
+
+    /**
      * Reads the file for correct surface forms and their most frequent root forms, in other words, the surface forms
      * which have at least one morphological analysis in  Turkish.
      * @param fileName Input file containing analyzable surface forms and their root forms.
      */
     public void addParsedSurfaceForms(String fileName){
-        parsedSurfaceForms = new HashMap<>();
-        String line;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(FileUtils.getInputStream(fileName), StandardCharsets.UTF_8));
-            line = br.readLine();
-            while (line != null) {
-                String[] items = line.split(" ");
-                parsedSurfaceForms.put(items[0], items[1]);
-                line = br.readLine();
-            }
-        } catch (IOException ignored) {
-        }
+        parsedSurfaceForms = FileUtils.readHashMap(fileName);
     }
 
     /**
@@ -1381,7 +1380,10 @@ public class FsmMorphologicalAnalyzer {
      */
     public FsmParseList morphologicalAnalysis(String surfaceForm) {
         FsmParseList fsmParseList;
+        TxtWord newWord;
         String lowerCased = surfaceForm.toLowerCase(new Locale("tr"));
+        String possibleRootLowerCased = "", pronunciation = "";
+        boolean isRootReplaced = false;
         if (parsedSurfaceForms != null && parsedSurfaceForms.containsKey(lowerCased) && !isInteger(surfaceForm) && !isDouble(surfaceForm) && !isPercent(surfaceForm) && !isTime(surfaceForm) && !isRange(surfaceForm) && !isDate(surfaceForm)){
             ArrayList<FsmParse> parses = new ArrayList<>();
             parses.add(new FsmParse(new Word(parsedSurfaceForms.get(lowerCased))));
@@ -1391,9 +1393,9 @@ public class FsmMorphologicalAnalyzer {
             return cache.get(surfaceForm);
         }
         if (patternMatches("(\\w|Ç|Ş|İ|Ü|Ö)\\.",surfaceForm)) {
-            dictionaryTrie.addWord(surfaceForm.toLowerCase(new Locale("tr")), new TxtWord(surfaceForm.toLowerCase(new Locale("tr")), "IS_OA"));
+            dictionaryTrie.addWord(lowerCased, new TxtWord(lowerCased, "IS_OA"));
         }
-        ArrayList<FsmParse> defaultFsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+        ArrayList<FsmParse> defaultFsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
         if (!defaultFsmParse.isEmpty()) {
             fsmParseList = new FsmParseList(defaultFsmParse);
             if (cache != null) {
@@ -1407,48 +1409,57 @@ public class FsmMorphologicalAnalyzer {
             if (!possibleRoot.isEmpty()) {
                 if (possibleRoot.contains("/") || possibleRoot.contains("\\/")) {
                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
-                    fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                    fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                 } else {
                     if (isDate(possibleRoot)) {
                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_DATE"));
-                        fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                        fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                     } else {
                         if (patternMatches("\\d+/\\d+", possibleRoot)) {
                             dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_KESIR"));
-                            fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                            fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                         } else {
                             if (isPercent(possibleRoot)) {
                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_PERCENT"));
-                                fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                             } else {
                                 if (isTime(surfaceForm)) {
                                     dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_ZAMAN"));
-                                    fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                    fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                 } else {
                                     if (isRange(surfaceForm)) {
                                         dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_RANGE"));
-                                        fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                        fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                     } else {
                                         if (isInteger(possibleRoot)) {
                                             dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_SAYI"));
-                                            fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                            fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                         } else {
                                             if (isDouble(possibleRoot)) {
                                                 dictionaryTrie.addWord(possibleRoot, new TxtWord(possibleRoot, "IS_REELSAYI"));
-                                                fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                                fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                             } else {
                                                 if (Word.isCapital(possibleRoot)) {
-                                                    TxtWord newWord = null;
-                                                    if (dictionary.getWord(possibleRoot.toLowerCase(new Locale("tr"))) != null) {
-                                                        ((TxtWord) dictionary.getWord(possibleRoot.toLowerCase(new Locale("tr")))).addFlag("IS_OA");
+                                                    possibleRootLowerCased = possibleRoot.toLowerCase(new Locale("tr"));
+                                                    if (pronunciations.containsKey(possibleRootLowerCased)){
+                                                        isRootReplaced = true;
+                                                        pronunciation = pronunciations.get(possibleRootLowerCased);
+                                                        if (dictionary.getWord(pronunciation) != null) {
+                                                            ((TxtWord) dictionary.getWord(pronunciation)).addFlag("IS_OA");
+                                                        } else {
+                                                            newWord = new TxtWord(pronunciation, "IS_OA");
+                                                            dictionaryTrie.addWord(pronunciation, newWord);
+                                                        }
+                                                        String replacedWord = pronunciation + lowerCased.substring(possibleRootLowerCased.length());
+                                                        fsmParse = analysis(replacedWord, isProperNoun(surfaceForm));
                                                     } else {
-                                                        newWord = new TxtWord(possibleRoot.toLowerCase(new Locale("tr")), "IS_OA");
-                                                        dictionaryTrie.addWord(possibleRoot.toLowerCase(new Locale("tr")), newWord);
-                                                    }
-                                                    fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
-                                                    if (fsmParse.isEmpty() && newWord != null) {
-                                                        newWord.addFlag("IS_KIS");
-                                                        fsmParse = analysis(surfaceForm.toLowerCase(new Locale("tr")), isProperNoun(surfaceForm));
+                                                        if (dictionary.getWord(possibleRootLowerCased) != null) {
+                                                            ((TxtWord) dictionary.getWord(possibleRootLowerCased)).addFlag("IS_OA");
+                                                        } else {
+                                                            newWord = new TxtWord(possibleRootLowerCased, "IS_OA");
+                                                            dictionaryTrie.addWord(possibleRootLowerCased, newWord);
+                                                        }
+                                                        fsmParse = analysis(lowerCased, isProperNoun(surfaceForm));
                                                     }
                                                 }
                                             }
@@ -1459,6 +1470,11 @@ public class FsmMorphologicalAnalyzer {
                         }
                     }
                 }
+            }
+        }
+        if (isRootReplaced){
+            for (FsmParse parse: fsmParse){
+                parse.restoreOriginalForm(possibleRootLowerCased, pronunciation);
             }
         }
         fsmParseList = new FsmParseList(fsmParse);
