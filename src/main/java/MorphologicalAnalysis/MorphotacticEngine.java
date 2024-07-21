@@ -252,6 +252,9 @@ public class MorphotacticEngine {
                 }
             }
         }
+        if (Word.lastVowel(formationToCheck) == '0'){
+            return formation + 'i';
+        }
         return formation;
     }
 

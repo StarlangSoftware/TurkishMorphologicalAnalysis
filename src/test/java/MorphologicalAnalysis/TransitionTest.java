@@ -151,6 +151,13 @@ public class TransitionTest {
     public void testShowsSuRegularities() {
         assertTrue(fsm.morphologicalAnalysis("karasuyu").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("suyu").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suymuş").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suyuymuş").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suyla").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suyuyla").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suydu").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suyuydu").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("suyuna").size() != 0);
     }
 
     @Test

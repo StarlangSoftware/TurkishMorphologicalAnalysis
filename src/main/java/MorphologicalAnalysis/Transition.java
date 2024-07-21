@@ -300,8 +300,9 @@ public class Transition {
             } else {
                 //---showsSuRegularities---
                 //karasu->karasuyu, su->suyu, ağırsu->ağırsuyu, akarsu->akarsuyu, bengisu->bengisuyu
-                if (rootWord && root.showsSuRegularities() && startWithVowelorConsonantDrops() && !with.startsWith("y")) {
+                if (rootWord && root.showsSuRegularities() && startWithVowelorConsonantDrops()) {
                     formation = stem + 'y';
+                    i = 1;
                     formationToCheck = formation;
                 } else {
                     if (rootWord && root.duplicatesDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && TurkishLanguage.isConsonantDrop(with.charAt(0))) {
