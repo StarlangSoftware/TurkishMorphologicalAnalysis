@@ -698,6 +698,9 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.ABLATIVE) || containsTag(MorphologicalTag.PCABLATIVE)){
             return "Abl";
         }
+        if (containsTag(MorphologicalTag.EQUATIVE)){
+            return "Equ";
+        }
         if (containsTag(MorphologicalTag.NOMINATIVE) || containsTag(MorphologicalTag.PCNOMINATIVE)){
             return "Nom";
         }
@@ -712,10 +715,10 @@ public class MorphologicalParse implements Serializable {
     private String getDefinite(){
         String lemma = root.getName();
         if (containsTag(MorphologicalTag.DETERMINER)){
-            if (lemma.equals("bir") || lemma.equals("bazı") || lemma.equals("birkaç")){
+            if (lemma.equals("bir") || lemma.equals("bazı") || lemma.equals("birkaç") || lemma.equals("birçok") || lemma.equals("kimi")){
                 return "Ind";
             }
-            if (lemma.equals("her") || lemma.equals("bu") || lemma.equals("şu") || lemma.equals("o") || lemma.equals("bütün")){
+            if (lemma.equals("her") || lemma.equals("hangi") || lemma.equals("bu") || lemma.equals("şu") || lemma.equals("o") || lemma.equals("bütün")){
                 return "Def";
             }
         }
@@ -742,6 +745,9 @@ public class MorphologicalParse implements Serializable {
      * @return "Pos" for positive polarity containing tag POS; "Neg" for negative polarity containing tag NEG.
      */
     private String getPolarity(){
+        if (root.getName().equals("değil")){
+            return "Neg";
+        }
         if (containsTag(MorphologicalTag.POSITIVE)){
             return "Pos";
         }
@@ -840,14 +846,14 @@ public class MorphologicalParse implements Serializable {
      * past tenses.
      */
     private String getTense(){
-        if (containsTag(MorphologicalTag.PASTTENSE)){
+        if (containsTag(MorphologicalTag.NARRATIVE) && containsTag(MorphologicalTag.PASTTENSE)){
+            return "Pqp";
+        }
+        if (containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.NARRATIVE)){
             return "Past";
         }
         if (containsTag(MorphologicalTag.FUTURE)){
             return "Fut";
-        }
-        if (containsTag(MorphologicalTag.NARRATIVE) && containsTag(MorphologicalTag.PASTTENSE)){
-            return "Pqp";
         }
         if (!containsTag(MorphologicalTag.PASTTENSE) && !containsTag(MorphologicalTag.FUTURE)){
             return "Pres";
@@ -947,6 +953,19 @@ public class MorphologicalParse implements Serializable {
         return null;
     }
 
+    private String getEvident(){
+        if (containsTag(MorphologicalTag.NARRATIVE)){
+            return "Nfh";
+        } else {
+            if (containsTag(MorphologicalTag.COPULA) || containsTag(MorphologicalTag.ABLE) || containsTag(MorphologicalTag.AORIST) || containsTag(MorphologicalTag.PROGRESSIVE2)
+                    || containsTag(MorphologicalTag.DESIRE) || containsTag(MorphologicalTag.NECESSITY) || containsTag(MorphologicalTag.CONDITIONAL) || containsTag(MorphologicalTag.IMPERATIVE) || containsTag(MorphologicalTag.OPTATIVE)
+                    || containsTag(MorphologicalTag.PASTTENSE) || containsTag(MorphologicalTag.NARRATIVE) || containsTag(MorphologicalTag.PROGRESSIVE1) || containsTag(MorphologicalTag.FUTURE)) {
+                return "Fh";
+            }
+        }
+        return null;
+    }
+
     /**
      * Construct the universal dependency features as an array of strings. Each element represents a single feature.
      * Every feature is given as featureType = featureValue.
@@ -971,7 +990,7 @@ public class MorphologicalParse implements Serializable {
         if (degree != null && !uPos.equalsIgnoreCase("ADJ")){
             featureList.add("Degree=" + degree);
         }
-        if (isNoun() || isVerb()){
+        if (isNoun() || isVerb() || root.getName().equals("mi") || (pronType != null && !pronType.equals("Art"))){
             String number = getNumber();
             if (number != null){
                 featureList.add("Number=" + number);
@@ -989,7 +1008,7 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Person[psor]=" + possessivePerson);
             }
         }
-        if (isNoun()) {
+        if (isNoun() || (pronType != null && !pronType.equals("Art"))) {
             String case_ = getCase();
             if (case_ != null){
                 featureList.add("Case=" + case_);
@@ -1001,17 +1020,17 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Definite=" + definite);
             }
         }
-        if (isVerb()){
+        if (isVerb() || root.getName().equals("mi")){
             String polarity = getPolarity();
             if (polarity != null){
                 featureList.add("Polarity=" + polarity);
             }
             String voice = getVoice();
-            if (voice != null){
+            if (voice != null && !root.getName().equals("mi")){
                 featureList.add("Voice=" + voice);
             }
             String aspect = getAspect();
-            if (aspect != null && !uPos.equalsIgnoreCase("PROPN")){
+            if (aspect != null && !uPos.equalsIgnoreCase("PROPN") && !root.getName().equals("mi")){
                 featureList.add("Aspect=" + aspect);
             }
             String tense = getTense();
@@ -1019,12 +1038,16 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Tense=" + tense);
             }
             String mood = getMood();
-            if (mood != null && !uPos.equalsIgnoreCase("PROPN")){
+            if (mood != null && !uPos.equalsIgnoreCase("PROPN") && !root.getName().equals("mi")){
                 featureList.add("Mood=" + mood);
             }
             String verbForm = getVerbForm();
             if (verbForm != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("VerbForm=" + verbForm);
+            }
+            String evident = getEvident();
+            if (evident != null && !root.getName().equals("mi")){
+                featureList.add("Evident=" + evident);
             }
         }
         featureList.sort(Comparator.comparing(String::toLowerCase));

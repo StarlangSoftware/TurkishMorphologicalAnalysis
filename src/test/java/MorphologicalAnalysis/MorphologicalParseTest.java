@@ -3,6 +3,8 @@ package MorphologicalAnalysis;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class MorphologicalParseTest {
@@ -19,6 +21,11 @@ public class MorphologicalParseTest {
         parse7 = new MorphologicalParse("iyi+ADJ^DB+VERB+BECOME^DB+VERB+CAUS^DB+VERB+PASS+POS^DB+VERB+ABLE^DB+NOUN+INF2+A3PL+P3PL+ABL");
         parse8 = new MorphologicalParse("değil+ADJ^DB+VERB+ZERO+PAST+A3SG");
         parse9 = new MorphologicalParse("hazır+ADJ^DB+VERB+ZERO+PAST+A3SG");
+    }
+
+    @Test
+    public void testUd(){
+        ArrayList<String> list = new MorphologicalParse("getir+VERB+POS+NARR+PAST+A3SG").getUniversalDependencyFeatures("Int");
     }
 
     @Test

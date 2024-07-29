@@ -104,6 +104,7 @@ public class FsmMorphologicalAnalyzerTest {
 
     @Test
     public void morphologicalAnalysisSpecialProperNoun() {
+        FsmParseList parseList = fsm.morphologicalAnalysis("yapsa");
         assertTrue(fsm.morphologicalAnalysis("TL").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("Won'u").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("Slack'in").size() != 0);
