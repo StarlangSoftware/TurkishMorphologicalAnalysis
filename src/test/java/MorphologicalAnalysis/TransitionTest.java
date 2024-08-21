@@ -64,7 +64,7 @@ public class TransitionTest {
 
     @Test
     public void testA() {
-        assertTrue(fsm.morphologicalAnalysis("saatini").size() != 0);
+        assertTrue(fsm.morphologicalAnalysis("saatinizi").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("alkole").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("anormale").size() != 0);
         assertTrue(fsm.morphologicalAnalysis("sakala").size() != 0);

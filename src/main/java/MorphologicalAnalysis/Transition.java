@@ -431,6 +431,8 @@ public class Transition {
                     } else {
                         formation = MorphotacticEngine.resolveH(root, formation, i == 1, false, rootWord, formationToCheck);
                     }
+                    //Added for the second H in HnHz and HmHz.
+                    rootWord = false;
                     break;
                 case 'C':
                     formation = MorphotacticEngine.resolveC(formation, formationToCheck);
