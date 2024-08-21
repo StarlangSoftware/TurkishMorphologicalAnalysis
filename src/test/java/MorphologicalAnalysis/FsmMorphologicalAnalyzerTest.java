@@ -114,10 +114,10 @@ public class FsmMorphologicalAnalyzerTest {
 
     @Test
     public void morphologicalAnalysisNewWords() {
-        assertTrue(fsm.robustMorphologicalAnalysis("googlecılardan").size() != 0);
-        assertTrue(fsm.robustMorphologicalAnalysis("zaptıraplaştırılmayana").size() != 0);
-        assertTrue(fsm.robustMorphologicalAnalysis("abzürtleşenmiş").size() != 0);
-        assertTrue(fsm.robustMorphologicalAnalysis("vışlığından").size() != 0);
+        assertEquals(fsm.robustMorphologicalAnalysis("googlecılardan").size(), 6);
+        assertEquals(fsm.robustMorphologicalAnalysis("zaptıraplaştırılmayana").size(), 8);
+        assertEquals(fsm.robustMorphologicalAnalysis("abzürtleşenmiş").size(), 5);
+        assertEquals(fsm.robustMorphologicalAnalysis("vışlığından").size(), 8);
     }
 
     @Test
