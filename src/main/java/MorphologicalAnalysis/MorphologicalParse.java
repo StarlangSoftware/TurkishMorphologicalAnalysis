@@ -582,7 +582,7 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.DETERMINER)){
             return "Art";
         }
-        if (lemma.equals("kendi") ||containsTag(MorphologicalTag.PERSONALPRONOUN)){
+        if (lemma.equals("kendi") || containsTag(MorphologicalTag.PERSONALPRONOUN)){
             return "Prs";
         }
         if (lemma.equals("birbiri") || lemma.equals("birbirleri")){
