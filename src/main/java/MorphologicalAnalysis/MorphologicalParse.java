@@ -650,6 +650,12 @@ public class MorphologicalParse implements Serializable {
      * of the parse is plural (contains A1PL, A2PL, A3PL).
      */
     private String getNumber(){
+        if (lastIGContainsTag(MorphologicalTag.A1SG) || lastIGContainsTag(MorphologicalTag.A2SG) || lastIGContainsTag(MorphologicalTag.A3SG)){
+            return "Sing";
+        }
+        if (lastIGContainsTag(MorphologicalTag.A1PL) || lastIGContainsTag(MorphologicalTag.A2PL) || lastIGContainsTag(MorphologicalTag.A3PL)){
+            return "Plur";
+        }
         if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A2SG) || containsTag(MorphologicalTag.A3SG)){
             return "Sing";
         }
@@ -665,6 +671,12 @@ public class MorphologicalParse implements Serializable {
      * possessive agreement of the parse is plural (contains P1PL, P2PL, P3PL).
      */
     private String getPossessiveNumber(){
+        if (lastIGContainsTag(MorphologicalTag.P1SG) || lastIGContainsTag(MorphologicalTag.P2SG) || lastIGContainsTag(MorphologicalTag.P3SG)){
+            return "Sing";
+        }
+        if (lastIGContainsTag(MorphologicalTag.P1PL) || lastIGContainsTag(MorphologicalTag.P2PL) || lastIGContainsTag(MorphologicalTag.P3PL)){
+            return "Plur";
+        }
         if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P2SG) || containsTag(MorphologicalTag.P3SG)){
             return "Sing";
         }
@@ -762,6 +774,15 @@ public class MorphologicalParse implements Serializable {
      * @return "1" for first person; "2" for second person; "3" for third person.
      */
     private String getPerson(){
+        if (lastIGContainsTag(MorphologicalTag.A1SG) || lastIGContainsTag(MorphologicalTag.A1PL)){
+            return "1";
+        }
+        if (lastIGContainsTag(MorphologicalTag.A2SG) || lastIGContainsTag(MorphologicalTag.A2PL)){
+            return "2";
+        }
+        if (lastIGContainsTag(MorphologicalTag.A3SG) || lastIGContainsTag(MorphologicalTag.A3PL)){
+            return "3";
+        }
         if (containsTag(MorphologicalTag.A1SG) || containsTag(MorphologicalTag.A1PL)){
             return "1";
         }
@@ -779,6 +800,15 @@ public class MorphologicalParse implements Serializable {
      * @return "1" for first person; "2" for second person; "3" for third person.
      */
     private String getPossessivePerson(){
+        if (lastIGContainsTag(MorphologicalTag.P1SG) || lastIGContainsTag(MorphologicalTag.P1PL)){
+            return "1";
+        }
+        if (lastIGContainsTag(MorphologicalTag.P2SG) || lastIGContainsTag(MorphologicalTag.P2PL)){
+            return "2";
+        }
+        if (lastIGContainsTag(MorphologicalTag.P3SG) || lastIGContainsTag(MorphologicalTag.P3PL)){
+            return "3";
+        }
         if (containsTag(MorphologicalTag.P1SG) || containsTag(MorphologicalTag.P1PL)){
             return "1";
         }
