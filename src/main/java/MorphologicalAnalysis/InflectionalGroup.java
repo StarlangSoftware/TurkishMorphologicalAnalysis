@@ -30,7 +30,8 @@ public class InflectionalGroup implements Serializable {
             "INF2", "INF3", "BSTAG", "ESTAG", "BTTAG",
             "ETTAG", "BDTAG", "EDTAG", "INF1", "ASLONGAS",
             "DIST", "ADAMANTLY", "PERCENT", "WITHOUTBEINGABLETOHAVEDONESO", "DIM",
-            "PERS", "FRACTION", "HASHTAG", "EMAIL", "DATE", "CODE", "METRIC"};
+            "PERS", "FRACTION", "HASHTAG", "EMAIL", "DATE",
+            "CODE", "METRIC", "POL", "URGE"};
     public static final MorphologicalTag[] morphoTags = {MorphologicalTag.NOUN, MorphologicalTag.ADVERB, MorphologicalTag.ADJECTIVE,
             MorphologicalTag.VERB, MorphologicalTag.A1SG, MorphologicalTag.A2SG, MorphologicalTag.A3SG, MorphologicalTag.A1PL,
             MorphologicalTag.A2PL, MorphologicalTag.A3PL, MorphologicalTag.P1SG, MorphologicalTag.P2SG, MorphologicalTag.P3SG, MorphologicalTag.P1PL,
@@ -56,7 +57,8 @@ public class InflectionalGroup implements Serializable {
             MorphologicalTag.INFINITIVE2, MorphologicalTag.INFINITIVE3, MorphologicalTag.BEGINNINGOFSENTENCE, MorphologicalTag.ENDOFSENTENCE, MorphologicalTag.BEGINNINGOFTITLE,
             MorphologicalTag.ENDOFTITLE, MorphologicalTag.BEGINNINGOFDOCUMENT, MorphologicalTag.ENDOFDOCUMENT, MorphologicalTag.INFINITIVE, MorphologicalTag.ASLONGAS,
             MorphologicalTag.DISTRIBUTIVE, MorphologicalTag.ADAMANTLY, MorphologicalTag.PERCENT, MorphologicalTag.WITHOUTBEINGABLETOHAVEDONESO, MorphologicalTag.DIMENSION,
-            MorphologicalTag.PERSONALPRONOUN, MorphologicalTag.FRACTION, MorphologicalTag.HASHTAG, MorphologicalTag.EMAIL, MorphologicalTag.DATE, MorphologicalTag.CODE, MorphologicalTag.METRIC};
+            MorphologicalTag.PERSONALPRONOUN, MorphologicalTag.FRACTION, MorphologicalTag.HASHTAG, MorphologicalTag.EMAIL, MorphologicalTag.DATE,
+            MorphologicalTag.CODE, MorphologicalTag.METRIC, MorphologicalTag.POLITE, MorphologicalTag.URGE};
 
     /**
      * The getMorphologicalTag method takes a String tag as an input and if the input matches with one of the elements of

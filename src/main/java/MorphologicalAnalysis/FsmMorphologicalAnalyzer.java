@@ -741,12 +741,12 @@ public class FsmMorphologicalAnalyzer {
      */
     private ArrayList<FsmParse> parseWord(ArrayList<FsmParse> fsmParse, int maxLength) {
         ArrayList<FsmParse> result;
-        ArrayList<String> resultSuffixList = new ArrayList<>();
+        ArrayList<String> resultTransitionList = new ArrayList<>();
         FsmParse currentFsmParse;
         TxtWord root;
         State currentState;
         String currentSurfaceForm;
-        String currentSuffixList;
+        String currentTransitionList;
         LinkedList<FsmParse> parseQueue = new LinkedList<>(fsmParse);
         result = new ArrayList<>();
         while (!parseQueue.isEmpty()) {
@@ -755,11 +755,11 @@ public class FsmMorphologicalAnalyzer {
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.length() <= maxLength) {
-                currentSuffixList = currentFsmParse.suffixList();
-                if (!resultSuffixList.contains(currentSuffixList)) {
+                currentTransitionList = currentFsmParse.getSurfaceForm() + " " + currentFsmParse.transitionList();
+                if (!resultTransitionList.contains(currentTransitionList)) {
                     result.add(currentFsmParse);
                     currentFsmParse.constructInflectionalGroups();
-                    resultSuffixList.add(currentSuffixList);
+                    resultTransitionList.add(currentTransitionList);
                 }
             }
             addNewParsesFromCurrentParse(currentFsmParse, parseQueue, maxLength, root);
@@ -777,12 +777,12 @@ public class FsmMorphologicalAnalyzer {
      */
     private ArrayList<FsmParse> parseWord(ArrayList<FsmParse> fsmParse, String surfaceForm) {
         ArrayList<FsmParse> result;
-        ArrayList<String> resultSuffixList = new ArrayList<>();
+        ArrayList<String> resultTransitionList = new ArrayList<>();
         FsmParse currentFsmParse;
         TxtWord root;
         State currentState;
         String currentSurfaceForm;
-        String currentSuffixList;
+        String currentTransitionList;
         LinkedList<FsmParse> parseQueue = new LinkedList<>(fsmParse);
         result = new ArrayList<>();
         while (!parseQueue.isEmpty()) {
@@ -791,11 +791,11 @@ public class FsmMorphologicalAnalyzer {
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.compareTo(surfaceForm) == 0) {
-                currentSuffixList = currentFsmParse.suffixList();
-                if (!resultSuffixList.contains(currentSuffixList)) {
+                currentTransitionList = currentFsmParse.transitionList();
+                if (!resultTransitionList.contains(currentTransitionList)) {
                     result.add(currentFsmParse);
                     currentFsmParse.constructInflectionalGroups();
-                    resultSuffixList.add(currentSuffixList);
+                    resultTransitionList.add(currentTransitionList);
                 }
             }
             addNewParsesFromCurrentParse(currentFsmParse, parseQueue, surfaceForm, root);

@@ -59,7 +59,7 @@ public class FiniteStateMachineTest {
         for (State state : stateList){
             transitionCount += fsm.getTransitions(state).size();
         }
-        assertEquals(779, transitionCount);
+        assertEquals(783, transitionCount);
     }
 
     @org.junit.Test
