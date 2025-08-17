@@ -755,7 +755,7 @@ public class FsmMorphologicalAnalyzer {
             currentState = currentFsmParse.getFinalSuffix();
             currentSurfaceForm = currentFsmParse.getSurfaceForm();
             if (currentState.isEndState() && currentSurfaceForm.length() <= maxLength) {
-                currentTransitionList = currentFsmParse.getSurfaceForm() + " " + currentFsmParse.transitionList();
+                currentTransitionList = currentSurfaceForm + " " + currentFsmParse.transitionList();
                 if (!resultTransitionList.contains(currentTransitionList)) {
                     result.add(currentFsmParse);
                     currentFsmParse.constructInflectionalGroups();
