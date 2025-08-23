@@ -225,11 +225,11 @@ public class Transition {
      * @param root {@link TxtWord} input.
      * @return true if there is softening during suffixation of the given root, false otherwise.
      */
-    public boolean softenDuringSuffixation(TxtWord root) {
-        if ((root.isNominal() || root.isAdjective()) && root.nounSoftenDuringSuffixation() && (with.equalsIgnoreCase("Hm") || with.equalsIgnoreCase("nDAn") || with.equalsIgnoreCase("ncA") || with.equalsIgnoreCase("nDA") || with.equalsIgnoreCase("yA") || with.equalsIgnoreCase("yHm") || with.equalsIgnoreCase("yHz") || with.equalsIgnoreCase("yH") || with.equalsIgnoreCase("nH") || with.equalsIgnoreCase("nA") || with.equalsIgnoreCase("nHn") || with.equalsIgnoreCase("H") || with.equalsIgnoreCase("sH") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("HnHz") || with.equalsIgnoreCase("HmHz"))) {
+    public boolean softenDuringSuffixation(TxtWord root, State startState) {
+        if (!startState.getName().startsWith("VerbalRoot") && (root.isNominal() || root.isAdjective()) && root.nounSoftenDuringSuffixation() && (with.equalsIgnoreCase("Hm") || with.equalsIgnoreCase("nDAn") || with.equalsIgnoreCase("ncA") || with.equalsIgnoreCase("nDA") || with.equalsIgnoreCase("yA") || with.equalsIgnoreCase("yHm") || with.equalsIgnoreCase("yHz") || with.equalsIgnoreCase("yH") || with.equalsIgnoreCase("nH") || with.equalsIgnoreCase("nA") || with.equalsIgnoreCase("nHn") || with.equalsIgnoreCase("H") || with.equalsIgnoreCase("sH") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("HnHz") || with.equalsIgnoreCase("HmHz"))) {
             return true;
         }
-        return root.isVerb() && root.verbSoftenDuringSuffixation() && (with.startsWith("Hyor") || with.equalsIgnoreCase("yHs") || with.equalsIgnoreCase("yAn") || with.equalsIgnoreCase("yA") || with.startsWith("yAcAk") || with.equalsIgnoreCase("yAsH") || with.equalsIgnoreCase("yHncA") || with.equalsIgnoreCase("yHp") || with.equalsIgnoreCase("yAlH") || with.equalsIgnoreCase("yArAk") || with.equalsIgnoreCase("yAdur") || with.equalsIgnoreCase("yHver") || with.equalsIgnoreCase("yAgel") || with.equalsIgnoreCase("yAgor") || with.equalsIgnoreCase("yAbil") || with.equalsIgnoreCase("yAyaz") || with.equalsIgnoreCase("yAkal") || with.equalsIgnoreCase("yAkoy") || with.equalsIgnoreCase("yAmA") || with.equalsIgnoreCase("yHcH") || with.equalsIgnoreCase("HCH") || with.startsWith("Hr") || with.equalsIgnoreCase("Hs") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("yHn") || with.equalsIgnoreCase("yHnHz") || with.startsWith("Ar") || with.equalsIgnoreCase("Hl"));
+        return startState.getName().startsWith("VerbalRoot") && root.isVerb() && root.verbSoftenDuringSuffixation() && (with.startsWith("Hyor") || with.equalsIgnoreCase("yHs") || with.equalsIgnoreCase("yAn") || with.equalsIgnoreCase("yA") || with.startsWith("yAcAk") || with.equalsIgnoreCase("yAsH") || with.equalsIgnoreCase("yHncA") || with.equalsIgnoreCase("yHp") || with.equalsIgnoreCase("yAlH") || with.equalsIgnoreCase("yArAk") || with.equalsIgnoreCase("yAdur") || with.equalsIgnoreCase("yHver") || with.equalsIgnoreCase("yAgel") || with.equalsIgnoreCase("yAgor") || with.equalsIgnoreCase("yAbil") || with.equalsIgnoreCase("yAyaz") || with.equalsIgnoreCase("yAkal") || with.equalsIgnoreCase("yAkoy") || with.equalsIgnoreCase("yAmA") || with.equalsIgnoreCase("yHcH") || with.equalsIgnoreCase("HCH") || with.startsWith("Hr") || with.equalsIgnoreCase("Hs") || with.equalsIgnoreCase("Hn") || with.equalsIgnoreCase("yHn") || with.equalsIgnoreCase("yHnHz") || with.startsWith("Ar") || with.equalsIgnoreCase("Hl"));
     }
 
     /**
@@ -307,7 +307,7 @@ public class Transition {
                 } else {
                     if (rootWord && root.duplicatesDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && TurkishLanguage.isConsonantDrop(with.charAt(0))) {
                         //---duplicatesDuringSuffixation---
-                        if (softenDuringSuffixation(root)) {
+                        if (softenDuringSuffixation(root, startState)) {
                             //--extra softenDuringSuffixation
                             switch (Word.lastPhoneme(stem)) {
                                 case 'p':
@@ -329,7 +329,7 @@ public class Transition {
                         if (rootWord && root.lastIdropsDuringSuffixation() && !startState.getName().startsWith("VerbalRoot") && !startState.getName().startsWith("ProperRoot") && startWithVowelorConsonantDrops()) {
                             //---lastIdropsDuringSuffixation---
                             String stemExceptLastTwo = stem.substring(0, stem.length() - 2);
-                            if (softenDuringSuffixation(root)) {
+                            if (softenDuringSuffixation(root, startState)) {
                                 //---softenDuringSuffixation---
                                 switch (Word.lastPhoneme(stem)) {
                                     case 'p':
@@ -356,26 +356,26 @@ public class Transition {
                                 //---nounSoftenDuringSuffixation or verbSoftenDuringSuffixation
                                 case 'p':
                                     //adap->adabı, amip->amibi, azap->azabı, gazap->gazabı
-                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
+                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root, startState)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'b';
                                     }
                                     break;
                                 case 't':
                                     //adet->adedi, akort->akordu, armut->armudu
                                     //affet->affedi, yoket->yokedi, sabret->sabredi, rakset->raksedi
-                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
+                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root, startState)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'd';
                                     }
                                     break;
                                 case 'ç':
                                     //ağaç->ağacı, almaç->almacı, akaç->akacı, avuç->avucu
-                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
+                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root, startState)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'c';
                                     }
                                     break;
                                 case 'g':
                                     //arkeolog->arkeoloğu, filolog->filoloğu, minerolog->mineroloğu
-                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root)) {
+                                    if (startWithVowelorConsonantDrops() && rootWord && softenDuringSuffixation(root, startState)) {
                                         formation = stem.substring(0, stem.length() - 1) + 'ğ';
                                     }
                                     break;
@@ -385,7 +385,7 @@ public class Transition {
                                         formation = stem.substring(0, stem.length() - 1) + 'g';
                                     } else {
                                         //ablak->ablağı, küllük->küllüğü, kitaplık->kitaplığı, evcilik->evciliği
-                                        if (startWithVowelorConsonantDrops() && (!rootWord || (softenDuringSuffixation(root) && (!root.isProperNoun() || !startState.toString().equals("ProperRoot"))))) {
+                                        if (startWithVowelorConsonantDrops() && (!rootWord || (softenDuringSuffixation(root, startState) && (!root.isProperNoun() || !startState.toString().equals("ProperRoot"))))) {
                                             formation = stem.substring(0, stem.length() - 1) + 'ğ';
                                         }
                                     }
