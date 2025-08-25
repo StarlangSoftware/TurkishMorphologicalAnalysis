@@ -133,12 +133,6 @@ public class Transition {
         if (with.equalsIgnoreCase("Ar") && currentFsmParse.getSurfaceForm().endsWith("l") && !currentFsmParse.getWord().getName().equalsIgnoreCase(currentFsmParse.getSurfaceForm())) {
             return false;
         }
-        if (currentFsmParse.getVerbAgreement() != null && currentFsmParse.getPossesiveAgreement() != null && withName != null) {
-            if (currentFsmParse.getVerbAgreement().equalsIgnoreCase("A3PL") && withName.equalsIgnoreCase("^DB+VERB+ZERO+PRES+A1SG")) {
-                return false;
-            }
-            return !currentFsmParse.getVerbAgreement().equalsIgnoreCase("A3SG") || (!currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P1SG") && !currentFsmParse.getPossesiveAgreement().equalsIgnoreCase("P2SG")) || !withName.equalsIgnoreCase("^DB+VERB+ZERO+PRES+A1PL");
-        }
         return true;
     }
 
