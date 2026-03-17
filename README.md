@@ -28,11 +28,6 @@ Video Lectures
 
 [<img src=video1.jpg width="50%">](https://youtu.be/KxguxpbgDQc)[<img src=video2.jpg width="50%">](https://youtu.be/UMmA2LMkAkw)[<img src=video3.jpg width="50%">](https://youtu.be/dP97ovMSSfE)[<img src=video4.jpg width="50%">](https://youtu.be/Tgmy5tts_pY)
 
-Class Diagram
-============
-
-<img src="classDiagram.png">
-
 For Developers
 ============
 
@@ -231,6 +226,10 @@ Output
 	
 For Contibutors
 ============
+
+### Class Diagram
+
+<img src="classDiagram.png">
 
 ### pom.xml file
 1. Standard setup for packaging is similar to:
