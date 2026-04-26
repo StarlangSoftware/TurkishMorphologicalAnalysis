@@ -302,6 +302,15 @@ public class MorphologicalParse implements Serializable {
     }
 
     /**
+     * The isRootNoun method returns true if the part of speech of root is NOUN, false otherwise.
+     *
+     * @return true if the part of speech of root is NOUN, false otherwise.
+     */
+    public boolean isRootNoun() {
+        return (getRootPos().equals("NOUN"));
+    }
+
+    /**
      * The isVerb method returns true if the part of speech is VERB, false otherwise.
      *
      * @return true if the part of speech is VERB, false otherwise.
@@ -329,12 +338,30 @@ public class MorphologicalParse implements Serializable {
     }
 
     /**
+     * The isRootAdjective method returns true if the part of speech of root is ADJ, false otherwise.
+     *
+     * @return true if the part of speech of root is ADJ, false otherwise.
+     */
+    public boolean isRootAdjective() {
+        return (getRootPos().equals("ADJ"));
+    }
+
+    /**
      * The isAdverb method returns true if the part of speech is ADV, false otherwise.
      *
      * @return true if the part of speech is ADV, false otherwise.
      */
     public boolean isAdverb() {
         return (getPos().equals("ADV"));
+    }
+
+    /**
+     * The isRootAdverb method returns true if the part of speech of root is ADV, false otherwise.
+     *
+     * @return true if the part of speech of root is ADV, false otherwise.
+     */
+    public boolean isRootAdverb() {
+        return (getRootPos().equals("ADV"));
     }
 
     /**
@@ -611,7 +638,8 @@ public class MorphologicalParse implements Serializable {
                 || lemma.equals("birkaç") || lemma.equals("birkaçı") || lemma.equals("biri")
                 || lemma.equals("öbür") || lemma.equals("öteki") || lemma.equals("hepsi")
                 || lemma.equals("diğeri") || lemma.equals("herkes") || lemma.equals("kimi") || lemma.equals("diğer")
-                || lemma.equals("topu") || lemma.equals("başkası") || lemma.equals("başka")) {
+                || lemma.equals("topu") || lemma.equals("başkası") || lemma.equals("başka") || lemma.equals("tüm") || lemma.equals("hep")
+                || lemma.equals("birtakım")) {
             return "Ind";
         }
         if (lemma.equals("hiçbiri") || lemma.equals("hiç") || lemma.equals("hiçbir") || lemma.equals("kimse")) {
@@ -651,7 +679,7 @@ public class MorphologicalParse implements Serializable {
         if (containsTag(MorphologicalTag.DISTRIBUTIVE)){
             return "Dist";
         }
-        if (containsTag(MorphologicalTag.CARDINAL) || containsTag(MorphologicalTag.NUMBER) || lemma.equals("kaç")){
+        if (containsTag(MorphologicalTag.CARDINAL) || containsTag(MorphologicalTag.NUMBER) || (lemma.equals("kaç") && !isRootVerb())){
             return "Card";
         }
         return null;
@@ -769,7 +797,7 @@ public class MorphologicalParse implements Serializable {
         if (lemma.equals("daha")){
             return "Cmp";
         }
-        if (lemma.equals("en") && !isNoun()){
+        if (lemma.equals("en") && !isRootNoun()){
             return "Sup";
         }
         return null;
@@ -1065,7 +1093,7 @@ public class MorphologicalParse implements Serializable {
         String lemma = root.getName();
         //prs,rcp,int,dem, ind, neg, art
         String pronType = getPronType();
-        if (pronType != null) {
+        if (pronType != null && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("ADV") && !uPos.equalsIgnoreCase("X") && !uPos.equalsIgnoreCase("NOUN") && !uPos.equalsIgnoreCase("PROPN") && !uPos.equalsIgnoreCase("ADP") && !uPos.equalsIgnoreCase("VERB")) {
             featureList.add("PronType=" + pronType);
         }
         //card,ord,dist
@@ -1075,7 +1103,7 @@ public class MorphologicalParse implements Serializable {
         }
         //kendi,kendisi,kendimiz
         String reflex = getReflex();
-        if (reflex != null) {
+        if (reflex != null && !uPos.equalsIgnoreCase("X")) {
             featureList.add("Reflex=" + reflex);
         }
         //daha:cmp,en:sup
@@ -1091,11 +1119,11 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Number=" + number);
             }
             String possessiveNumber = getPossessiveNumber();
-            if (possessiveNumber != null) {
+            if (possessiveNumber != null && !uPos.equalsIgnoreCase("X")) {
                 featureList.add("Number[psor]=" + possessiveNumber);
             }
             String possessivePerson = getPossessivePerson();
-            if (possessivePerson != null && !uPos.equalsIgnoreCase("PROPN")) {
+            if (possessivePerson != null && !uPos.equalsIgnoreCase("PROPN") && !uPos.equalsIgnoreCase("X")) {
                 featureList.add("Person[psor]=" + possessivePerson);
             }
         }
@@ -1103,11 +1131,11 @@ public class MorphologicalParse implements Serializable {
         //Only nominal features
         if (isNoun() || getRootPos().equalsIgnoreCase("PRON") || containsTag(MorphologicalTag.PRONOUN)){ // isVerb -> isRootVerb()
             String case_ = getCase();
-            if (case_ != null){
+            if (case_ != null && !uPos.equalsIgnoreCase("X")){
                 featureList.add("Case=" + case_);
             }
             String person = getPerson();
-            if (getPos().equalsIgnoreCase("PRON") || containsTag(MorphologicalTag.PERSONALPRONOUN)){
+            if ((getPos().equalsIgnoreCase("PRON") || containsTag(MorphologicalTag.PERSONALPRONOUN)) && !uPos.equalsIgnoreCase("X")){
                 if (person != null){
                     featureList.add("Person=" + person);
                 }
@@ -1125,7 +1153,7 @@ public class MorphologicalParse implements Serializable {
         // Verbal features: if root is verb, the word is -mI (can add değil and some others)
         if (isRootVerb() || isVerb() || lemma.equals("mi") || lemma.equals("değil") || lemma.equals("yok") || lemma.equals("var")){
             String person = getPerson();
-            if (person != null && !uPos.equalsIgnoreCase("PROPN")){
+            if (person != null && !uPos.equalsIgnoreCase("PROPN") && !uPos.equalsIgnoreCase("X")){
                 featureList.add("Person=" + person);
             }
             String polarity = getPolarity();
@@ -1133,31 +1161,33 @@ public class MorphologicalParse implements Serializable {
                 featureList.add("Polarity=" + polarity);
             }
             String voice = getVoice();
-            if (voice != null && !root.getName().equals("mi")){
+            if (voice != null && !root.getName().equals("mi") && !uPos.equalsIgnoreCase("NOUN") && !uPos.equalsIgnoreCase("ADJ")){
                 featureList.add("Voice=" + voice);
             }
             String aspect = getAspect();
-            if (aspect != null && !uPos.equalsIgnoreCase("PROPN")) {
+            if (aspect != null && !uPos.equalsIgnoreCase("PROPN") && !uPos.equalsIgnoreCase("X")) {
                 featureList.add("Aspect=" + aspect);
             }
             String tense = getTense();
-            if (tense != null && !uPos.equalsIgnoreCase("PROPN")){
+            if (tense != null && !uPos.equalsIgnoreCase("PROPN") && !uPos.equalsIgnoreCase("NOUN") && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("X") && !uPos.equalsIgnoreCase("NUM")){
                 featureList.add("Tense=" + tense);
-            }
-            String mood = getMood();
-            if (mood != null && !uPos.equalsIgnoreCase("PROPN")) {
-                featureList.add("Mood=" + mood);
             }
             String verbForm = getVerbForm();
             if (verbForm != null && !uPos.equalsIgnoreCase("PROPN")){
                 featureList.add("VerbForm=" + verbForm);
             }
+            String mood = getMood();
+            if (mood != null && !uPos.equalsIgnoreCase("PROPN")) {
+                if (verbForm != null && verbForm.equalsIgnoreCase("FIN")) {
+                    featureList.add("Mood=" + mood);
+                }
+            }
             String evident = getEvident();
-            if (evident != null){
+            if (evident != null && !uPos.equalsIgnoreCase("NOUN") && !uPos.equalsIgnoreCase("ADJ") && !uPos.equalsIgnoreCase("X") && !uPos.equalsIgnoreCase("NUM") && !uPos.equalsIgnoreCase("PROPN")) {
                 featureList.add("Evident=" + evident);
             }
             String polite = getPolite();
-            if (polite != null){
+            if (polite != null && !uPos.equalsIgnoreCase("ADJ")){
                 featureList.add("Polite=" + polite);
             }
         }
@@ -1180,19 +1210,19 @@ public class MorphologicalParse implements Serializable {
         if (isProperNoun()){
             return "PROPN";
         }
-        if (isNoun()){
+        if (isRootNoun()){
             return "NOUN";
         }
-        if (isAdjective()){
+        if (isRootAdjective()){
             return "ADJ";
         }
-        if (getPos().equals("ADV")){
+        if (isRootAdverb()){
             return "ADV";
         }
         if (containsTag(MorphologicalTag.INTERJECTION)){
             return "INTJ";
         }
-        if (isVerb()){
+        if (isRootVerb()){
             return "VERB";
         }
         if (isPunctuation() || isHashTag()){

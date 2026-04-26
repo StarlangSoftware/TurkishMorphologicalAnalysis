@@ -38,7 +38,7 @@ public class FsmParseListTest {
         assertEquals(2, parse1.size());
         assertEquals(2, parse2.size());
         assertEquals(6, parse3.size());
-        assertEquals(4, parse4.size());
+        assertEquals(5, parse4.size());
         assertEquals(5, parse5.size());
         assertEquals(12, parse6.size());
         assertEquals(8, parse7.size());
@@ -102,7 +102,7 @@ public class FsmParseListTest {
         assertEquals(1, parse1.constructParseListForDifferentRootWithPos().size());
         assertEquals(2, parse2.constructParseListForDifferentRootWithPos().size());
         assertEquals(5, parse3.constructParseListForDifferentRootWithPos().size());
-        assertEquals(4, parse4.constructParseListForDifferentRootWithPos().size());
+        assertEquals(5, parse4.constructParseListForDifferentRootWithPos().size());
         assertEquals(5, parse5.constructParseListForDifferentRootWithPos().size());
         assertEquals(7, parse6.constructParseListForDifferentRootWithPos().size());
         assertEquals(2, parse7.constructParseListForDifferentRootWithPos().size());
@@ -114,7 +114,7 @@ public class FsmParseListTest {
     public void testParsesWithoutPrefixAndSuffix(){
         assertEquals("P3SG+NOM$PNON+ACC", parse10.parsesWithoutPrefixAndSuffix());
         assertEquals("A3PL+P3PL+NOM$A3PL+P3SG+NOM$A3PL+PNON+ACC$A3SG+P3PL+NOM", parse11.parsesWithoutPrefixAndSuffix());
-        assertEquals("DET$PRON+DEMONSP+A3SG+PNON+NOM$PRON+PERS+A3SG+PNON+NOM", parse12.parsesWithoutPrefixAndSuffix());
+        assertEquals("ADJ$DET$PRON+DEMONSP+A3SG+PNON+NOM$PRON+PERS+A3SG+PNON+NOM", parse12.parsesWithoutPrefixAndSuffix());
         assertEquals("NOUN+A3SG+P3SG+NOM$NOUN^DB+ADJ+ALMOST", parse13.parsesWithoutPrefixAndSuffix());
     }
 
